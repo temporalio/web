@@ -1,27 +1,33 @@
 <script>
-import logo from './assets/logo.svg'
+import logo from './assets/logo.svg';
 
 export default {
-  data () {
-    return { logo }
+  data() {
+    return { logo };
   },
   methods: {
     globalClick(e) {
       if (this.editing && !this.$refs.domain.contains(e.target)) {
-        this.clearEdit()
+        this.clearEdit();
       }
 
       if (e.target.tagName === 'A') {
-        var href = e.target.getAttribute('href')
-        if (href && href.startsWith('/') && !e.target.getAttribute('download') && !e.target.getAttribute('target')) {
-          e.preventDefault()
-          e.stopPropagation()
-          this.$router.push(href)
+        const href = e.target.getAttribute('href');
+
+        if (
+          href &&
+          href.startsWith('/') &&
+          !e.target.getAttribute('download') &&
+          !e.target.getAttribute('target')
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.$router.push(href);
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <template>
@@ -29,15 +35,32 @@ export default {
     <header class="top-bar">
       <a href="/" class="logo" v-html="logo"></a>
       <div class="domain" v-if="$route.params.domain">
-        <a :href="`/domain/${$route.params.domain}/workflows`" :class="{'router-link-active': $route.path === `/domain/${$route.params.domain}/workflows`, workflows: true }">{{$route.params.domain}}</a>
-        <a :href="`/domain/${$route.params.domain}/config`" :class="{'router-link-active': $route.path === `/domain/${$route.params.domain}/config`, config: true }"></a>
+        <a
+          :href="`/domain/${$route.params.domain}/workflows`"
+          :class="{
+            'router-link-active':
+              $route.path === `/domain/${$route.params.domain}/workflows`,
+            workflows: true,
+          }"
+          >{{ $route.params.domain }}</a
+        >
+        <a
+          :href="`/domain/${$route.params.domain}/config`"
+          :class="{
+            'router-link-active':
+              $route.path === `/domain/${$route.params.domain}/config`,
+            config: true,
+          }"
+        ></a>
       </div>
-      <div class="list-workflows" v-if="$route.name === 'workflows'">Workflows</div>
+      <div class="list-workflows" v-if="$route.name === 'workflows'">
+        Workflows
+      </div>
       <div class="detail-view workflow-id" v-if="$route.params.workflowId">
-        <span>{{$route.params.workflowId}}</span>
+        <span>{{ $route.params.workflowId }}</span>
       </div>
       <div class="detail-view task-list" v-if="$route.params.taskList">
-        <span>{{$route.params.taskList}}</span>
+        <span>{{ $route.params.taskList }}</span>
       </div>
     </header>
     <router-view></router-view>
@@ -46,6 +69,7 @@ export default {
   </main>
 </template>
 
+<style src="vue-virtual-scroller/dist/vue-virtual-scroller.css"></style>
 <style lang="stylus">
 @import "https://d1a3f4spazzrp4.cloudfront.net/uber-fonts/4.0.0/superfine.css"
 @import "https://d1a3f4spazzrp4.cloudfront.net/uber-icons/3.14.0/uber-icons.css"

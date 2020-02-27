@@ -1,107 +1,253 @@
 <template>
   <section :class="{ execution: true, loading: wfLoading }">
     <nav>
-      <router-link :to="{ name: 'execution/summary' }" class="summary">Summary</router-link>
-      <router-link :to="{ name: 'execution/history' }" class="history">History</router-link>
-      <router-link :to="{ name: 'execution/stack-trace' }" class="stack-trace" v-show="isWorkflowRunning">Stack Trace</router-link>
-      <router-link :to="{ name: 'execution/queries' }" class="queries" v-show="isWorkflowRunning">Queries</router-link>
+      <router-link :to="{ name: 'execution/summary' }" class="summary"
+        >Summary</router-link
+      >
+      <router-link :to="{ name: 'execution/history' }" class="history"
+        >History</router-link
+      >
+      <router-link
+        :to="{ name: 'execution/stack-trace' }"
+        class="stack-trace"
+        v-show="isWorkflowRunning"
+        >Stack Trace</router-link
+      >
+      <router-link
+        :to="{ name: 'execution/queries' }"
+        class="queries"
+        v-show="isWorkflowRunning"
+        >Queries</router-link
+      >
     </nav>
-    <router-view></router-view>
+    <router-view
+      name="summary"
+      :baseAPIURL="baseAPIURL"
+      :input="summary.input"
+      :isWorkflowRunning="summary.isWorkflowRunning"
+      :parentWorkflowRoute="summary.parentWorkflowRoute"
+      :result="summary.result"
+      :wfStatus="summary.wfStatus"
+      :workflow="summary.workflow"
+    />
+    <router-view
+      name="history"
+      :baseAPIURL="baseAPIURL"
+      :error="history.error"
+      :events="history.events"
+      :loading="history.loading"
+      :timelineEvents="history.timelineEvents"
+    />
+    <router-view name="stacktrace" :baseAPIURL="baseAPIURL" />
+    <router-view name="queries" :baseAPIURL="baseAPIURL" />
   </section>
 </template>
 
 <script>
-import moment from 'moment'
-const resultThreshold = 1000
+import {
+  getHistoryEvents,
+  getHistoryTimelineEvents,
+  getSummary,
+} from './helpers';
 
 export default {
   data() {
     return {
-      workflow: undefined,
-      wfError: undefined,
-      wfLoading: true,
-      historyError: undefined,
-      historyLoading: undefined,
+      events: [],
       isWorkflowRunning: undefined,
       nextPageToken: undefined,
-      results: []
-    }
+      wfError: undefined,
+      wfLoading: true,
+      workflow: undefined,
+
+      history: {
+        error: undefined,
+        events: [],
+        loading: undefined,
+        timelineEvents: [],
+      },
+
+      summary: {
+        input: undefined,
+        isWorkflowRunning: undefined,
+        parentWorkflowRoute: undefined,
+        result: undefined,
+        wfStatus: undefined,
+        workflow: undefined,
+      },
+
+      unwatch: [],
+    };
   },
+  props: ['domain', 'runId', 'workflowId'],
   created() {
-    this.$watch('baseAPIURL', u => {
-      this.results = []
-      this.nextPageToken = undefined
-      return this.$http(u).then(
-        wf => { this.workflow = wf; this.isWorkflowRunning = !wf.workflowExecutionInfo.closeTime },
-        e => this.wfError = (e.json && e.json.message) || e.status || e.message
-      ).finally(() => this.wfLoading = false)
-    }, { immediate: true })
-
-    this.$watch(() => {
-      let queryUrl = this.baseAPIURL + '/history?waitForNewEvent=true'
-      if (!this.nextPageToken) return queryUrl
-
-      return queryUrl + '&nextPageToken=' + encodeURIComponent(this.nextPageToken)
-    }, v => this.fetchHistoryPage(v), { immediate: true })
+    this.unwatch.push(
+      this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
+    );
+  },
+  beforeDestroy() {
+    this.clearWatches();
   },
   computed: {
     baseAPIURL() {
-      var { domain, workflowId, runId } = this.$route.params
-      return `/api/domain/${domain}/workflows/${encodeURIComponent(workflowId)}/${encodeURIComponent(runId)}`
-    }
-  },
-  methods: {
-    fetchHistoryPage(pagedQueryUrl) {
-      this.historyError = undefined
-      if (!pagedQueryUrl) {
-        this.historyLoading = false
-        return
+      const { domain, workflowId, runId } = this;
+
+      return `/api/domain/${domain}/workflows/${encodeURIComponent(
+        workflowId
+      )}/${encodeURIComponent(runId)}`;
+    },
+    queryUrl() {
+      const queryUrl = `${this.baseAPIURL}/history?waitForNewEvent=true`;
+
+      if (!this.nextPageToken) {
+        return queryUrl;
       }
 
-      this.historyLoading = true
-      this.pqu = pagedQueryUrl
-      return this.$http(pagedQueryUrl).then(res => {
-        if (this._isDestroyed || this.pqu !== pagedQueryUrl) return
-        if (res.nextPageToken && this.npt === res.nextPageToken) {
-          // nothing happened, and same query is still valid, so let's long pool again
-          return this.fetch(pagedQueryUrl)
-        }
+      return `${queryUrl}&nextPageToken=${encodeURIComponent(
+        this.nextPageToken
+      )}`;
+    },
+  },
+  methods: {
+    clearState() {
+      this.events = [];
+      this.isWorkflowRunning = undefined;
+      this.nextPageToken = undefined;
+      this.wfError = undefined;
+      this.wfLoading = true;
+      this.workflow = undefined;
 
-        if (res.nextPageToken) {
-          this.isWorkflowRunning = JSON.parse(atob(res.nextPageToken)).IsWorkflowRunning
-          if (this.results.length < resultThreshold) {
-            setImmediate(() => this.nextPageToken = res.nextPageToken)
+      this.history.error = undefined;
+      this.history.events = [];
+      this.history.loading = undefined;
+      this.history.timelineEvents = [];
+
+      this.summary.input = undefined;
+      this.summary.isWorkflowRunning = undefined;
+      this.summary.parentWorkflowRoute = undefined;
+      this.summary.result = undefined;
+      this.summary.wfStatus = undefined;
+      this.summary.workflow = undefined;
+    },
+    clearWatches() {
+      while (this.unwatch.length) {
+        this.unwatch.pop()();
+      }
+    },
+    clearQueryUrlWatch() {
+      while (this.unwatch.length > 1) {
+        this.unwatch.pop()();
+      }
+    },
+    fetchHistoryPage(pagedQueryUrl) {
+      this.history.error = undefined;
+
+      if (!pagedQueryUrl) {
+        this.history.loading = false;
+
+        return;
+      }
+
+      this.history.loading = true;
+      this.pqu = pagedQueryUrl;
+      this.$http(pagedQueryUrl)
+        .then(res => {
+          // eslint-disable-next-line no-underscore-dangle
+          if (this._isDestroyed || this.pqu !== pagedQueryUrl) {
+            return null;
           }
-        } else {
-          this.isWorkflowRunning = false
-        }
 
-        var shouldHighlightEventId = this.$route.query.eventId && this.results.length <= this.$route.query.eventId
-        this.results = this.results.concat(res.history.events.map(data => {
-          data.timestamp = moment(data.timestamp)
-          return data
-        }))
+          if (res.nextPageToken && this.npt === res.nextPageToken) {
+            // nothing happened, and same query is still valid, so let's long pool again
+            return this.fetch(pagedQueryUrl);
+          }
 
-        if (shouldHighlightEventId) {
-          this.$emit('highlight-event-id', this.$route.query.eventId)
-        }
-        // // https://github.com/ElemeFE/vue-infinite-scroll/issues/89
-        // setImmediate(() => this.$emit('longpoll'))
+          if (res.nextPageToken) {
+            this.isWorkflowRunning = JSON.parse(
+              atob(res.nextPageToken)
+            ).IsWorkflowRunning;
+            setTimeout(() => {
+              this.nextPageToken = res.nextPageToken;
+            });
+          } else {
+            this.isWorkflowRunning = false;
+          }
 
-        return this.results
-      }).catch(e => {
-        console.error(e)
-        if (this._isDestroyed || this.pqu !== pagedQueryUrl) return
-        this.historyError = (e.json && e.json.message) || e.status || e.message
-        return []
-      }).finally(() => {
-        if (this._isDestroyed || this.pqu !== pagedQueryUrl) {
-          this.historyLoading = false
-        }
-      })
-    }
-  }
-}
+          const shouldHighlightEventId =
+            this.$route.query.eventId &&
+            this.events.length <= this.$route.query.eventId;
+
+          const { events } = res.history;
+
+          this.events = this.events.concat(events);
+
+          this.history.events = getHistoryEvents(this.events);
+          this.history.timelineEvents = getHistoryTimelineEvents(
+            this.history.events
+          );
+
+          this.summary = getSummary({
+            events: this.events,
+            isWorkflowRunning: this.isWorkflowRunning,
+            workflow: this.workflow,
+          });
+
+          if (shouldHighlightEventId) {
+            this.$emit('highlight-event-id', this.$route.query.eventId);
+          }
+
+          return this.events;
+        })
+        .catch(e => {
+          // eslint-disable-next-line no-console
+          console.error(e);
+
+          // eslint-disable-next-line no-underscore-dangle
+          if (this._isDestroyed || this.pqu !== pagedQueryUrl) {
+            return;
+          }
+
+          this.history.error =
+            (e.json && e.json.message) || e.status || e.message;
+        })
+        .finally(() => {
+          // eslint-disable-next-line no-underscore-dangle
+          if (this._isDestroyed || this.pqu !== pagedQueryUrl) {
+            this.history.loading = false;
+          }
+        });
+    },
+    onBaseApiUrlChange(baseAPIURL) {
+      this.clearQueryUrlWatch();
+      this.clearState();
+      this.wfLoading = true;
+
+      return this.$http(baseAPIURL)
+        .then(
+          wf => {
+            this.workflow = wf;
+            this.isWorkflowRunning = !wf.workflowExecutionInfo.closeTime;
+            this.setupQueryUrlWatch();
+          },
+          e => {
+            this.wfError = (e.json && e.json.message) || e.status || e.message;
+          }
+        )
+        .finally(() => {
+          this.wfLoading = false;
+        });
+    },
+    onQueryUrlChange(queryUrl) {
+      this.fetchHistoryPage(queryUrl);
+    },
+    setupQueryUrlWatch() {
+      this.clearQueryUrlWatch();
+      this.unwatch.push(
+        this.$watch('queryUrl', this.onQueryUrlChange, { immediate: true })
+      );
+    },
+  },
+};
 </script>
 
 <style lang="stylus">

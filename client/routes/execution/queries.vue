@@ -10,55 +10,79 @@
           :searchable="false"
         />
       </div>
-      <a :href="queryName && !running ? '#' : undefined" :class="{ run: true, running }" @click.prevent="run">Run</a>
+      <a
+        :href="queryName && !running ? '#' : undefined"
+        :class="{ run: true, running }"
+        @click.prevent="run"
+      >
+        Run
+      </a>
     </header>
-    <pre v-if="result">{{result}}</pre>
-    <span class="error" v-if="error">{{error}}</span>
-    <span class="no-queries" v-if="queries && queries.length === 0">No queries registered</span>
+    <pre v-if="queryResult">{{ queryResult }}</pre>
+    <span class="error" v-if="error">{{ error }}</span>
+    <span class="no-queries" v-if="queries && queries.length === 0">
+      No queries registered
+    </span>
   </section>
 </template>
 
 <script>
-import moment from 'moment'
-
 export default {
   data() {
     return {
+      error: undefined,
       loading: false,
       queryName: undefined,
       queryInput: undefined,
       queries: undefined,
-      result: undefined,
-      error: undefined,
-      running: false
-    }
+      queryResult: undefined,
+      running: false,
+    };
   },
+  props: ['baseAPIURL'],
   created() {
-    this.loading = true
-    this.$http(this.$parent.baseAPIURL + '/queries').then(
-      r => {
-        this.queries = r.filter(r => r !== '__stack_trace')
-        if (!this.queryName) {
-          this.queryName = this.queries[0]
+    this.loading = true;
+    this.$http(`${this.baseAPIURL}/queries`)
+      .then(
+        queries => {
+          this.queries = queries.filter(query => query !== '__stack_trace');
+
+          if (!this.queryName) {
+            [this.queryName] = this.queries;
+          }
+        },
+        e => {
+          this.error = (e.json && e.json.message) || e.status || e.message;
         }
-      },
-      e => this.error = (e.json && e.json.message) || e.status || e.message
-    ).finally(() => this.loading = false)
+      )
+      .finally(() => {
+        this.loading = false;
+      });
   },
   methods: {
     setQuery(queryName) {
-      this.result = undefined
-      this.error = undefined
-      this.queryName = queryName
+      this.queryResult = undefined;
+      this.error = undefined;
+      this.queryName = queryName;
     },
     run() {
-      this.running = true
-      this.$http.post(`${this.$parent.baseAPIURL}/queries/${this.queryName}`)
-        .then(r => this.result = r.queryResult, e => this.error = (e.json && e.json.message) || e.status || e.message)
-        .finally(() => this.running = false)
-    }
-  }
-}
+      this.running = true;
+      this.$http
+        .post(`${this.baseAPIURL}/queries/${this.queryName}`)
+        .then(
+          r => {
+            this.queryResult = r.queryResult;
+          },
+          e => {
+            this.error = (e.json && e.json.message) || e.status || e.message;
+          }
+        )
+        .finally(() => {
+          this.running = false;
+        });
+    },
+  },
+};
 </script>
 
 <style lang="stylus">

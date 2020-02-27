@@ -8,7 +8,7 @@ const
   losslessJSON = require('lossless-json'),
   moment = require('moment'),
   dns = require('dns'),
-  isIPv4 = require('is-ipv4-node')
+  isIPv4 = require('is-ipv4-node');
 
 function uiTransform(item) {
   if (!item || typeof item !== 'object') return item
@@ -58,7 +58,7 @@ function cliTransform(item) {
       subvalue.forEach(cliTransform)
     } else if (subvalue && typeof subvalue === 'object') {
       cliTransform(subvalue)
-    } else if (subvalue == null) {
+    } else if (subvalue === null || subvalue === undefined) {
       delete item[subkey]
     }
   })
