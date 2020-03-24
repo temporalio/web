@@ -1,6 +1,8 @@
 FROM node:8.17.0-jessie as builder
 
 WORKDIR /usr/build
+ENV NODE_ENV=production
+ENV NPM_CONFIG_PRODUCTION=true
 
 # Install app dependencies
 COPY package*.json ./
@@ -16,7 +18,6 @@ RUN mkdir -p ./app/protobuf/src && mv protobuf/src ./app/protobuf
 # Build final image
 FROM node:8.17.0-jessie-slim
 WORKDIR /usr/app
-ENV NODE_ENV=production
 COPY --from=builder ./usr/build/app ./
 EXPOSE 8088
 CMD [ "node", "server.js" ]
