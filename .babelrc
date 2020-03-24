@@ -20,6 +20,6 @@
         }
       }
     ],
-    "@babel/preset-env"
+    "@babel/preset-env" 
   ]
 }

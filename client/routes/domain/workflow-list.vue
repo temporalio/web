@@ -110,6 +110,7 @@ import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import pagedGrid from '~components/paged-grid';
 import { DateRangePicker } from '~components';
+import { mapWorkflow } from '~helpers';
 
 export default pagedGrid({
   data() {
@@ -284,18 +285,11 @@ export default pagedGrid({
 
         return this.$http(url, { query })
           .then(res => {
-            this.npt = res.nextPageToken;
+            this.npt = res.nextpagetoken;
             this.loading = false;
-            const formattedResults = res.executions.map(data => ({
-              workflowId: data.execution.workflowId,
-              runId: data.execution.runId,
-              workflowName: data.type.name,
-              startTime: moment(data.startTime).format('lll'),
-              endTime: data.closeTime
-                ? moment(data.closeTime).format('lll')
-                : '',
-              status: (data.closeStatus || 'open').toLowerCase(),
-            }));
+            const formattedResults = res.executionsList.map(data => {
+              return mapWorkflow(data);
+            });
 
             this.results = query.nextPageToken
               ? this.results.concat(formattedResults)
