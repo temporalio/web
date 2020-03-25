@@ -34,7 +34,6 @@ app.init = function(options) {
   .use(require('koa-compress')({
     filter: contentType => !contentType.startsWith('text/event-stream')
   }))
-  .use(require('./middleware/tchannel-client'))
   .use(useWebpack ?
     koaWebpack({
       compiler,
