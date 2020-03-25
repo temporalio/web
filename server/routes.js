@@ -4,7 +4,7 @@ const Router = require('koa-router'),
   Long = require('long'),
   losslessJSON = require('lossless-json'),
   momentToLong = m => Long.fromValue(m.unix()).mul(1000000000),
-  WorkflowClient = require('./workflow-client');
+  WorkflowClient = require('./middleware/workflow-client');
 
 const wfClient = new WorkflowClient();
 
