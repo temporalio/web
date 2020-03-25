@@ -1,5 +1,5 @@
 {
-  "name": "cadence-web",
+  "name": "temporal-web",
   "version": "3.13.0",
   "description": "Cadence Web UI",
   "main": "server/index.js",

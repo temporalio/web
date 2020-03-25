@@ -1,6 +1,6 @@
 FROM node:dubnium
 
-WORKDIR /usr/cadence-web
+WORKDIR /usr/temporal-web
 
 ENV NODE_ENV=production
 
