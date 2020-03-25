@@ -1,4 +1,4 @@
-# Cadence Web UI
+# Temporal Web UI
 
 [![Build Status](https://travis-ci.com/uber/cadence-web.svg?branch=master)](https://travis-ci.com/uber/cadence-web)
 

@@ -4,4 +4,3 @@ dist/
 .vscode
 .idea
 package-lock.json
-server/idl

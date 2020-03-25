@@ -1,7 +1,7 @@
 {
   "name": "temporal-web",
   "version": "3.13.0",
-  "description": "Cadence Web UI",
+  "description": "Temporal Web UI",
   "main": "server/index.js",
   "licence": "MIT",
   "scripts": {
@@ -18,7 +18,7 @@
   "keywords": [
     "uber",
     "workflow",
-    "cadence",
+    "temporal",
     "asynchronous"
   ],
   "author": "Nathan Black <nathanbl@uber.com>",
