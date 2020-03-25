@@ -16,10 +16,9 @@ Set these environment variables if you need to change their defaults
 
 | Variable                  | Description                                   | Default           |
 | ------------------------- | --------------------------------------------- | ----------------- |
-| TEMPORAL_GRPC_ENDPOINT    | String representing server gRPC endpoint      | 127.0.0.1:7933    |
-| CADENCE_TCHANNEL_SERVICE  | Name of the cadence tchannel service to call  | cadence-frontend  |
-| CADENCE_WEB_PORT          | HTTP port to serve on                         | 8088              |
-| CADENCE_EXTERNAL_SCRIPTS     | Addtional JavaScript tags to serve in the UI  |                   |
+| TEMPORAL_GRPC_ENDPOINT    | String representing server gRPC endpoint      | 127.0.0.1:7233    |
+| TEMPORAL_WEB_PORT         | HTTP port to serve on                         | 8088              |
+| TEMPORAL_EXTERNAL_SCRIPTS | Addtional JavaScript tags to serve in the UI  |                   |
 
 ### Running locally
 
