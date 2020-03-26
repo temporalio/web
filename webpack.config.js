@@ -31,7 +31,7 @@ module.exports = {
       inject: false,
       template: require('html-webpack-template'),
       lang: 'en-US',
-      scripts: (process.env.CADENCE_EXTERNAL_SCRIPTS || '').split(',').filter(x => x)
+      scripts: (process.env.TEMPORAL_EXTERNAL_SCRIPTS || '').split(',').filter(x => x)
     })
   ].filter(x => x),
   module: {
