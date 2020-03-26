@@ -188,9 +188,6 @@ export default {
           }
 
           if (res.nextPageToken) {
-            this.isWorkflowRunning = JSON.parse(
-              atob(res.nextPageToken)
-            ).IsWorkflowRunning;
             setTimeout(() => {
               this.nextPageToken = res.nextPageToken;
             });

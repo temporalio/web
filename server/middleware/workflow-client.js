@@ -55,6 +55,17 @@ function buildWorkflowExecutionRequest(execution) {
   return req;
 }
 
+function buildStatusFilter(statusFilter) {
+  if (!statusFilter) {
+    return statusFilter;
+  }
+
+  const filter =
+    statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1).toLowerCase();
+
+  return { closeStatus: `WorkflowExecutionCloseStatus${filter}` };
+}
+
 function uiTransform(item) {
   if (!item || typeof item !== 'object') {
     return item;
@@ -209,7 +220,7 @@ WorkflowClient.prototype.closedWorkflows = async function({
     StartTimeFilter: startTimeFilter,
     typeFilter,
     executionFilter,
-    statusFilter,
+    statusFilter: buildStatusFilter(statusFilter),
     nextPageToken,
     maximumPageSize,
   };
