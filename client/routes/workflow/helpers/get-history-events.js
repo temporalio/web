@@ -5,6 +5,12 @@ import getEventDetails from './get-event-details';
 import getEventFullDetails from './get-event-full-details';
 import getEventSummary from './get-event-summary';
 
+const timestampToDate = timestamp => {
+  const ts = parseInt(timestamp) / 1000000;
+
+  return moment(ts);
+};
+
 const getHistoryEvents = events => {
   if (!events) {
     return [];
@@ -12,7 +18,7 @@ const getHistoryEvents = events => {
 
   return events
     .map(event => {
-      const timestamp = moment(event.timestamp);
+      const timestamp = timestampToDate(event.timestamp);
 
       return {
         ...event,
