@@ -1,14 +1,14 @@
 <template>
   <section class="help">
     <section id="getting-started">
-      <h1>Welcome to Cadence!</h1>
+      <h1>Welcome to Temporal!</h1>
       <h3>
         <a href="#getting-started">
           Getting started
         </a>
       </h3>
       <p>
-        If you are new to Cadence, here's some resources to get you started!
+        If you are new to Temporal, here's some resources to get you started!
       </p>
       <div class="video-outer-container">
         <div class="video-inner-container">
@@ -41,7 +41,7 @@
       <slot name="getting-started" />
       <div v-if="!hideDocs">
         <a
-          href="https://cadenceworkflow.io/docs"
+          href="https://docs.temporal.io/"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -50,7 +50,7 @@
       </div>
       <div>
         <a
-          href="https://github.com/samarabbas/cadence-samples"
+          href="https://github.com/temporalio/temporal-go-samples"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -59,20 +59,20 @@
       </div>
       <div>
         <a
-          href="https://github.com/uber/cadence"
+          href="https://github.com/temporalio/temporal"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Cadence source code on GitHub
+          Temporal source code on GitHub
         </a>
       </div>
       <div>
         <a
-          href="https://github.com/uber/cadence-web"
+          href="https://github.com/temporalio/temporal-web"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Cadence UI source code on GitHub
+          Temporal UI source code on GitHub
         </a>
       </div>
     </section>
@@ -83,7 +83,7 @@
         </a>
       </h3>
       <p>
-        Here are a some useful common CLI commands to get started with Cadence.
+        Here are a some useful common CLI commands to get started with Temporal.
       </p>
 
       <section v-for="commandGroup in cliCommands" :key="commandGroup.header">
@@ -119,20 +119,20 @@
       </h3>
       <div>
         <a
-          href="https://github.com/uber/cadence/releases/latest"
+          href="https://github.com/temporalio/temporal/releases/latest"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Cadence
+          Temporal
         </a>
       </div>
       <div>
         <a
-          href="https://github.com/uber/cadence-web/releases/latest"
+          href="https://github.com/temporalio/temporal-web/releases/latest"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Cadence UI
+          Temporal UI
         </a>
       </div>
       <slot name="release-notes" />
