@@ -64,8 +64,8 @@ describe('Workflow list', () => {
     resultsEl
       .textNodes('tbody td:first-child')
       .should.deep.equal([
-        'github.com/uber/cadence-web/email-daily-summaries-2',
-        'github.com/uber/cadence-web/example-1',
+        'github.com/temporalio/temporal-web/email-daily-summaries-2',
+        'github.com/temporalio/temporal-web/example-1',
       ]);
     resultsEl
       .textNodes('tbody td:nth-child(2)')
@@ -76,8 +76,8 @@ describe('Workflow list', () => {
     resultsEl
       .attrValues('tbody td:nth-child(2) a', 'href')
       .should.deep.equal([
-        '/domains/ci-test/workflows/github.com%2Fuber%2Fcadence-web%2Femail-daily-summaries-2/ef2c889e-e709-4d50-99ee-3748dfa0a101/summary',
-        '/domains/ci-test/workflows/github.com%2Fuber%2Fcadence-web%2Fexample-1/db8da3c0-b7d3-48b7-a9b3-b6f566e58207/summary',
+        '/domains/ci-test/workflows/github.com%2Fuber%2Ftemporal-web%2Femail-daily-summaries-2/ef2c889e-e709-4d50-99ee-3748dfa0a101/summary',
+        '/domains/ci-test/workflows/github.com%2Fuber%2Ftemporal-web%2Fexample-1/db8da3c0-b7d3-48b7-a9b3-b6f566e58207/summary',
       ]);
     resultsEl
       .textNodes('tbody td:nth-child(3)')

@@ -14,7 +14,7 @@ module.exports = {
   ].filter(x => x),
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'cadence.[hash].js',
+    filename: 'temporal.[hash].js',
     publicPath: '/'
   },
   plugins: [
@@ -23,7 +23,7 @@ module.exports = {
         NODE_ENV: '"production"'
       }
     }),
-    new ExtractTextPlugin({ filename: development ? 'cadence.css' : 'cadence.[hash].css', allChunks: true }),
+    new ExtractTextPlugin({ filename: development ? 'temporal.css' : 'temporal.[hash].css', allChunks: true }),
     new HtmlWebpackPlugin({
       title: 'Temporal',
       filename: 'index.html',

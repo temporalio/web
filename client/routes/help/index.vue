@@ -103,7 +103,7 @@
 
       <div>
         <a
-          href="https://cadenceworkflow.io/docs/08_cli"
+          href="https://docs.temporal.io/docs/08_running_temporal/02_cli"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -147,7 +147,7 @@
       <p>Our office hours are 9am - 5pm PDT</p>
       <div v-if="!hideStackOverflow">
         <a
-          href="https://stackoverflow.com/questions/tagged/cadence-workflow"
+          href="https://stackoverflow.com/questions/tagged/temporal-workflow"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -165,7 +165,7 @@
       </div>
       <div v-if="!hideSlack">
         <a
-          href="https://join.slack.com/t/uber-cadence/shared_invite/enQtNDczNTgxMjYxNDEzLTQyYjcxZDM2YTIxMTZkMzQ0NjgxYmI3OWY5ODhiOTliM2I5MzA4NTM4MjU4YzgzZDkwNGEzOTUzNTBlNDk3Yjc"
+          href="https://join.slack.com/t/temporalio/shared_invite/zt-c1e99p8g-beF7~ZZW2HP6gGStXD8Nuw
           target="_blank"
           rel="noopener noreferrer"
         >

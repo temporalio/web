@@ -70,7 +70,7 @@ describe('Domain search', () => {
       .textNodes('dl.details dd')
       .should.deep.equal([
         'A cool domain',
-        'ci-test@uber.com',
+        'ci-test@temporalio.com',
         'No',
         '21 days',
         'Yes',
@@ -194,7 +194,7 @@ describe('Domain search', () => {
       .textNodes('dl.details dd')
       .should.deep.equal([
         'demo playground',
-        'ci-test@uber.com',
+        'ci-test@temporalio.com',
         'No',
         '3 days',
         'Yes',

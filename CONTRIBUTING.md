@@ -1,14 +1,14 @@
-# Developing Cadence's Web UI
+# Developing Temporal's Web UI
 
-This doc is intended for contributors to `cadence-web`
+This doc is intended for contributors to `temporal-web`
 
-**Note:** All contributors will be asked to sign [Uber Contributor License Agreement](http://t.uber.com/cla) during the PR process.
+**Note:** All contributors will be asked to sign [Uber Contributor License Agreement](http://t.temporalio.com/cla) during the PR process.
 
 ## Development Environment
 
-Node.js. Check [package.json](https://github.com/uber/cadence-web/blob/master/package.json) for the current version required. We recommend using [nvm](https://github.com/creationix/nvm) to manage your versions.
+Node.js. Check [package.json](https://github.com/temporalio/temporal-web/blob/master/package.json) for the current version required. We recommend using [nvm](https://github.com/creationix/nvm) to manage your versions.
 
-You also need to run [cadence-server](https://github.com/uber/cadence) locally or have access to a cadence environment to talk to.
+You also need to run [temporal-server](https://github.com/temporalio/temporal) locally or have access to a temporal environment to talk to.
 
 ## Working with the source code
 

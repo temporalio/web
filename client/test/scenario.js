@@ -127,7 +127,7 @@ Scenario.prototype.withDomainDescription = function withDomainDescription(
           name: domain,
           status: 'REGISTERED',
           description: 'A cool domain',
-          ownerEmail: 'ci-test@uber.com',
+          ownerEmail: 'ci-test@temporalio.com',
         },
         configuration: {
           workflowExecutionRetentionPeriodInDays: 21,

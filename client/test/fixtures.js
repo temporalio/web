@@ -15,7 +15,7 @@ export default {
     open: [
       {
         execution: {
-          workflowId: 'github.com/uber/cadence-web/email-daily-summaries-2',
+          workflowId: 'github.com/temporalio/temporal-web/email-daily-summaries-2',
           runId: 'ef2c889e-e709-4d50-99ee-3748dfa0a101',
         },
         type: {
@@ -27,7 +27,7 @@ export default {
       },
       {
         execution: {
-          workflowId: 'github.com/uber/cadence-web/example-1',
+          workflowId: 'github.com/temporalio/temporal-web/example-1',
           runId: 'db8da3c0-b7d3-48b7-a9b3-b6f566e58207',
         },
         type: {
@@ -45,7 +45,7 @@ export default {
           runId: '51ccc0d1-6ffe-4a7a-a89f-6b5154df86f7',
         },
         type: {
-          name: 'github.com/uber/cadence-web/email-daily-summaries-1',
+          name: 'github.com/temporalio/temporal-web/email-daily-summaries-1',
         },
         closeStatus: 'COMPLETED',
         startTime: emailRun1Start.toISOString(),
