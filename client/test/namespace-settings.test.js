@@ -1,4 +1,4 @@
-describe('Namespace Configuration', () => {
+describe('Namespace Settings', () => {
   async function namespaceConfigTest(mochaTest, desc) {
     const [testEl, scenario] = new Scenario(mochaTest)
       .withNamespace('ci-test')
@@ -6,7 +6,7 @@ describe('Namespace Configuration', () => {
       .withNamespaceDescription('ci-test', desc)
       .go();
 
-    const configEl = await testEl.waitUntilExists('section.namespace-config');
+    const configEl = await testEl.waitUntilExists('section.namespace-settings');
 
     return [configEl, scenario];
   }
@@ -31,7 +31,7 @@ describe('Namespace Configuration', () => {
       .textNodes('dl.details dd')
       .should.deep.equal([
         'A cool namespace',
-        'ci-test@temporalio.com',
+        'ci-test@uber.com',
         'No',
         '21 days',
         'Yes',

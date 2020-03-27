@@ -161,9 +161,12 @@ Scenario.prototype.withWorkflows = function withWorkflows(
     workflows = JSON.parse(JSON.stringify(fixtures.workflows[status]));
   }
 
-  const url = `/api/namespaces/${this.namespace}/workflows/${status}?${qs.stringify({
+  const startTimeDays = status === 'open' ? 30 : 21;
+  const url = `/api/namespaces/${
+    this.namespaces
+  }/workflows/${status}?${qs.stringify({
     startTime: moment()
-      .subtract(21, 'day')
+      .subtract(startTimeDays, 'day')
       .startOf('day')
       .toISOString(),
     endTime: moment()

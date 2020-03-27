@@ -1,4 +1,4 @@
-describe('Namespace search', () => {
+describe('Namespace list', () => {
   it('should show a header bar without a breadcrumb or namespace changer', async function test() {
     const testEl = new Scenario(this.test).render();
     const headerBar = await testEl.waitUntilExists('header.top-bar');
@@ -70,7 +70,7 @@ describe('Namespace search', () => {
       .textNodes('dl.details dd')
       .should.deep.equal([
         'A cool namespace',
-        'ci-test@temporalio.com',
+        'ci-test@uber.com',
         'No',
         '21 days',
         'Yes',
@@ -167,7 +167,9 @@ describe('Namespace search', () => {
       .withWorkflows('open');
 
     await testEl.waitUntilExists('section.workflow-list');
-    localStorage.getItem('recent-namespaces').should.equal('["ci-tests","demo"]');
+    localStorage
+      .getItem('recent-namespaces')
+      .should.equal('["ci-tests","demo"]');
   });
 
   it('should show a description of recent namespaces when hovered', async function test() {
@@ -194,7 +196,7 @@ describe('Namespace search', () => {
       .textNodes('dl.details dd')
       .should.deep.equal([
         'demo playground',
-        'ci-test@temporalio.com',
+        'ci-test@uber.com',
         'No',
         '3 days',
         'Yes',
