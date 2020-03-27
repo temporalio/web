@@ -201,7 +201,7 @@ describe('Workflow', () => {
               newExecutionRunId: '617d8b6f-ea42-479c-bc7c-0ec4dacddf64',
               workflowType: {
                 name:
-                  'code.uber.internal/marketplace/dsp-scheduler/scheduler/workflow.CTBWorkflow',
+                  'code.temporalio.internal/marketplace/dsp-scheduler/scheduler/workflow.CTBWorkflow',
               },
               taskList: {
                 name: 'ctb-decider',
@@ -270,7 +270,7 @@ describe('Workflow', () => {
             timestamp: moment().toISOString(),
             eventId: 1,
             details: {
-              workflowType: { name: 'com.github/uber/ci-test-parent' },
+              workflowType: { name: 'com.github/temporalio/ci-test-parent' },
               parentWorkflowDomain: 'another-domain',
               parentWorkflowExecution: {
                 workflowId: 'the-parent-wfid',
@@ -1018,7 +1018,7 @@ describe('Workflow', () => {
               timestamp: moment().toISOString(),
               eventId: 1,
               details: {
-                workflowType: { name: 'com.github/uber/ci-test-parent' },
+                workflowType: { name: 'com.github/temporalio/ci-test-parent' },
               },
             },
             {

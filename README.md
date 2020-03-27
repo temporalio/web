@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/uber/cadence-web.svg?branch=master)](https://travis-ci.com/uber/cadence-web)
 
-Cadence is a distributed, scalable, durable, and highly available orchestration engine we developed at Uber Engineering to execute asynchronous long-running business logic in a scalable and resilient way.
+Temporal is a distributed, scalable, durable, and highly available orchestration engine we developed at Uber Engineering to execute asynchronous long-running business logic in a scalable and resilient way.
 
 This web UI is used to view workflows from [Temporalio][temporal], see what's running, and explore and debug workflow executions.
 
@@ -30,7 +30,7 @@ npm run dev
 
 For development and contributing to `temporal-web`, please see the [contributing guide](https://github.com/temporalio/temporal-web/blob/master/CONTRIBUTING.md).
 
-You may also use docker by pulling [temporalio/web](https://hub.docker.com/r/temporalio/web/). It is also included in the Cadence server's [local docker setup](https://github.com/temporalio/temporal/tree/master/docker).
+You may also use docker by pulling [temporalio/web](https://hub.docker.com/r/temporalio/web/). It is also included in the Temporal server's [local docker setup](https://github.com/temporalio/temporal/tree/master/docker).
 
 ### API
 

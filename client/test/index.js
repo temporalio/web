@@ -41,7 +41,7 @@ main {
 }
 `;
 document.head.appendChild(extraStyling);
-document.title = 'Cadence Tests';
+document.title = 'Temporal Tests';
 
 const chai = require('chai');
 

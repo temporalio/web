@@ -89,7 +89,7 @@ function uiTransform(item) {
       const stringval = subvalue.toString('utf8');
 
       try {
-        // most of Cadence's uses of buffer is just line-delimited JSON.
+        // most of Temporal's uses of buffer is just line-delimited JSON.
         item[subkey] = stringval
           .split('\n')
           .filter(x => x)

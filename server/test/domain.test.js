@@ -5,7 +5,7 @@ describe('Describe Domain', function() {
         name: 'ci-test-domain',
         status: 'REGISTERED',
         description: 'domain for running CI tests',
-        ownerEmail: 'cadence-dev@uber.com',
+        ownerEmail: 'temporal-dev@temporalio.com',
         data: null,
         uuid: null
       },

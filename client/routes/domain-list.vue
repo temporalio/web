@@ -1,6 +1,6 @@
 <template>
   <section class="domain-search">
-    <domain-navigation type="text" placeholder="cadence-canary" />
+    <domain-navigation type="text" placeholder="temporal-canary" />
   </section>
 </template>
 

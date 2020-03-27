@@ -7,7 +7,7 @@ wfHistoryThrift = [{
   workflowExecutionStartedEventAttributes: {
     attempt: null,
     workflowType: {
-      name: 'github.com/uber/cadence/demo'
+      name: 'github.com/temporalio/temporal/demo'
     },
     taskList: {
       name: 'ci-task-queue',
@@ -89,7 +89,7 @@ wfHistoryJson = [{
 }]
 
 describe('Workflow History', function() {
-  it('should forward the request to the cadence frontend with workflowId and runId', function() {
+  it('should forward the request to the temporal frontend with workflowId and runId', function() {
     this.test.GetWorkflowExecutionHistory = ({ getRequest }) => {
       getRequest.should.deep.equal({
         HistoryEventFilterType: null,
@@ -169,7 +169,7 @@ describe('Workflow History', function() {
   })
 
   describe('Export', function() {
-    const wfHistoryCliJson = `[{"eventId":1,"timestamp":1510701850351393089,"eventType":"WorkflowExecutionStarted","workflowExecutionStartedEventAttributes":{"workflowType":{"name":"github.com/uber/cadence/demo"},"taskList":{"name":"ci-task-queue"},"input":"eyJlbWFpbHMiOlsiamFuZUBleGFtcGxlLmNvbSIsImJvYkBleGFtcGxlLmNvbSJdLCJpbmNsdWRlRm9vdGVyIjp0cnVlfQ==","executionStartToCloseTimeoutSeconds":1080,"taskStartToCloseTimeoutSeconds":30}},{"eventId":2,"timestamp":1510701850351393089,"eventType":"DecisionTaskScheduled","decisionTaskScheduledEventAttributes":{"taskList":{"name":"canary-task-queue"},"startToCloseTimeoutSeconds":180,"attempt":1}},{"eventId":3,"timestamp":1510701867531262273,"eventType":"DecisionTaskStarted","decisionTaskStartedEventAttributes":{"scheduledEventId":2,"identity":"box1@ci-task-queue","requestId":"fafa095d-b4ca-423a-a812-223e62b5ccf8"}}]`
+    const wfHistoryCliJson = `[{"eventId":1,"timestamp":1510701850351393089,"eventType":"WorkflowExecutionStarted","workflowExecutionStartedEventAttributes":{"workflowType":{"name":"github.com/temporalio/temporal/demo"},"taskList":{"name":"ci-task-queue"},"input":"eyJlbWFpbHMiOlsiamFuZUBleGFtcGxlLmNvbSIsImJvYkBleGFtcGxlLmNvbSJdLCJpbmNsdWRlRm9vdGVyIjp0cnVlfQ==","executionStartToCloseTimeoutSeconds":1080,"taskStartToCloseTimeoutSeconds":30}},{"eventId":2,"timestamp":1510701850351393089,"eventType":"DecisionTaskScheduled","decisionTaskScheduledEventAttributes":{"taskList":{"name":"canary-task-queue"},"startToCloseTimeoutSeconds":180,"attempt":1}},{"eventId":3,"timestamp":1510701867531262273,"eventType":"DecisionTaskStarted","decisionTaskStartedEventAttributes":{"scheduledEventId":2,"identity":"box1@ci-task-queue","requestId":"fafa095d-b4ca-423a-a812-223e62b5ccf8"}}]`
 
     it('should be able to export history in a format compatible with the CLI', function() {
       this.test.GetWorkflowExecutionHistory = ({ getRequest }) => ({

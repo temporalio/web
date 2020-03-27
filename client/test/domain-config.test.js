@@ -31,7 +31,7 @@ describe('Domain Configuration', () => {
       .textNodes('dl.details dd')
       .should.deep.equal([
         'A cool domain',
-        'ci-test@uber.com',
+        'ci-test@temporalio.com',
         'No',
         '21 days',
         'Yes',

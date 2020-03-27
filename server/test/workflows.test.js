@@ -5,7 +5,7 @@ describe('Listing Workflows', function() {
       runId: 'd92bb92c-5f49-487f-80a8-f8f375ba55a8'
     },
     type: {
-      name: 'github.com/uber/cadence/demo.cronWorkflow'
+      name: 'github.com/temporalio/temporal/demo.cronWorkflow'
     },
     startTime: dateToLong('2017-11-10T21:30:00.000Z'),
     closeTime: null,

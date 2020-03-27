@@ -4,7 +4,7 @@ var app = require('./server/index'),
 
 app.init().listen(port)
 
-console.log('cadence-web up and listening on port ' + port)
+console.log('temporal-web up and listening on port ' + port)
 if (!production) {
   console.log('webpack is compiling...')
 }

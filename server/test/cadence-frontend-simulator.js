@@ -11,14 +11,14 @@ global.should = require('chai').should()
 global.dateToLong = d => Long.fromValue(Number(new Date(d))).mul(1000000)
 
 before(function(done) {
-  tchanServer = new TChannel({ serviceName: 'cadence-frontend' })
+  tchanServer = new TChannel({ serviceName: 'temporal-frontend' })
 
   client = new TChannel()
-  var cadenceChan = client.makeSubChannel({
-    serviceName: 'cadence-frontend'
+  var temporalChan = client.makeSubChannel({
+    serviceName: 'temporal-frontend'
   })
   var tchan = TChannelAsThrift({
-    channel: cadenceChan,
+    channel: temporalChan,
     entryPoint: path.join(__dirname, '../idl/cadence.thrift')
   })
 
