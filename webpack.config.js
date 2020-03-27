@@ -25,9 +25,9 @@ module.exports = {
     }),
     new ExtractTextPlugin({ filename: development ? 'cadence.css' : 'cadence.[hash].css', allChunks: true }),
     new HtmlWebpackPlugin({
-      title: 'Cadence',
+      title: 'Temporal',
       filename: 'index.html',
-      favicon: 'favicon.ico',
+      favicon: 'favicon.svg',
       inject: false,
       template: require('html-webpack-template'),
       lang: 'en-US',
