@@ -2,12 +2,12 @@ import moment from 'moment';
 import fixtures from './fixtures';
 
 describe('Workflow list', () => {
-  async function workflowsTest(mochaTest, initialWorkflows, query, domainDesc) {
+  async function workflowsTest(mochaTest, initialWorkflows, query, namespaceDesc) {
     const [testEl, scenario] = new Scenario(mochaTest)
-      .withDomain('ci-test')
-      .startingAt('/domains/ci-test/workflows')
+      .withNamespace('ci-test')
+      .startingAt('/namespaces/ci-test/workflows')
       .withWorkflows('open', query, initialWorkflows)
-      .withDomainDescription('ci-test', domainDesc)
+      .withNamespaceDescription('ci-test', namespaceDesc)
       .go();
 
     const workflows = await testEl.waitUntilExists('section.workflow-list');
@@ -25,19 +25,19 @@ describe('Workflow list', () => {
     },
   ];
 
-  it('should show the domain with configuration link and workflows breadcrumb in the nav bar', async function test() {
+  it('should show the namespace with configuration link and workflows breadcrumb in the nav bar', async function test() {
     const [, scenario] = await workflowsTest(this.test);
     const header = scenario.vm.$el.querySelector('header.top-bar');
 
     header.should.have
       .descendant('a.workflows')
       .and.have.class('router-link-active')
-      .and.have.attribute('href', '/domains/ci-test/workflows');
+      .and.have.attribute('href', '/namespaces/ci-test/workflows');
 
     header.should.have
       .descendant('a.config')
       .and.not.have.class('router-link-active')
-      .and.have.attribute('href', 'domain/ci-test/config');
+      .and.have.attribute('href', 'namespace/ci-test/config');
   });
 
   it('should query for open workflows and show the results in a grid', async function test() {
@@ -76,8 +76,8 @@ describe('Workflow list', () => {
     resultsEl
       .attrValues('tbody td:nth-child(2) a', 'href')
       .should.deep.equal([
-        '/domains/ci-test/workflows/github.com%2Fuber%2Ftemporal-web%2Femail-daily-summaries-2/ef2c889e-e709-4d50-99ee-3748dfa0a101/summary',
-        '/domains/ci-test/workflows/github.com%2Fuber%2Ftemporal-web%2Fexample-1/db8da3c0-b7d3-48b7-a9b3-b6f566e58207/summary',
+        '/namespaces/ci-test/workflows/github.com%2Fuber%2Ftemporal-web%2Femail-daily-summaries-2/ef2c889e-e709-4d50-99ee-3748dfa0a101/summary',
+        '/namespaces/ci-test/workflows/github.com%2Fuber%2Ftemporal-web%2Fexample-1/db8da3c0-b7d3-48b7-a9b3-b6f566e58207/summary',
       ]);
     resultsEl
       .textNodes('tbody td:nth-child(3)')
@@ -131,9 +131,9 @@ describe('Workflow list', () => {
 
   it('should respect query parameters for range and status', async function test() {
     const [testEl] = new Scenario(this.test)
-      .withDomain('ci-test')
+      .withNamespace('ci-test')
       .startingAt(
-        '/domains/ci-test/workflows?status=FAILED&range=last-24-hours'
+        '/namespaces/ci-test/workflows?status=FAILED&range=last-24-hours'
       )
       .withWorkflows('closed', {
         startTime: moment()
@@ -145,7 +145,7 @@ describe('Workflow list', () => {
           .toISOString(),
         status: 'FAILED',
       })
-      .withDomainDescription('ci-test')
+      .withNamespaceDescription('ci-test')
       .go();
 
     await retry(() =>
@@ -263,13 +263,13 @@ describe('Workflow list', () => {
 
   it('should use query parameters from the URL', async function test() {
     const [testEl] = new Scenario(this.test)
-      .withDomain('ci-test')
-      .startingAt('/domains/ci-test/workflows?status=FAILED&workflowName=demo')
+      .withNamespace('ci-test')
+      .startingAt('/namespaces/ci-test/workflows?status=FAILED&workflowName=demo')
       .withWorkflows('closed', {
         status: 'FAILED',
         workflowName: 'demo',
       })
-      .withDomainDescription('ci-test')
+      .withNamespaceDescription('ci-test')
       .go();
 
     const workflowsEl = await testEl.waitUntilExists('section.workflow-list');

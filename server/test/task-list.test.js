@@ -1,7 +1,7 @@
 describe('Task List Pollers', function() {
   it('should aggregate decision and activity pollers together by instance', function() {
     this.test.DescribeTaskList = ({ request }) => {
-      request.domain.should.equal('canary')
+      request.namespace.should.equal('canary')
       request.taskList.name.should.equal('demo-task-list')
 
       return {
@@ -22,7 +22,7 @@ describe('Task List Pollers', function() {
     }
 
     return request()
-      .get('/api/domains/canary/task-lists/demo-task-list/pollers')
+      .get('/api/namespaces/canary/task-lists/demo-task-list/pollers')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect({

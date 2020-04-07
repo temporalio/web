@@ -277,10 +277,10 @@ export default {
   data() {
     return {
       tsFormat:
-        localStorage.getItem(`${this.domain}:history-ts-col-format`) ||
+        localStorage.getItem(`${this.namespace}:history-ts-col-format`) ||
         'elapsed',
       compactDetails:
-        localStorage.getItem(`${this.domain}:history-compact-details`) ===
+        localStorage.getItem(`${this.namespace}:history-compact-details`) ===
         'true',
       scrolledToEventOnInit: false,
       splitEnabled: false,
@@ -301,7 +301,7 @@ export default {
   },
   props: [
     'baseAPIURL',
-    'domain',
+    'namespace',
     'eventId',
     'events',
     'format',
@@ -443,14 +443,14 @@ export default {
     },
     setTsFormat(tsFormat) {
       this.tsFormat = tsFormat;
-      localStorage.setItem(`${this.domain}:history-ts-col-format`, tsFormat);
+      localStorage.setItem(`${this.namespace}:history-ts-col-format`, tsFormat);
     },
     setCompactDetails(compact) {
       const { scrollerGrid } = this.$refs;
 
       this.compactDetails = compact;
       localStorage.setItem(
-        `${this.domain}:history-compact-details`,
+        `${this.namespace}:history-compact-details`,
         JSON.stringify(compact)
       );
       scrollerGrid.forceUpdate();

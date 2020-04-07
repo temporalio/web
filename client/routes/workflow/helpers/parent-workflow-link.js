@@ -4,7 +4,7 @@ export default function(wfStartDetails) {
       to: {
         name: 'workflow/summary',
         params: {
-          domain: wfStartDetails.parentWorkflowDomain,
+          namespace: wfStartDetails.parentWorkflowNamespace,
           workflowId: wfStartDetails.parentWorkflowExecution.workflowId,
           runId: wfStartDetails.parentWorkflowExecution.runId,
         },

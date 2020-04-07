@@ -1,18 +1,18 @@
-describe('Domain Configuration', () => {
-  async function domainConfigTest(mochaTest, desc) {
+describe('Namespace Configuration', () => {
+  async function namespaceConfigTest(mochaTest, desc) {
     const [testEl, scenario] = new Scenario(mochaTest)
-      .withDomain('ci-test')
-      .startingAt('/domains/ci-test/config')
-      .withDomainDescription('ci-test', desc)
+      .withNamespace('ci-test')
+      .startingAt('/namespaces/ci-test/config')
+      .withNamespaceDescription('ci-test', desc)
       .go();
 
-    const configEl = await testEl.waitUntilExists('section.domain-config');
+    const configEl = await testEl.waitUntilExists('section.namespace-config');
 
     return [configEl, scenario];
   }
 
-  it('should show properties in a readable form from the domain description API', async function test() {
-    const [configEl] = await domainConfigTest(this.test);
+  it('should show properties in a readable form from the namespace description API', async function test() {
+    const [configEl] = await namespaceConfigTest(this.test);
 
     await configEl.waitUntilExists('dl.details dt');
     configEl.should.have.descendant('header h3').with.text('ci-test');
@@ -30,7 +30,7 @@ describe('Domain Configuration', () => {
     configEl
       .textNodes('dl.details dd')
       .should.deep.equal([
-        'A cool domain',
+        'A cool namespace',
         'ci-test@temporalio.com',
         'No',
         '21 days',

@@ -78,28 +78,28 @@ export default {
       :type="notification.type"
     />
     <header class="top-bar">
-      <a href="/domains" class="logo">
+      <a href="/namespaces" class="logo">
         <div v-html="logo"></div>
         <span class="version">{{ version }}</span>
       </a>
-      <div class="domain" v-if="$route.params.domain">
+      <div class="namespace" v-if="$route.params.namespace">
         <a
           class="workflows"
           :class="{
             'router-link-active':
-              $route.path === `/domains/${$route.params.domain}/workflows`,
+              $route.path === `/namespaces/${$route.params.namespace}/workflows`,
           }"
-          :href="`/domains/${$route.params.domain}/workflows`"
+          :href="`/namespaces/${$route.params.namespace}/workflows`"
         >
-          {{ $route.params.domain }}
+          {{ $route.params.namespace }}
         </a>
         <a
           class="config"
           :class="{
             'router-link-active':
-              $route.path === `/domains/${$route.params.domain}/config`,
+              $route.path === `/namespaces/${$route.params.namespace}/config`,
           }"
-          :href="`/domains/${$route.params.domain}/config`"
+          :href="`/namespaces/${$route.params.namespace}/config`"
         ></a>
       </div>
       <div v-if="$route.name === 'workflow-list'">
@@ -166,10 +166,10 @@ header.top-bar
   nav-label-font-size = 11px
   & > div
     margin-right spacing
-  div.domain
+  div.namespace
     flex 0 0 auto
     &::before
-      content 'DOMAIN'
+      content 'NAMESPACE'
       font-size nav-label-font-size
       font-weight normal
       vertical-align middle

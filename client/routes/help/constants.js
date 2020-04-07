@@ -1,31 +1,31 @@
 export const cliCommands = [
   {
-    header: 'Domain commands',
+    header: 'Namespace commands',
     commands: [
       {
-        id: 'cli-command-domain-register',
-        label: 'Register a domain (local only)',
+        id: 'cli-command-namespace-register',
+        label: 'Register a namespace (local only)',
         value:
-          'tctl --domain {domain-name} domain register --global_domain false',
+          'tctl --namespace {namespace-name} namespace register --global_namespace false',
       },
       {
-        id: 'cli-command-domain-describe',
-        label: 'List domain settings',
+        id: 'cli-command-namespace-describe',
+        label: 'List namespace settings',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} domain describe',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} namespace describe',
       },
       {
-        id: 'cli-command-domain-update-cluster',
+        id: 'cli-command-namespace-update-cluster',
         label:
-          'Update domain active cluster (Make sure the domain_data has UberIgnoringLisa:true)',
+          'Update namespace active cluster (Make sure the namespace_data has UberIgnoringLisa:true)',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} domain update -active_cluster {cluster-name}',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} namespace update -active_cluster {cluster-name}',
       },
       {
-        id: 'cli-command-domain-update-bad-binary',
-        label: 'Update domain bad binary',
+        id: 'cli-command-namespace-update-bad-binary',
+        label: 'Update namespace bad binary',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} domain update --add_bad_binary {bad-binary-SHA} --reason \'"{reason}"\'',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} namespace update --add_bad_binary {bad-binary-SHA} --reason \'"{reason}"\'',
       },
     ],
   },
@@ -36,25 +36,25 @@ export const cliCommands = [
         id: 'cli-command-workflow-run',
         label: 'Run a workflow',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} workflow run --tl {task-list-name} --wt {workflow-type-name} --et 60 -i \'"{input-string}"\'',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow run --tl {task-list-name} --wt {workflow-type-name} --et 60 -i \'"{input-string}"\'',
       },
       {
         id: 'cli-command-workflow-describe',
         label: 'See workflow settings',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} workflow describe -w {workflow-id} -r {run-id}',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow describe -w {workflow-id} -r {run-id}',
       },
       {
         id: 'cli-command-workflow-show',
         label: 'See workflow history',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} workflow show -w {workflow-id} -r {run-id}',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow show -w {workflow-id} -r {run-id}',
       },
       {
         id: 'cli-command-workflow-signal',
         label: 'Signal a workflow',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} workflow signal -w {workflow-id} -r {run-id} --name {signal-name} --input \'"{signal-payload}"\'',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow signal -w {workflow-id} -r {run-id} --name {signal-name} --input \'"{signal-payload}"\'',
       },
 
       {
@@ -81,13 +81,13 @@ export const cliCommands = [
         id: 'cli-command-workflow-list',
         label: 'List closed workflows',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} workflow {list|listall}',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow {list|listall}',
       },
       {
         id: 'cli-command-workflow-list-open',
         label: 'List open workflows',
         value:
-          'tctl --env {staging|prod|prod02} --domain {domain-name} workflow {list|listall} --open',
+          'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow {list|listall} --open',
       },
       {
         id: 'cli-command-workflow-query',
