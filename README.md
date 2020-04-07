@@ -1,6 +1,6 @@
 # Temporal Web UI
 
-[![Build Status](https://travis-ci.com/uber/cadence-web.svg?branch=master)](https://travis-ci.com/uber/cadence-web)
+[![Build status](https://badge.buildkite.com/72da2011c93761d680bc8c641d07adad16c94b99b0ed8d7566.svg?branch=master)](https://buildkite.com/temporal/temporal-web)
 
 Temporal is a distributed, scalable, durable, and highly available orchestration engine we developed at Uber Engineering to execute asynchronous long-running business logic in a scalable and resilient way.
 
