@@ -4,12 +4,12 @@
       <navigation-link
         :exact="true"
         icon="icon_search"
-        label="Domains"
-        :to="{ name: 'domain-list' }"
+        label="Namespaces"
+        :to="{ name: 'namespace-list' }"
       />
       <navigation-link label="Help" icon="icon_help" :to="{ name: 'help' }" />
     </navigation-bar>
-    <router-view name="domain-list" />
+    <router-view name="namespace-list" />
     <router-view name="help" />
   </section>
 </template>

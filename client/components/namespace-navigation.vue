@@ -1,47 +1,47 @@
 <template>
-  <div class="domain-navigation" :class="'validation-' + validation">
+  <div class="namespace-navigation" :class="'validation-' + validation">
     <div class="input-and-validation">
       <div class="input-wrapper">
         <input
           type="text"
-          name="domain"
+          name="namespace"
           spellcheck="false"
           autocorrect="off"
           ref="input"
           v-bind:value="d"
           :placeholder="$props.placeholder"
           @input="onInput"
-          @keydown.enter="changeDomain"
+          @keydown.enter="changeNamespace"
           @keydown.esc="onEsc"
         />
         <a
           :href="validation === 'valid' ? '#' : ''"
-          class="change-domain"
-          @click="changeDomain"
+          class="change-namespace"
+          @click="changeNamespace"
         ></a>
       </div>
       <p :class="'validation validation-' + validation">
         {{ validationMessage }}
       </p>
     </div>
-    <ul class="recent-domains" v-if="recentDomains.length">
-      <h3>Recent Domains</h3>
-      <li v-for="domain in recentDomains" :key="domain">
+    <ul class="recent-namespaces" v-if="recentNamespaces.length">
+      <h3>Recent Namespaces</h3>
+      <li v-for="namespace in recentNamespaces" :key="namespace">
         <a
-          :href="domainLink(domain)"
-          :data-domain="domain"
-          @click="recordDomainFromClick"
-          @mouseover="showDomainDesc(domain)"
-          >{{ domain }}</a
+          :href="namespaceLink(namespace)"
+          :data-namespace="namespace"
+          @click="recordNamespaceFromClick"
+          @mouseover="showNamespaceDesc(namespace)"
+          >{{ namespace }}</a
         >
       </li>
     </ul>
     <div
-      :class="{ 'domain-description': true, pending: !!domainDescRequest }"
-      v-if="domainDesc"
+      :class="{ 'namespace-description': true, pending: !!namespaceDescRequest }"
+      v-if="namespaceDesc"
     >
-      <span class="domain-name">{{ domainDescName }}</span>
-      <detail-list :item="domainDesc" :title="domainDescName" />
+      <span class="namespace-name">{{ namespaceDescName }}</span>
+      <detail-list :item="namespaceDesc" :title="namespaceDescName" />
     </div>
   </div>
 </template>
@@ -50,7 +50,7 @@
 import debounce from 'lodash-es/debounce';
 import omit from 'lodash-es/omit';
 import { stringify } from 'friendly-querystring';
-import { getKeyValuePairs, mapDomainDescription } from '~helpers';
+import { getKeyValuePairs, mapNamespaceDescription } from '~helpers';
 import { DetailList } from '~components';
 
 const validationMessages = {
@@ -60,46 +60,46 @@ const validationMessages = {
 };
 
 export default {
-  props: ['domain', 'placeholder'],
+  props: ['namespace', 'placeholder'],
   data() {
     return {
-      d: this.$props.domain,
+      d: this.$props.namespace,
       validation: 'unknown',
       validationMessage: undefined,
-      recentDomains:
-        JSON.tryParse(localStorage.getItem('recent-domains')) || [],
-      domainDesc: undefined,
-      domainDescName: undefined,
-      domainDescRequest: undefined,
+      recentNamespaces:
+        JSON.tryParse(localStorage.getItem('recent-namespaces')) || [],
+      namespaceDesc: undefined,
+      namespaceDescName: undefined,
+      namespaceDescRequest: undefined,
     };
   },
   components: {
     'detail-list': DetailList,
   },
   created() {
-    this.domainDescCache = {};
+    this.namespaceDescCache = {};
 
-    if (this.$route && this.$route.params && this.$route.params.domain) {
-      this.recordDomain(this.$route.params.domain);
+    if (this.$route && this.$route.params && this.$route.params.namespace) {
+      this.recordNamespace(this.$route.params.namespace);
     }
   },
   methods: {
-    recordDomain(domain) {
-      if (domain) {
-        this.recentDomains = this.recentDomains
-          .filter(d => d && d !== domain)
+    recordNamespace(namespace) {
+      if (namespace) {
+        this.recentNamespaces = this.recentNamespaces
+          .filter(d => d && d !== namespace)
           .slice(0, 15);
-        this.recentDomains.unshift(domain);
+        this.recentNamespaces.unshift(namespace);
         localStorage.setItem(
-          'recent-domains',
-          JSON.stringify(this.recentDomains)
+          'recent-namespaces',
+          JSON.stringify(this.recentNamespaces)
         );
       }
     },
-    changeDomain() {
+    changeNamespace() {
       if (this.validation === 'valid') {
         this.$router.push({
-          path: `/domains/${this.d}/workflows`,
+          path: `/namespaces/${this.d}/workflows`,
           query: omit(
             this.$router.currentRoute.query,
             'workflowId',
@@ -107,40 +107,40 @@ export default {
             'workflowName'
           ),
         });
-        this.recordDomain(this.d);
+        this.recordNamespace(this.d);
         this.$emit('navigate', this.d);
       }
     },
-    domainLink(d) {
-      return `/domains/${d}/workflows?${stringify(
+    namespaceLink(d) {
+      return `/namespaces/${d}/workflows?${stringify(
         this.$router.currentRoute.query
       )}`;
     },
-    recordDomainFromClick(e) {
-      const domain = e.target.getAttribute('data-domain');
+    recordNamespaceFromClick(e) {
+      const namespace = e.target.getAttribute('data-namespace');
 
-      this.recordDomain(domain);
-      this.$emit('navigate', domain);
+      this.recordNamespace(namespace);
+      this.$emit('navigate', namespace);
     },
-    getDomainDesc(d) {
-      if (this.domainDescCache[d]) {
-        return Promise.resolve(this.domainDescCache[d]);
+    getNamespaceDesc(d) {
+      if (this.namespaceDescCache[d]) {
+        return Promise.resolve(this.namespaceDescCache[d]);
       }
 
-      return this.$http(`/api/domains/${d}`).then(r => {
-        this.domainDescCache[d] = mapDomainDescription(r);
+      return this.$http(`/api/namespaces/${d}`).then(r => {
+        this.namespaceDescCache[d] = mapNamespaceDescription(r);
 
-        return this.domainDescCache[d];
+        return this.namespaceDescCache[d];
       });
     },
     checkValidity: debounce(function checkValidity() {
-      const check = newDomain => {
+      const check = newNamespace => {
         this.validation = 'pending';
-        this.domainDescRequest = this.getDomainDesc(newDomain)
+        this.namespaceDescRequest = this.getNamespaceDesc(newNamespace)
           .then(
             desc => {
-              this.domainDescName = newDomain;
-              this.domainDesc = {
+              this.namespaceDescName = newNamespace;
+              this.namespaceDesc = {
                 kvps: getKeyValuePairs(desc),
               };
 
@@ -155,16 +155,16 @@ export default {
               this.validationMessage = validationMessages[v](this.d);
             }
 
-            if (this.d === newDomain || !this.d) {
+            if (this.d === newNamespace || !this.d) {
               this.validation = this.d ? v : 'unknown';
-              this.domainDescRequest = null;
+              this.namespaceDescRequest = null;
             } else {
               check.call(this, this.d);
             }
           });
       };
 
-      if (!this.domainDescRequest && this.d) {
+      if (!this.namespaceDescRequest && this.d) {
         check(this.d);
       }
     }, 300),
@@ -172,18 +172,18 @@ export default {
       this.d = this.$refs.input.value;
       this.checkValidity();
     },
-    showDomainDesc(d) {
-      this.domainDescName = d;
-      this.domainDescRequest = this.getDomainDesc(d)
+    showNamespaceDesc(d) {
+      this.namespaceDescName = d;
+      this.namespaceDescRequest = this.getNamespaceDesc(d)
         .catch(res => ({
           error: `${res.statusText || res.message} ${res.status}`,
         }))
         .then(desc => {
-          if (this.domainDescName === d) {
-            this.domainDesc = {
+          if (this.namespaceDescName === d) {
+            this.namespaceDesc = {
               kvps: getKeyValuePairs(desc),
             };
-            this.domainDescRequest = null;
+            this.namespaceDescRequest = null;
           }
         });
     },
@@ -206,10 +206,10 @@ validation(color, symbol)
     background-color color
     content symbol
 
-.domain-navigation
+.namespace-navigation
   display flex
   flex-wrap wrap
-  change-domain-size = 32px
+  change-namespace-size = 32px
 
   div.input-and-validation
     flex 0 0 100%
@@ -219,7 +219,7 @@ validation(color, symbol)
       align-items center
       &::after
         position absolute
-        right 18px + change-domain-size + inline-spacing-small
+        right 18px + change-namespace-size + inline-spacing-small
         font-size 11px
         size = 16px
         width size
@@ -245,28 +245,28 @@ validation(color, symbol)
   .validation-message
     line-height 1.5em
 
-  ul.recent-domains
+  ul.recent-namespaces
     flex 1 1 auto
 
-  a.change-domain
+  a.change-namespace
     icon('\ea87')
     margin-left inline-spacing-small
     &::before
       display inline-block
-      width change-domain-size
-      height change-domain-size
-      line-height change-domain-size
+      width change-namespace-size
+      height change-namespace-size
+      line-height change-namespace-size
       text-align center
       color white
       background-color uber-white-80
-      border-radius change-domain-size
+      border-radius change-namespace-size
     &[href='#']::before
       background-color primary-color
 
-.domain-description
+.namespace-description
   flex 1 1 60%
   padding layout-spacing-small
-  span.domain-name
+  span.namespace-name
     display inline-block
     font-size 18px
     padding inline-spacing-small

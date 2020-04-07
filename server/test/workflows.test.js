@@ -14,7 +14,7 @@ describe('Listing Workflows', function() {
     autoResetPoints: null,
     executionTime: null,
     memo: null,
-    parentDomainId: null,
+    parentNamespaceId: null,
     parentExecution: null,
     searchAttributes: null
   },
@@ -24,7 +24,7 @@ describe('Listing Workflows', function() {
 
   it('should list open workflows', function() {
     this.test.ListOpenWorkflowExecutions = ({ listRequest }) => {
-      listRequest.domain.should.equal('canary')
+      listRequest.namespace.should.equal('canary')
       listRequest.StartTimeFilter.earliestTime.div(1000000000).toNumber().should.equal(1510488000)
       listRequest.StartTimeFilter.latestTime.div(1000000000).toNumber().should.equal(1510583400)
       should.not.exist(listRequest.executionFilter)
@@ -36,7 +36,7 @@ describe('Listing Workflows', function() {
     }
 
     return request()
-      .get('/api/domains/canary/workflows/open?startTime=2017-11-12T12:00:00Z&endTime=2017-11-13T14:30:00Z')
+      .get('/api/namespaces/canary/workflows/open?startTime=2017-11-12T12:00:00Z&endTime=2017-11-13T14:30:00Z')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect({
@@ -47,7 +47,7 @@ describe('Listing Workflows', function() {
 
   it('should list closed workflows', function() {
     this.test.ListClosedWorkflowExecutions = ({ listRequest }) => {
-      listRequest.domain.should.equal('canary')
+      listRequest.namespace.should.equal('canary')
       listRequest.StartTimeFilter.earliestTime.div(1000000000).toNumber().should.equal(1510488000)
       listRequest.StartTimeFilter.latestTime.div(1000000000).toNumber().should.equal(1510583400)
       should.not.exist(listRequest.executionFilter)
@@ -59,7 +59,7 @@ describe('Listing Workflows', function() {
     }
 
     return request()
-      .get('/api/domains/canary/workflows/closed?startTime=2017-11-12T12:00:00Z&endTime=2017-11-13T14:30:00Z')
+      .get('/api/namespaces/canary/workflows/closed?startTime=2017-11-12T12:00:00Z&endTime=2017-11-13T14:30:00Z')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect({
@@ -78,7 +78,7 @@ describe('Listing Workflows', function() {
     }
 
     return request()
-      .get('/api/domains/canary/workflows/closed?startTime=2017-11-01&endTime=2017-11-13T22:27:17.551Z&nextPageToken=cGFnZTE=')
+      .get('/api/namespaces/canary/workflows/closed?startTime=2017-11-01&endTime=2017-11-13T22:27:17.551Z&nextPageToken=cGFnZTE=')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect({
@@ -89,17 +89,17 @@ describe('Listing Workflows', function() {
 
   it('should return 404 if another state of workflows is queried', function() {
     return request()
-      .get('/api/domains/canary/workflows/failed')
+      .get('/api/namespaces/canary/workflows/failed')
       .expect(404)
   })
 
   it('should return 400 if startTime or endTime are missing', async function() {
     await request()
-      .get('/api/domains/canary/workflows/open?startTime=2017-11-01')
+      .get('/api/namespaces/canary/workflows/open?startTime=2017-11-01')
       .expect(400)
 
     return request()
-      .get('/api/domains/canary/workflows/closed?endTime=2017-11-01')
+      .get('/api/namespaces/canary/workflows/closed?endTime=2017-11-01')
       .expect(400)
   })
 })

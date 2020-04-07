@@ -133,13 +133,13 @@ export default pagedGrid({
     };
   },
   created() {
-    this.$http(`/api/domains/${this.$route.params.domain}`).then(r => {
+    this.$http(`/api/namespaces/${this.$route.params.namespace}`).then(r => {
       this.maxRetentionDays =
         Number(r.configuration.workflowExecutionRetentionPeriodInDays) || 30;
 
       if (!this.isRouteRangeValid(this.minStartDate)) {
         const prevRange = localStorage.getItem(
-          `${this.$route.params.domain}:workflows-time-range`
+          `${this.$route.params.namespace}:workflows-time-range`
         );
 
         if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
@@ -185,7 +185,7 @@ export default pagedGrid({
         : q.range;
     },
     criteria() {
-      const { domain } = this.$route.params;
+      const { namespace } = this.$route.params;
       const q = this.$route.query;
       const startTime = this.getStartTimeIsoString(q.range, q.startTime);
       const endTime = this.getEndTimeIsoString(q.range, q.endTime);
@@ -193,7 +193,7 @@ export default pagedGrid({
       this.nextPageToken = undefined;
 
       return {
-        domain,
+        namespace,
         startTime,
         endTime,
         status: q.status,
@@ -204,7 +204,7 @@ export default pagedGrid({
     },
     queryOnChange() {
       const q = { ...this.criteria };
-      const { domain } = q;
+      const { namespace } = q;
       const state = !q.status || q.status === 'OPEN' ? 'open' : 'closed';
 
       if (!q.startTime || !q.endTime || !q.status) {
@@ -227,16 +227,16 @@ export default pagedGrid({
         delete q.status;
       }
 
-      delete q.domain;
+      delete q.namespace;
       q.nextPageToken = this.nextPageToken;
 
       if (q.queryString) {
-        this.fetch(`/api/domains/${domain}/workflows/list`, q);
+        this.fetch(`/api/namespaces/${namespace}/workflows/list`, q);
 
         return;
       }
 
-      this.fetch(`/api/domains/${domain}/workflows/${state}`, q);
+      this.fetch(`/api/namespaces/${namespace}/workflows/${state}`, q);
     },
     minStartDate() {
       const {
@@ -389,7 +389,7 @@ export default pagedGrid({
           delete query.startTime;
           delete query.endTime;
           localStorage.setItem(
-            `${this.$route.params.domain}:workflows-time-range`,
+            `${this.$route.params.namespace}:workflows-time-range`,
             range
           );
         } else {

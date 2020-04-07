@@ -5,9 +5,9 @@ export default function(d) {
   d.replicationConfiguration = d.replicationConfiguration || { clusters: [] };
 
   return {
-    description: d.domainInfo.description,
-    owner: d.domainInfo.ownerEmail,
-    'Global?': d.isGlobalDomain ? 'Yes' : 'No',
+    description: d.namespaceInfo.description,
+    owner: d.namespaceInfo.ownerEmail,
+    'Global?': d.isGlobalNamespace ? 'Yes' : 'No',
     'Retention Period': `${d.configuration.workflowExecutionRetentionPeriodInDays} days`,
     'Emit Metrics': d.configuration.emitMetric ? 'Yes' : 'No',
     'Failover Version': d.failoverVersion,

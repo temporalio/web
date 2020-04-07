@@ -1,18 +1,18 @@
 <template>
-  <section class="domain-search">
-    <domain-navigation type="text" placeholder="temporal-canary" />
+  <section class="namespace-search">
+    <namespace-navigation type="text" placeholder="temporal-canary" />
   </section>
 </template>
 
 <script>
-import { DomainNavigation } from '~components';
+import { NamespaceNavigation } from '~components';
 
 export default {
   data() {
     return {};
   },
   components: {
-    'domain-navigation': DomainNavigation,
+    'namespace-navigation': NamespaceNavigation,
   },
 };
 </script>
@@ -20,12 +20,12 @@ export default {
 <style lang="stylus">
 @require "../styles/definitions"
 
-section.domain-search
+section.namespace-search
   margin layout-spacing-large
   @media (min-width 1600px)
     width 1580px
     margin 0 auto
-    .domain-navigation
+    .namespace-navigation
       padding-left layout-spacing-medium
       padding-right layout-spacing-medium
   .links
@@ -34,13 +34,13 @@ section.domain-search
       display block
   h1
     margin-bottom base-font-size*2
-  p, h3, .domain-navigation
+  p, h3, .namespace-navigation
     margin 1em 0
   a
     line-height 2.5em
     &:nth-child(2n)
       background none
-  .domain-navigation
+  .namespace-navigation
     div.input-and-validation
       align-items center
       .input-wrapper, p
@@ -49,7 +49,7 @@ section.domain-search
         margin-right auto
     input
       margin 0
-  .recent-domains
+  .recent-namespaces
     li
       padding 0 inline-spacing-medium
 </style>

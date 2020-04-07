@@ -1,19 +1,19 @@
 <template>
-  <section :class="{ 'domain-config domain-description': true, loading }">
+  <section :class="{ 'namespace-config namespace-description': true, loading }">
     <header>
-      <h3>{{ domain }}</h3>
+      <h3>{{ namespace }}</h3>
     </header>
     <detail-list
-      v-if="domainConfig"
-      :item="domainConfig"
-      :title="`Domain ${domain} Configuration`"
+      v-if="namespaceConfig"
+      :item="namespaceConfig"
+      :title="`Namespace ${namespace} Configuration`"
     />
     <span class="error" v-if="error">{{ error }}</span>
   </section>
 </template>
 
 <script>
-import { getKeyValuePairs, mapDomainDescription } from '~helpers';
+import { getKeyValuePairs, mapNamespaceDescription } from '~helpers';
 import { DetailList } from '~components';
 
 export default {
@@ -21,21 +21,21 @@ export default {
     return {
       error: undefined,
       loading: true,
-      domainConfig: undefined,
+      namespaceConfig: undefined,
     };
   },
-  props: ['domain'],
+  props: ['namespace'],
   components: {
     'detail-list': DetailList,
   },
   created() {
-    this.$http(`/api/domains/${this.domain}`)
+    this.$http(`/api/namespaces/${this.namespace}`)
       .then(
         r => {
-          const domainConfig = mapDomainDescription(r);
-          const kvps = getKeyValuePairs(domainConfig);
+          const namespaceConfig = mapNamespaceDescription(r);
+          const kvps = getKeyValuePairs(namespaceConfig);
 
-          this.domainConfig = { ...domainConfig, kvps };
+          this.namespaceConfig = { ...namespaceConfig, kvps };
         },
         res => {
           this.error = `${res.statusText || res.message} ${res.status}`;
@@ -52,7 +52,7 @@ export default {
 <style lang="stylus">
 @require "../../styles/definitions.styl"
 
-section.domain-config
+section.namespace-config
   .foobar
     display none
 </style>

@@ -12,14 +12,14 @@ describe('Workflow', () => {
 
     return [
       new Scenario(mochaTest)
-        .withDomain('ci-test')
+        .withNamespace('ci-test')
         .withWorkflow(
           extendedOptions.workflowId,
           extendedOptions.runId,
           extendedOptions.execution
         )
         .startingAt(
-          `/domains/ci-test/workflows/${extendedOptions.workflowId}/${
+          `/namespaces/ci-test/workflows/${extendedOptions.workflowId}/${
             extendedOptions.runId
           }/${extendedOptions.view}${
             extendedOptions.query ? `?${extendedOptions.query}` : ''
@@ -66,7 +66,7 @@ describe('Workflow', () => {
         summaryEl
           .querySelector('.task-list dd a[href]')
           .should.contain.text('ci_task_list')
-          .and.have.attr('href', '/domains/ci-test/task-lists/ci_task_list');
+          .and.have.attr('href', '/namespaces/ci-test/task-lists/ci_task_list');
         summaryEl.querySelector('.started-at dd').should.have.text(
           moment()
             .startOf('hour')
@@ -229,7 +229,7 @@ describe('Workflow', () => {
         .and.have.text('Continued As New')
         .and.have.attr(
           'href',
-          '/domains/ci-test/workflows/email-daily-summaries/617d8b6f-ea42-479c-bc7c-0ec4dacddf64/summary'
+          '/namespaces/ci-test/workflows/email-daily-summaries/617d8b6f-ea42-479c-bc7c-0ec4dacddf64/summary'
         );
     });
 
@@ -271,7 +271,7 @@ describe('Workflow', () => {
             eventId: 1,
             details: {
               workflowType: { name: 'com.github/temporalio/ci-test-parent' },
-              parentWorkflowDomain: 'another-domain',
+              parentWorkflowNamespace: 'another-namespace',
               parentWorkflowExecution: {
                 workflowId: 'the-parent-wfid',
                 runId: '1234',
@@ -292,7 +292,7 @@ describe('Workflow', () => {
         .should.contain.text('the-parent-wfid')
         .and.have.attr(
           'href',
-          '/domains/another-domain/workflows/the-parent-wfid/1234/summary'
+          '/namespaces/another-namespace/workflows/the-parent-wfid/1234/summary'
         );
     });
 
@@ -431,7 +431,7 @@ describe('Workflow', () => {
       resultsEl.should.not.have.descendant('pre.json');
       resultsEl.should.not.have.descendant('table');
       scenario.location.should.equal(
-        '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact'
+        '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact'
       );
       historyEl.querySelector('.view-formats a.json').trigger('click');
 
@@ -442,7 +442,7 @@ describe('Workflow', () => {
       jsonView.should.contain.text('"eventId":');
       resultsEl.should.not.have.descendant('.compact-view');
       scenario.location.should.equal(
-        '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=json'
+        '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=json'
       );
     });
 
@@ -454,7 +454,7 @@ describe('Workflow', () => {
 
       exportEl.should.have.attr(
         'href',
-        '/api/domains/ci-test/workflows/email-daily-summaries/emailRun1/export'
+        '/api/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/export'
       );
       exportEl.should.have.attr(
         'download',
@@ -563,7 +563,7 @@ describe('Workflow', () => {
 
         timelineEl.timeline.fit();
         scenario.location.should.equal(
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&showGraph=true'
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&showGraph=true'
         );
         await retry(() =>
           timelineEl
@@ -582,7 +582,7 @@ describe('Workflow', () => {
 
         await retry(() => {
           scenario.location.should.equal(
-            '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&showGraph=true&eventId=16'
+            '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&showGraph=true&eventId=16'
           );
           timelineEl
             .querySelector('.vis-range.activity.failed')
@@ -603,7 +603,7 @@ describe('Workflow', () => {
         timelineEl.timeline.fit();
 
         scenario.location.should.equal(
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact'
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact'
         );
         const failedActivity = await timelineEl.waitUntilExists(
           '.vis-range.activity.failed'
@@ -612,7 +612,7 @@ describe('Workflow', () => {
 
         await retry(() =>
           scenario.location.should.equal(
-            '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&eventId=16'
+            '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&eventId=16'
           )
         );
       });
@@ -636,7 +636,7 @@ describe('Workflow', () => {
             .querySelector('.selected-event-detail')
             .should.have.class('active');
           scenario.location.should.equal(
-            '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&showGraph=true&eventId=18'
+            '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history?format=compact&showGraph=true&eventId=18'
           );
           timelineEl
             .querySelector('.vis-range.child-workflow.completed')
@@ -1026,7 +1026,7 @@ describe('Workflow', () => {
               eventType: 'ChildWorkflowExecutionInitiated',
               timestamp: moment().toISOString(),
               details: {
-                domain: 'child-domain',
+                namespace: 'child-namespace',
                 workflowExecution: {
                   workflowId: 'child-wfid',
                   runId: '2345',
@@ -1045,7 +1045,7 @@ describe('Workflow', () => {
           .should.have.text('2345')
           .and.have.attr(
             'href',
-            '/domains/child-domain/workflows/child-wfid/2345/summary'
+            '/namespaces/child-namespace/workflows/child-wfid/2345/summary'
           );
       });
     });
@@ -1058,10 +1058,10 @@ describe('Workflow', () => {
       scenario.vm.$el
         .attrValues('section.workflow > nav a', 'href')
         .should.deep.equal([
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/summary',
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history',
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/stack-trace',
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/query',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/summary',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/stack-trace',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/query',
         ]);
       scenario.vm.$el
         .querySelector('section.workflow > nav a#nav-link-stack-trace')
@@ -1232,10 +1232,10 @@ describe('Workflow', () => {
       scenario.vm.$el
         .attrValues('section.workflow > nav a', 'href')
         .should.deep.equal([
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/summary',
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/history',
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/stack-trace',
-          '/domains/ci-test/workflows/email-daily-summaries/emailRun1/query',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/summary',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/history',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/stack-trace',
+          '/namespaces/ci-test/workflows/email-daily-summaries/emailRun1/query',
         ]);
       scenario.vm.$el
         .querySelector('section.workflow > nav a#nav-link-summary')
