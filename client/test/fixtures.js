@@ -481,7 +481,7 @@ export default {
         details: {
           markerName: 'LocalActivity',
           details: {
-            ActivityID: 1,
+            ActivityId: 1,
             ErrReason: 'child process failed',
             ErrJSON: JSON.stringify({ exitcode: 1 }),
           },
@@ -494,7 +494,7 @@ export default {
         details: {
           markerName: 'LocalActivity',
           details: {
-            ActivityID: 2,
+            ActivityId: 2,
             ResultJSON: JSON.stringify({ parrot_name: 'squaky' }),
           },
         },

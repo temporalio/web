@@ -16,10 +16,10 @@ describe('eventFullTransforms', () => {
         };
       });
 
-      it('should return an object with property sideEffectID.', () => {
+      it('should return an object with property sideEffectId.', () => {
         const output = eventFullTransforms.MarkerRecorded(event);
 
-        expect(output.sideEffectID).toEqual('sideEffectIdValue');
+        expect(output.sideEffectId).toEqual('sideEffectIdValue');
       });
 
       it('should return an object with property data.', () => {
