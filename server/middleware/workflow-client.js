@@ -159,6 +159,7 @@ function WorkflowClient() {
       `${dir}/temporal-proto/tasklist`,
       `${dir}/temporal-proto/version`,
       `${dir}/temporal-proto/workflowservice`,
+      `${dir}/protobuf/src`,
     ],
   };
 
@@ -203,7 +204,7 @@ WorkflowClient.prototype.openWorkflows = async function({
 }) {
   const req = {
     namespace,
-    StartTimeFilter: startTimeFilter,
+    startTimeFilter,
     typeFilter,
     executionFilter,
     nextPageToken,
@@ -225,7 +226,7 @@ WorkflowClient.prototype.closedWorkflows = async function({
 }) {
   const req = {
     namespace,
-    StartTimeFilter: startTimeFilter,
+    startTimeFilter,
     typeFilter,
     executionFilter,
     statusFilter: buildStatusFilter(statusFilter),
