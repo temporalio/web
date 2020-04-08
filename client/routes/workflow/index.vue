@@ -100,7 +100,7 @@ export default {
       unwatch: [],
     };
   },
-  props: ['domain', 'runId', 'workflowId'],
+  props: ['namespace', 'runId', 'workflowId'],
   created() {
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
@@ -115,9 +115,9 @@ export default {
   },
   computed: {
     baseAPIURL() {
-      const { domain, workflowId, runId } = this;
+      const { namespace, workflowId, runId } = this;
 
-      return `/api/domains/${domain}/workflows/${encodeURIComponent(
+      return `/api/namespaces/${namespace}/workflows/${encodeURIComponent(
         workflowId
       )}/${encodeURIComponent(runId)}`;
     },

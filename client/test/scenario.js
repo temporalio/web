@@ -109,24 +109,24 @@ Object.defineProperty(Scenario.prototype, 'location', {
   },
 });
 
-Scenario.prototype.withDomain = function withDomain(domain) {
-  this.domain = domain;
+Scenario.prototype.withNamespace = function withNamespace(namespace) {
+  this.namespace = namespace;
 
   return this;
 };
 
-Scenario.prototype.withDomainDescription = function withDomainDescription(
-  domain,
-  domainDesc
+Scenario.prototype.withNamespaceDescription = function withNamespaceDescription(
+  namespace,
+  namespaceDesc
 ) {
   this.api.getOnce(
-    `/api/domains/${domain}`,
+    `/api/namespaces/${namespace}`,
     deepmerge(
       {
-        domainInfo: {
-          name: domain,
+        namespaceInfo: {
+          name: namespace,
           status: 'REGISTERED',
-          description: 'A cool domain',
+          description: 'A cool namespace',
           ownerEmail: 'ci-test@temporalio.com',
         },
         configuration: {
@@ -142,9 +142,9 @@ Scenario.prototype.withDomainDescription = function withDomainDescription(
           ],
         },
         failoverVersion: 0,
-        isGlobalDomain: false,
+        isGlobalNamespace: false,
       },
-      domainDesc || {}
+      namespaceDesc || {}
     )
   );
 
@@ -161,7 +161,7 @@ Scenario.prototype.withWorkflows = function withWorkflows(
     workflows = JSON.parse(JSON.stringify(fixtures.workflows[status]));
   }
 
-  const url = `/api/domains/${this.domain}/workflows/${status}?${qs.stringify({
+  const url = `/api/namespaces/${this.namespace}/workflows/${status}?${qs.stringify({
     startTime: moment()
       .subtract(21, 'day')
       .startOf('day')
@@ -182,7 +182,7 @@ Scenario.prototype.withWorkflows = function withWorkflows(
 };
 
 Scenario.prototype.execApiBase = function execApiBase(workflowId, runId) {
-  return `/api/domains/${this.domain}/workflows/${encodeURIComponent(
+  return `/api/namespaces/${this.namespace}/workflows/${encodeURIComponent(
     workflowId || this.workflowId
   )}/${encodeURIComponent(runId || this.runId)}`;
 };
@@ -291,7 +291,7 @@ Scenario.prototype.withTaskListPollers = function withTaskListPollers(
   pollers
 ) {
   this.api.getOnce(
-    `/api/domains/${this.domain}/task-lists/${taskList}/pollers`,
+    `/api/namespaces/${this.namespace}/task-lists/${taskList}/pollers`,
     pollers || {
       node1: {
         lastAccessTime: moment()

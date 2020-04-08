@@ -1,15 +1,15 @@
-describe('Describe Domain', function() {
-  it('should list domains', async function() {
-    const domains = [{
-      domainInfo: {
-        name: 'ci-test-domain',
+describe('Describe Namespace', function() {
+  it('should list namespaces', async function() {
+    const namespaces = [{
+      namespaceInfo: {
+        name: 'ci-test-namespace',
         status: 'REGISTERED',
-        description: 'domain for running CI tests',
+        description: 'namespace for running CI tests',
         ownerEmail: 'temporal-dev@temporalio.com',
         data: null,
         uuid: null
       },
-      isGlobalDomain: false,
+      isGlobalNamespace: false,
       failoverVersion: 0,
       configuration: {
         badBinaries: null,
@@ -26,30 +26,30 @@ describe('Describe Domain', function() {
       }
     }]
 
-    this.test.ListDomains = ({ listRequest }) => {
+    this.test.ListNamespaces = ({ listRequest }) => {
       should.not.exist(listRequest.nextPageToken)
-      return { domains }
+      return { namespaces }
     }
 
     return request()
-      .get('/api/domains')
+      .get('/api/namespaces')
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect({ domains, nextPageToken: null })
+      .expect({ namespaces, nextPageToken: null })
   })
 
-  it('should describe the domain', async function () {
-    const domainDesc = {
-      domainInfo: {
-        name: 'test-domain',
+  it('should describe the namespace', async function () {
+    const namespaceDesc = {
+      namespaceInfo: {
+        name: 'test-namespace',
         status: 'REGISTERED',
-        description: 'ci test domain',
+        description: 'ci test namespace',
         ownerEmail: null,
         data: {},
         uuid: null
       },
       failoverVersion: 0,
-      isGlobalDomain: true,
+      isGlobalNamespace: true,
       configuration: {
         badBinaries: null,
         workflowExecutionRetentionPeriodInDays: 14,
@@ -65,31 +65,31 @@ describe('Describe Domain', function() {
       }
     }
 
-    this.test.DescribeDomain = ({ describeRequest }) => {
-      describeRequest.name.should.equal('test-domain')
-      return domainDesc
+    this.test.DescribeNamespace = ({ describeRequest }) => {
+      describeRequest.name.should.equal('test-namespace')
+      return namespaceDesc
     }
 
     return request()
-      .get('/api/domains/test-domain')
+      .get('/api/namespaces/test-namespace')
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect(domainDesc)
+      .expect(namespaceDesc)
   })
 
-  it('should return 404 if the domain is not found', async function () {
-    this.test.DescribeDomain = ({ describeRequest }) => ({
+  it('should return 404 if the namespace is not found', async function () {
+    this.test.DescribeNamespace = ({ describeRequest }) => ({
       ok: false,
-      body: { message: `domain "${describeRequest.name}" does not exist`},
+      body: { message: `namespace "${describeRequest.name}" does not exist`},
       typeName: 'entityNotExistError'
     })
 
     return request()
-      .get('/api/domains/nonexistant')
+      .get('/api/namespaces/nonexistant')
       .expect(404)
       .expect('Content-Type', /json/)
       .expect({
-        message: 'domain "nonexistant" does not exist'
+        message: 'namespace "nonexistant" does not exist'
       })
   })
 })

@@ -37,7 +37,7 @@ const getKeyValuePairs = event => {
           routeLink: {
             name: 'workflow/summary',
             params: {
-              domain: root.parentWorkflowDomain,
+              namespace: root.parentWorkflowNamespace,
               runId: value,
               workflowId: root.parentWorkflowExecution.workflowId,
             },
@@ -50,7 +50,7 @@ const getKeyValuePairs = event => {
           routeLink: {
             name: 'workflow/summary',
             params: {
-              domain: root.domain,
+              namespace: root.namespace,
               runId: value,
               workflowId: root.workflowExecution.workflowId,
             },

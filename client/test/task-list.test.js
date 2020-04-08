@@ -3,8 +3,8 @@ import moment from 'moment';
 describe('Task List', () => {
   async function taskListTest(mochaTest, pollers) {
     const [testEl, scenario] = new Scenario(mochaTest)
-      .withDomain('ci-test')
-      .startingAt('/domains/ci-test/task-lists/ci_task_list')
+      .withNamespace('ci-test')
+      .startingAt('/namespaces/ci-test/task-lists/ci_task_list')
       .withTaskListPollers('ci_task_list', pollers)
       .go();
 

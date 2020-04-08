@@ -6,7 +6,7 @@ describe('parentWorkflowLink', () => {
 
     beforeEach(() => {
       wfStartDetails = {
-        parentWorkflowDomain: 'parentWorkflowDomainValue',
+        parentWorkflowNamespace: 'parentWorkflowNamespaceValue',
         parentWorkflowExecution: {
           workflowId: 'workflowIdValue',
           runId: 'runIdValue',
@@ -20,10 +20,10 @@ describe('parentWorkflowLink', () => {
       expect(output.to.name).toEqual('workflow/summary');
     });
 
-    it('should return an object with to.params.domain.', () => {
+    it('should return an object with to.params.namespace.', () => {
       const output = parentWorkflowLink(wfStartDetails);
 
-      expect(output.to.params.domain).toEqual('parentWorkflowDomainValue');
+      expect(output.to.params.namespace).toEqual('parentWorkflowNamespaceValue');
     });
 
     it('should return an object with to.params.workflowId.', () => {

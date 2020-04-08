@@ -436,7 +436,7 @@ export default {
         eventType: 'ChildWorkflowExecutionStarted',
         eventId: 11,
         details: {
-          domain: 'pirates',
+          namespace: 'pirates',
           workflowType: { name: 'sail-the-ocean' },
           workflowExecution: {
             workflowId: 'sail-the-ocean-1',

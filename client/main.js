@@ -15,15 +15,15 @@ import snapscroll from './directives/snapscroll';
 import App from './App.vue';
 import Root from './routes/index.vue';
 import Help from './routes/help/index.vue';
-import DomainList from './routes/domain-list.vue';
-import WorkflowList from './routes/domain/workflow-list.vue';
-import DomainConfig from './routes/domain/domain-config.vue';
+import NamespaceList from './routes/namespace-list.vue';
+import WorkflowList from './routes/namespace/workflow-list.vue';
+import NamespaceConfig from './routes/namespace/namespace-config.vue';
 import WorkflowTabs from './routes/workflow/index.vue';
 import WorkflowSummary from './routes/workflow/summary.vue';
 import History from './routes/workflow/history.vue';
 import StackTrace from './routes/workflow/stack-trace.vue';
 import Query from './routes/workflow/query.vue';
-import TaskList from './routes/domain/task-list.vue';
+import TaskList from './routes/namespace/task-list.vue';
 import { http, injectMomentDurationFormat, jsonTryParse } from '~helpers';
 
 const routeOpts = {
@@ -31,14 +31,14 @@ const routeOpts = {
   routes: [
     {
       path: '/',
-      redirect: '/domains',
+      redirect: '/namespaces',
       component: Root,
       children: [
         {
-          name: 'domain-list',
-          path: '/domains',
+          name: 'namespace-list',
+          path: '/namespaces',
           components: {
-            'domain-list': DomainList,
+            'namespace-list': NamespaceList,
           },
         },
         {
@@ -51,36 +51,36 @@ const routeOpts = {
       ],
     },
     {
-      name: 'domains-redirect',
-      path: '/domain/*',
-      redirect: '/domains/*',
+      name: 'namespaces-redirect',
+      path: '/namespace/*',
+      redirect: '/namespaces/*',
     },
     {
       name: 'workflow-list',
-      path: '/domains/:domain/workflows',
+      path: '/namespaces/:namespace/workflows',
       component: WorkflowList,
     },
     {
-      name: 'domain-config',
-      path: '/domains/:domain/config',
-      component: DomainConfig,
+      name: 'namespace-config',
+      path: '/namespaces/:namespace/config',
+      component: NamespaceConfig,
       props: ({ params }) => ({
-        domain: params.domain,
+        namespace: params.namespace,
       }),
     },
     {
       name: 'workflow',
-      path: '/domains/:domain/workflows/:workflowId/:runId',
+      path: '/namespaces/:namespace/workflows/:workflowId/:runId',
       component: WorkflowTabs,
       props: ({ params }) => ({
-        domain: params.domain,
+        namespace: params.namespace,
         runId: params.runId,
         workflowId: params.workflowId,
       }),
       children: [
         {
           name: 'workflow/summary',
-          path: '/domains/:domain/workflows/:workflowId/:runId/summary',
+          path: '/namespaces/:namespace/workflows/:workflowId/:runId/summary',
           components: {
             summary: WorkflowSummary,
           },
@@ -93,13 +93,13 @@ const routeOpts = {
         },
         {
           name: 'workflow/history',
-          path: '/domains/:domain/workflows/:workflowId/:runId/history',
+          path: '/namespaces/:namespace/workflows/:workflowId/:runId/history',
           components: {
             history: History,
           },
           props: {
             history: ({ params, query }) => ({
-              domain: params.domain,
+              namespace: params.namespace,
               eventId: Number(query.eventId) || undefined,
               format: query.format || 'grid',
               runId: params.runId,
@@ -110,14 +110,14 @@ const routeOpts = {
         },
         {
           name: 'workflow/stack-trace',
-          path: '/domains/:domain/workflows/:workflowId/:runId/stack-trace',
+          path: '/namespaces/:namespace/workflows/:workflowId/:runId/stack-trace',
           components: {
             stacktrace: StackTrace,
           },
         },
         {
           name: 'workflow/query',
-          path: '/domains/:domain/workflows/:workflowId/:runId/query',
+          path: '/namespaces/:namespace/workflows/:workflowId/:runId/query',
           components: {
             query: Query,
           },
@@ -126,11 +126,11 @@ const routeOpts = {
     },
     {
       name: 'task-list',
-      path: '/domains/:domain/task-lists/:taskList',
+      path: '/namespaces/:namespace/task-lists/:taskList',
       component: TaskList,
     },
     {
-      path: '/domains/:domain/history',
+      path: '/namespaces/:namespace/history',
       redirect: ({ params, query }) => {
         if (!query.runId || !query.workflowId) {
           return {
@@ -144,7 +144,7 @@ const routeOpts = {
         const newParams = {
           runId,
           workflowId,
-          domain: params.domain,
+          namespace: params.namespace,
         };
 
         return {

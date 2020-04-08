@@ -148,8 +148,16 @@ function WorkflowClient() {
     includeDirs: [
       `${dir}/temporal-proto/`,
       `${dir}/temporal-proto/common`,
-      `${dir}/temporal-proto/enums`,
+      `${dir}/temporal-proto/decision`,
+      `${dir}/temporal-proto/event`,
+      `${dir}/temporal-proto/execution`,
       `${dir}/temporal-proto/failure`,
+      `${dir}/temporal-proto/filter`,
+      `${dir}/temporal-proto/namespace`,
+      `${dir}/temporal-proto/query`,
+      `${dir}/temporal-proto/replication`,
+      `${dir}/temporal-proto/tasklist`,
+      `${dir}/temporal-proto/version`,
       `${dir}/temporal-proto/workflowservice`,
     ],
   };
@@ -166,27 +174,27 @@ function WorkflowClient() {
   this.client = client;
 }
 
-WorkflowClient.prototype.describeDomain = async function({ name }) {
+WorkflowClient.prototype.describeNamespace = async function({ name }) {
   const req = { name };
 
-  const res = await this.client.describeDomainAsync(req);
+  const res = await this.client.describeNamespaceAsync(req);
 
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.listDomains = async function({
+WorkflowClient.prototype.listNamespaces = async function({
   pageSize,
   nextPageToken,
 }) {
   const req = { pageSize, nextPageToken };
 
-  const res = await this.client.listDomainsAync(req);
+  const res = await this.client.listNamespacesAync(req);
 
   return uiTransform(res);
 };
 
 WorkflowClient.prototype.openWorkflows = async function({
-  domain,
+  namespace,
   startTimeFilter,
   typeFilter,
   executionFilter,
@@ -194,7 +202,7 @@ WorkflowClient.prototype.openWorkflows = async function({
   maximumPageSize = 100,
 }) {
   const req = {
-    domain,
+    namespace,
     StartTimeFilter: startTimeFilter,
     typeFilter,
     executionFilter,
@@ -207,7 +215,7 @@ WorkflowClient.prototype.openWorkflows = async function({
 };
 
 WorkflowClient.prototype.closedWorkflows = async function({
-  domain,
+  namespace,
   startTimeFilter,
   typeFilter,
   executionFilter,
@@ -216,7 +224,7 @@ WorkflowClient.prototype.closedWorkflows = async function({
   maximumPageSize = 100,
 }) {
   const req = {
-    domain,
+    namespace,
     StartTimeFilter: startTimeFilter,
     typeFilter,
     executionFilter,
@@ -231,14 +239,14 @@ WorkflowClient.prototype.closedWorkflows = async function({
 };
 
 WorkflowClient.prototype.listWorkflows = async function({
-  domain,
+  namespace,
   query,
   nextPageToken,
   pageSize = 20,
   maximumPageSize = 100,
 }) {
   const req = {
-    domain,
+    namespace,
     query,
     nextPageToken,
     pageSize,
@@ -251,14 +259,14 @@ WorkflowClient.prototype.listWorkflows = async function({
 };
 
 WorkflowClient.prototype.getHistory = async function({
-  domain,
+  namespace,
   nextPageToken,
   execution,
   waitForNewEvent,
   maximumPageSize = 100,
 }) {
   const req = {
-    domain,
+    namespace,
     nextPageToken,
     execution: buildWorkflowExecutionRequest(execution),
     waitForNewEvent,
@@ -275,12 +283,12 @@ WorkflowClient.prototype.getHistory = async function({
 };
 
 WorkflowClient.prototype.exportHistory = async function({
-  domain,
+  namespace,
   execution,
   nextPageToken,
 }) {
   const req = {
-    domain,
+    namespace,
     execution: buildWorkflowExecutionRequest(execution),
     nextPageToken,
   };
@@ -291,12 +299,12 @@ WorkflowClient.prototype.exportHistory = async function({
 };
 
 WorkflowClient.prototype.queryWorkflow = async function({
-  domain,
+  namespace,
   execution,
   query,
 }) {
   const req = {
-    domain,
+    namespace,
     execution: buildWorkflowExecutionRequest(execution),
     query,
   };
@@ -306,12 +314,12 @@ WorkflowClient.prototype.queryWorkflow = async function({
 };
 
 WorkflowClient.prototype.terminateWorkflow = async function({
-  domain,
+  namespace,
   execution,
   reason,
 }) {
   const req = {
-    domain,
+    namespace,
     workflowExecution: buildWorkflowExecutionRequest(execution),
     reason,
   };
@@ -322,12 +330,12 @@ WorkflowClient.prototype.terminateWorkflow = async function({
 };
 
 WorkflowClient.prototype.signalWorkflow = async function({
-  domain,
+  namespace,
   execution,
   signal,
 }) {
   const req = {
-    domain,
+    namespace,
     workflowExecution: buildWorkflowExecutionRequest(execution),
     signal,
   };
@@ -338,11 +346,11 @@ WorkflowClient.prototype.signalWorkflow = async function({
 };
 
 WorkflowClient.prototype.describeWorkflow = async function({
-  domain,
+  namespace,
   execution,
 }) {
   const req = {
-    domain,
+    namespace,
     execution: buildWorkflowExecutionRequest(execution),
   };
 
@@ -352,11 +360,11 @@ WorkflowClient.prototype.describeWorkflow = async function({
 };
 
 WorkflowClient.prototype.describeTaskList = async function({
-  domain,
+  namespace,
   taskList,
   taskListType,
 }) {
-  const req = { domain, taskList, taskListType };
+  const req = { namespace, taskList, taskListType };
   const res = await this.client.describeTaskListAsync(req);
 
   return uiTransform(res);
