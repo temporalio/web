@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  web:
+    image: temporalio/web:latest
+    build: .
+    ports:
+      - "8088:8088"
