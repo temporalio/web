@@ -113,7 +113,7 @@
       </div>
       <div class="pending-activities" v-if="workflow.pendingActivities">
         <dt>Pending Activities</dt>
-        <dd v-for="pa in workflow.pendingActivities" :key="pa.activityID">
+        <dd v-for="pa in workflow.pendingActivities" :key="pa.activityId">
           <detail-list :item="pa" />
         </dd>
       </div>

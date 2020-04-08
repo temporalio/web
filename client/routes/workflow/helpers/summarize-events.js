@@ -4,7 +4,7 @@ import workflowLink from './workflow-link';
 import { shortName } from '~helpers';
 
 export const summarizeEvents = {
-  ActivityTaskCancelRequested: d => ({ ID: d.activityId }),
+  ActivityTaskCancelRequested: d => ({ Id: d.activityId }),
   ActivityTaskCompleted: d => ({ result: d.result }),
   ActivityTaskFailed: d => ({
     details: d.details,
@@ -14,7 +14,7 @@ export const summarizeEvents = {
     'Close Timeout': moment
       .duration(d.scheduleToCloseTimeoutSeconds, 'seconds')
       .format(),
-    ID: d.activityId,
+    Id: d.activityId,
     input: d.input,
     Name: shortName(d.activityType.name),
   }),
@@ -45,7 +45,7 @@ export const summarizeEvents = {
     const details = d.details || {};
 
     if (d.markerName === 'LocalActivity') {
-      const la = { 'Local Activity ID': details.ActivityID };
+      const la = { 'Local Activity ID': details.ActivityId };
 
       if (details.ErrJSON) {
         la.Error = JSON.tryParse(details.ErrJSON) || details.ErrJSON;
