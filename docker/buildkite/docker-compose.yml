@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  build:
+    image: temporalio/web:latest
+    build:
+      context: ../../
+      dockerfile: ./docker/buildkite/Dockerfile

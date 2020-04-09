@@ -1,0 +1,22 @@
+steps:
+  - label: ":node: unit test"
+    command: "npm run test:unit"
+    plugins:
+      - docker-compose#v3.1.0:
+          run: build
+          config: docker/buildkite/docker-compose.yml
+
+  - wait
+
+  - label: ":docker: build and push master"
+    agents:
+      queue: "default"
+      docker: "*"
+    command: "scripts/buildkite/docker-push.sh"
+    retry:
+      automatic:
+        limit: 1
+    plugins:
+      - docker-login#v2.0.1:
+          username: temporaltech
+          password-env: DOCKER_LOGIN_PASSWORD
