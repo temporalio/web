@@ -47,7 +47,7 @@ export default {
         type: {
           name: 'github.com/temporalio/temporal-web/email-daily-summaries-1',
         },
-        closeStatus: 'COMPLETED',
+        status: 'COMPLETED',
         startTime: emailRun1Start.toISOString(),
         closeTime: moment(timeBasis)
           .subtract(2, 'minutes')

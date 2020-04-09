@@ -12,23 +12,23 @@ describe('getSummaryWorkflowStatus', () => {
     });
   });
 
-  describe('When passed an event with workflowCompletedEvent = false and workflow.workflowExecutionInfo.closeStatus is defined', () => {
-    it('should return workflow.workflowExecutionInfo.closeStatus in lower case.', () => {
+  describe('When passed an event with workflowCompletedEvent = false and workflow.workflowExecutionInfo.status is defined', () => {
+    it('should return workflow.workflowExecutionInfo.status in lower case.', () => {
       const event = {
         workflow: {
           workflowExecutionInfo: {
-            closeStatus: 'closeStatusValue',
+            status: 'statusValue',
           },
         },
         workflowCompletedEvent: false,
       };
       const output = getSummaryWorkflowStatus(event);
 
-      expect(output).toEqual('closestatusvalue');
+      expect(output).toEqual('statusvalue');
     });
   });
 
-  describe('When passed an event with workflowCompletedEvent = false and workflow.workflowExecutionInfo.closeStatus is not defined', () => {
+  describe('When passed an event with workflowCompletedEvent = false and workflow.workflowExecutionInfo.status is not defined', () => {
     it('should return "running".', () => {
       const event = {
         workflowCompletedEvent: false,

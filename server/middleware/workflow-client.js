@@ -63,7 +63,7 @@ function buildStatusFilter(statusFilter) {
   const filter =
     statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1).toLowerCase();
 
-  return { closeStatus: `WorkflowExecutionCloseStatus${filter}` };
+  return { status: filter };
 }
 
 function uiTransform(item) {
