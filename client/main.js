@@ -8,23 +8,26 @@ import qs from 'friendly-querystring';
 import moment from 'moment';
 import promiseFinally from 'promise.prototype.finally';
 
-import copyButton from './components/copy.vue';
+import copyButton from './components/copy';
 
 import snapscroll from './directives/snapscroll';
 
-import App from './App.vue';
+import App from './App';
 import Namespace from './routes/namespace/index.vue';
 import NamespaceList from './routes/namespace-list.vue';
 import NamespaceSettings from './routes/namespace/namespace-settings.vue';
-import Help from './routes/help/index.vue';
-import History from './routes/workflow/history.vue';
-import Query from './routes/workflow/query.vue';
-import Root from './routes/index.vue';
-import StackTrace from './routes/workflow/stack-trace.vue';
-import TaskList from './routes/namespace/task-list.vue';
-import WorkflowList from './routes/namespace/workflow-list.vue';
-import WorkflowSummary from './routes/workflow/summary.vue';
-import WorkflowTabs from './routes/workflow/index.vue';
+import Help from './routes/help';
+import History from './routes/workflow/history';
+import Query from './routes/workflow/query';
+import Root from './routes';
+import StackTrace from './routes/workflow/stack-trace';
+import TaskList from './routes/namespace/task-list';
+import WorkflowArchival from './routes/namespace/workflow-archival';
+import WorkflowArchivalAdvanced from './routes/namespace/workflow-archival/advanced';
+import WorkflowArchivalBasic from './routes/namespace/workflow-archival/basic';
+import WorkflowList from './routes/namespace/workflow-list';
+import WorkflowSummary from './routes/workflow/summary';
+import WorkflowTabs from './routes/workflow';
 
 import { http, injectMomentDurationFormat, jsonTryParse } from '~helpers';
 
@@ -55,6 +58,7 @@ const routeOpts = {
     {
       name: 'namespace',
       path: '/namespaces/:namespace',
+      redirect: '/namespaces/:namespace/workflows',
       component: Namespace,
       props: ({ params }) => ({
         namespace: params.namespace,
@@ -73,6 +77,30 @@ const routeOpts = {
           components: {
             'namespace-settings': NamespaceSettings,
           },
+        },
+        {
+          name: 'workflow-archival',
+          path: '/namespaces/:namespace/archival',
+          redirect: '/namespaces/:namespace/archival/basic',
+          components: {
+            'workflow-archival': WorkflowArchival,
+          },
+          children: [
+            {
+              name: 'workflow-archival-advanced',
+              path: '/namespaces/:namespace/archival/advanced',
+              components: {
+                'workflow-archival-advanced': WorkflowArchivalAdvanced,
+              },
+            },
+            {
+              name: 'workflow-archival-basic',
+              path: '/namespaces/:namespace/archival/basic',
+              components: {
+                'workflow-archival-basic': WorkflowArchivalBasic,
+              },
+            },
+          ],
         },
       ],
     },
@@ -118,7 +146,8 @@ const routeOpts = {
         },
         {
           name: 'workflow/stack-trace',
-          path: '/namespaces/:namespace/workflows/:workflowId/:runId/stack-trace',
+          path:
+            '/namespaces/:namespace/workflows/:workflowId/:runId/stack-trace',
           components: {
             stacktrace: StackTrace,
           },

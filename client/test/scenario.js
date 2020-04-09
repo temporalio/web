@@ -132,6 +132,8 @@ Scenario.prototype.withNamespaceDescription = function withNamespaceDescription(
         configuration: {
           workflowExecutionRetentionPeriodInDays: 21,
           emitMetric: true,
+          historyArchivalStatus: 'ENABLED',
+          visibilityArchivalStatus: 'DISABLED',
         },
         replicationConfiguration: {
           activeClusterName: 'ci-test-cluster',

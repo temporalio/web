@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="namespace">
     <navigation-bar>
       <navigation-link
         icon="icon_search"
@@ -11,9 +11,15 @@
         icon="icon_settings"
         :to="{ name: 'namespace-settings' }"
       />
+      <navigation-link
+        label="Archival"
+        icon="icon_trip-history"
+        :to="{ name: 'workflow-archival' }"
+      />
     </navigation-bar>
     <router-view name="workflow-list" :namespace="namespace" />
     <router-view name="namespace-settings" :namespace="namespace" />
+    <router-view name="workflow-archival" :namespace="namespace" />
   </section>
 </template>
 
@@ -29,4 +35,11 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+section.namespace {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+</style>

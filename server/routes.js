@@ -86,6 +86,48 @@ router.get(
   }
 );
 
+const buildQueryString = (
+  startTime,
+  endTime,
+  { status, workflowId, workflowName }
+) => {
+  return [
+    `CloseTime >= "${startTime.toISOString()}"`,
+    `CloseTime <= "${endTime.toISOString()}"`,
+    status && `CloseStatus = "${status}"`,
+    workflowId && `WorkflowID = "${workflowId}"`,
+    workflowName && `WorkflowType = "${workflowName}"`,
+  ]
+    .filter(subQuery => !!subQuery)
+    .join(' and ');
+};
+
+router.get('/api/namespaces/:namespace/workflows/archived', async function(
+  ctx
+) {
+  const { namespace } = ctx.params;
+  const { nextPageToken, ...query } = ctx.query || {};
+  let queryString;
+
+  if (query.queryString) {
+    queryString = query.queryString;
+  } else {
+    const startTime = moment(query.startTime || NaN);
+    const endTime = moment(query.endTime || NaN);
+
+    ctx.assert(startTime.isValid() && endTime.isValid(), 400);
+    queryString = buildQueryString(startTime, endTime, query);
+  }
+
+  ctx.body = await wfClient.archivedWorkflows({
+    namespace,
+    nextPageToken: nextPageToken
+      ? Buffer.from(nextPageToken, 'base64')
+      : undefined,
+    query: queryString,
+  });
+});
+
 router.get(
   '/api/namespaces/:namespace/workflows/:workflowId/:runId/export',
   async function(ctx) {
@@ -184,52 +226,102 @@ router.post(
   }
 );
 
-router.get('/api/namespaces/:namespace/workflows/:workflowId/:runId', async function(
-  ctx
-) {
-  const { namespace, workflowId, runId } = ctx.params;
+router.get(
+  '/api/namespaces/:namespace/workflows/:workflowId/:runId',
+  async function(ctx) {
+    const { namespace, workflowId, runId } = ctx.params;
 
-  ctx.body = await wfClient.describeWorkflow({
-    namespace,
-    execution: { workflowId, runId },
-  });
-});
-
-router.get('/api/namespaces/:namespace/task-lists/:taskList/pollers', async function(
-  ctx
-) {
-  const { namespace, taskList } = ctx.params;
-  const descTaskList = async taskListType =>
-    (
-      await wfClient.describeTaskList({
+    try {
+      ctx.body = await wfClient.describeWorkflow({
         namespace,
-        taskList: { name: taskList },
-        taskListType,
-      })
-    ).pollers || [];
+        execution: { workflowId, runId },
+      });
+    } catch (error) {
+      if (error.name !== 'NotFoundError') {
+        throw error;
+      }
 
-  const r = type => (o, poller) => {
-    const i = o[poller.identity] || {};
+      const archivedHistoryResponse = await wfClient.getHistory();
+      const archivedHistoryEvents = mapHistoryResponse(
+        archivedHistoryResponse.history
+      );
 
-    o[poller.identity] = {
-      lastAccessTime:
-        !i.lastAccessTime || i.lastAccessTime < poller.lastAccessTime
-          ? poller.lastAccessTime
-          : i.lastAccessTime,
-      taskListTypes: i.taskListTypes ? i.taskListTypes.concat([type]) : [type],
+      if (!archivedHistoryEvents.length) {
+        throw error;
+      }
+
+      const { runId, workflowId } = ctx.params;
+
+      const {
+        timestamp: startTime,
+        details: {
+          taskList,
+          executionStartToCloseTimeoutSeconds,
+          taskStartToCloseTimeoutSeconds,
+          workflowType: type,
+        },
+      } = archivedHistoryEvents[0];
+
+      ctx.body = {
+        executionConfiguration: {
+          taskList,
+          executionStartToCloseTimeoutSeconds,
+          taskStartToCloseTimeoutSeconds,
+        },
+        workflowExecutionInfo: {
+          execution: {
+            runId,
+            workflowId,
+          },
+          isArchived: true,
+          startTime,
+          type,
+        },
+        pendingActivities: null,
+        pendingChildren: null,
+      };
+    }
+  }
+);
+
+router.get(
+  '/api/namespaces/:namespace/task-lists/:taskList/pollers',
+  async function(ctx) {
+    const { namespace, taskList } = ctx.params;
+    const descTaskList = async taskListType =>
+      (
+        await wfClient.describeTaskList({
+          namespace,
+          taskList: { name: taskList },
+          taskListType,
+        })
+      ).pollers || [];
+
+    const r = type => (o, poller) => {
+      const i = o[poller.identity] || {};
+
+      o[poller.identity] = {
+        lastAccessTime:
+          !i.lastAccessTime || i.lastAccessTime < poller.lastAccessTime
+            ? poller.lastAccessTime
+            : i.lastAccessTime,
+        taskListTypes: i.taskListTypes
+          ? i.taskListTypes.concat([type])
+          : [type],
+      };
+
+      return o;
     };
 
-    return o;
-  };
+    const activityL = await descTaskList('Activity'),
+      decisionL = await descTaskList('Decision');
 
-  const activityL = await descTaskList('Activity'),
-    decisionL = await descTaskList('Decision');
-
-  ctx.body = activityL.reduce(
-    r('activity'),
-    decisionL.reduce(r('decision'), {})
-  );
-});
+    ctx.body = activityL.reduce(
+      r('activity'),
+      decisionL.reduce(r('decision'), {})
+    );
+  }
+);
 
 router.get('/health', ctx => (ctx.body = 'OK'));
 
