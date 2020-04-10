@@ -9,7 +9,7 @@ const getSummaryWorkflowStatus = ({
 
   if (!workflowCompletedEvent) {
     return (
-      (workflow && workflow.workflowExecutionInfo.closeStatus) ||
+      (workflow && workflow.workflowExecutionInfo.status) ||
       'running'
     ).toLowerCase();
   }

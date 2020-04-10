@@ -9,7 +9,7 @@ describe('Listing Workflows', function() {
     },
     startTime: dateToLong('2017-11-10T21:30:00.000Z'),
     closeTime: null,
-    closeStatus: null,
+    status: null,
     historyLength: null,
     autoResetPoints: null,
     executionTime: null,

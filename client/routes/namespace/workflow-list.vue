@@ -294,7 +294,7 @@ export default pagedGrid({
               endTime: data.closeTime
                 ? moment(data.closeTime).format('lll')
                 : '',
-              status: (data.closeStatus || 'open').toLowerCase(),
+              status: (data.status || 'open').toLowerCase(),
             }));
 
             this.results = query.nextPageToken

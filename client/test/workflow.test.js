@@ -46,7 +46,7 @@ describe('Workflow', () => {
   const closedWorkflowExecution = {
     workflowExecutionInfo: {
       closeTime: moment().subtract(1, 'day'),
-      closeStatus: 'COMPLETED',
+      status: 'COMPLETED',
       type: {},
       execution: {},
     },
