@@ -175,7 +175,7 @@ function WorkflowClient() {
   this.client = client;
 }
 
-WorkflowClient.prototype.describeNamespace = async function({ name }) {
+WorkflowClient.prototype.describeNamespace = async function ({ name }) {
   const req = { name };
 
   const res = await this.client.describeNamespaceAsync(req);
@@ -183,7 +183,7 @@ WorkflowClient.prototype.describeNamespace = async function({ name }) {
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.listNamespaces = async function({
+WorkflowClient.prototype.listNamespaces = async function ({
   pageSize,
   nextPageToken,
 }) {
@@ -194,7 +194,7 @@ WorkflowClient.prototype.listNamespaces = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.openWorkflows = async function({
+WorkflowClient.prototype.openWorkflows = async function ({
   namespace,
   startTimeFilter,
   typeFilter,
@@ -215,7 +215,7 @@ WorkflowClient.prototype.openWorkflows = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.closedWorkflows = async function({
+WorkflowClient.prototype.closedWorkflows = async function ({
   namespace,
   startTimeFilter,
   typeFilter,
@@ -239,7 +239,7 @@ WorkflowClient.prototype.closedWorkflows = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.listWorkflows = async function({
+WorkflowClient.prototype.listWorkflows = async function ({
   namespace,
   query,
   nextPageToken,
@@ -259,7 +259,7 @@ WorkflowClient.prototype.listWorkflows = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.getHistory = async function({
+WorkflowClient.prototype.getHistory = async function ({
   namespace,
   nextPageToken,
   execution,
@@ -283,7 +283,7 @@ WorkflowClient.prototype.getHistory = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.exportHistory = async function({
+WorkflowClient.prototype.exportHistory = async function ({
   namespace,
   execution,
   nextPageToken,
@@ -299,7 +299,7 @@ WorkflowClient.prototype.exportHistory = async function({
   return cliTransform(res);
 };
 
-WorkflowClient.prototype.queryWorkflow = async function({
+WorkflowClient.prototype.queryWorkflow = async function ({
   namespace,
   execution,
   query,
@@ -314,7 +314,7 @@ WorkflowClient.prototype.queryWorkflow = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.terminateWorkflow = async function({
+WorkflowClient.prototype.terminateWorkflow = async function ({
   namespace,
   execution,
   reason,
@@ -330,7 +330,7 @@ WorkflowClient.prototype.terminateWorkflow = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.signalWorkflow = async function({
+WorkflowClient.prototype.signalWorkflow = async function ({
   namespace,
   execution,
   signal,
@@ -346,7 +346,7 @@ WorkflowClient.prototype.signalWorkflow = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.describeWorkflow = async function({
+WorkflowClient.prototype.describeWorkflow = async function ({
   namespace,
   execution,
 }) {
@@ -360,7 +360,7 @@ WorkflowClient.prototype.describeWorkflow = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.describeTaskList = async function({
+WorkflowClient.prototype.describeTaskList = async function ({
   namespace,
   taskList,
   taskListType,
