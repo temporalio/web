@@ -1,15 +1,9 @@
-import moment from 'moment';
 import getTimeElapsedDisplay from './get-time-elapsed-display';
 import getTimeStampDisplay from './get-time-stamp-display';
 import getEventDetails from './get-event-details';
 import getEventFullDetails from './get-event-full-details';
 import getEventSummary from './get-event-summary';
-
-const timestampToDate = timestamp => {
-  const ts = parseInt(timestamp) / 1000000;
-
-  return moment(ts);
-};
+import { timestampToDate } from '~helpers';
 
 const getHistoryEvents = events => {
   if (!events) {

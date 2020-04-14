@@ -110,6 +110,7 @@ import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import pagedGrid from '~components/paged-grid';
 import { DateRangePicker } from '~components';
+import { timestampToDate } from '~helpers';
 
 export default pagedGrid({
   data() {
@@ -283,6 +284,15 @@ export default pagedGrid({
         this.error = undefined;
 
         return this.$http(url, { query })
+          .then(res => {
+            res.executions = res.executions.map(data => ({
+              ...data,
+              startTime: timestampToDate(data.startTime),
+              closeTime: timestampToDate(data.closeTime),
+            }));
+
+            return res;
+          })
           .then(res => {
             this.npt = res.nextPageToken;
             this.loading = false;

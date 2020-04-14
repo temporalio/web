@@ -1,6 +1,10 @@
 import getSummaryWorkflowStatus from './get-summary-workflow-status';
 import parentWorkflowLink from './parent-workflow-link';
-import { getJsonStringObject, getKeyValuePairs } from '~helpers';
+import {
+  getJsonStringObject,
+  getKeyValuePairs,
+  timestampToDate,
+} from '~helpers';
 
 const getSummary = ({ events, isWorkflowRunning, workflow }) => {
   const formattedWorkflow = workflow.pendingActivities
@@ -12,6 +16,16 @@ const getSummary = ({ events, isWorkflowRunning, workflow }) => {
         })),
       }
     : workflow;
+
+  if (formattedWorkflow.workflowExecutionInfo) {
+    const { workflowExecutionInfo } = formattedWorkflow;
+
+    formattedWorkflow.workflowExecutionInfo = {
+      ...workflowExecutionInfo,
+      startTime: timestampToDate(workflowExecutionInfo.startTime),
+      closeTime: timestampToDate(workflowExecutionInfo.closeTime),
+    };
+  }
 
   if (!events || !events.length) {
     return {
