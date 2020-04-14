@@ -1,23 +1,23 @@
 import getVisibilityArchivalStatus from './get-visibility-archival-status';
 
 describe('getVisibilityArchivalStatus', () => {
-  describe('When domainSettings is not defined', () => {
+  describe('When namespaceSettings is not defined', () => {
     it('should return "".', () => {
-      const domainSettings = undefined;
-      const output = getVisibilityArchivalStatus(domainSettings);
+      const namespaceSettings = undefined;
+      const output = getVisibilityArchivalStatus(namespaceSettings);
 
       expect(output).toEqual('');
     });
   });
 
-  describe('When domainSettings.configuration.visibilityArchivalStatus = "ENABLED"', () => {
+  describe('When namespaceSettings.configuration.visibilityArchivalStatus = "ENABLED"', () => {
     it('should return "ENABLED".', () => {
-      const domainSettings = {
+      const namespaceSettings = {
         configuration: {
           visibilityArchivalStatus: 'ENABLED',
         },
       };
-      const output = getVisibilityArchivalStatus(domainSettings);
+      const output = getVisibilityArchivalStatus(namespaceSettings);
 
       expect(output).toEqual('ENABLED');
     });

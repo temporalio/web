@@ -154,15 +154,6 @@
           Ask a question on Stack Overflow
         </a>
       </div>
-      <div>
-        <a
-          href="https://groups.google.com/d/forum/cadence-discussion"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Join our discussion group
-        </a>
-      </div>
       <div v-if="!hideSlack">
         <a
           href="https://join.slack.com/t/temporalio/shared_invite/zt-c1e99p8g-beF7~ZZW2HP6gGStXD8Nuw
