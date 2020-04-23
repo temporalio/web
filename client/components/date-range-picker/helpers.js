@@ -20,14 +20,16 @@ export const getRange = dateRange => {
 
   const [, count, unit] = dateRange.split('-');
 
-  const startTime = moment()
+  let startTime = moment();
+
+  startTime = startTime
     .subtract(count, unit)
     .startOf(unit)
     .toDate();
 
-  const endTime = moment()
-    .endOf(unit)
-    .toDate();
+  let endTime = moment();
+
+  endTime = endTime.endOf(unit).toDate();
 
   return [startTime, endTime];
 };

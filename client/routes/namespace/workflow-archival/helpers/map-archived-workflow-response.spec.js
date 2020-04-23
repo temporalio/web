@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import mapArchivedWorkflowResponse from './map-archived-workflow-response';
 
 describe('mapArchivedWorkflowResponse', () => {
@@ -9,6 +11,9 @@ describe('mapArchivedWorkflowResponse', () => {
   });
 
   it('should return a flattened results array when passed executions with 1 item', () => {
+    const closeTime = '2020-03-30T00:00:00Z';
+    const startTime = '2020-03-01T00:00:00Z';
+
     const executions = [
       {
         closeStatus: 'closeStatusValue',
@@ -26,9 +31,13 @@ describe('mapArchivedWorkflowResponse', () => {
     const output = mapArchivedWorkflowResponse({ executions });
 
     expect(output.results[0].closeStatus).toEqual('closeStatusValue');
-    expect(output.results[0].closeTime).toEqual('Mar 29, 2020 5:00 PM');
+    expect(output.results[0].closeTime).toEqual(
+      moment(closeTime).format('lll')
+    );
     expect(output.results[0].runId).toEqual('runIdValue');
-    expect(output.results[0].startTime).toEqual('Feb 29, 2020 4:00 PM');
+    expect(output.results[0].startTime).toEqual(
+      moment(startTime).format('lll')
+    );
     expect(output.results[0].workflowId).toEqual('workflowIdValue');
     expect(output.results[0].workflowName).toEqual('workflowNameValue');
   });
