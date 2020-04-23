@@ -138,7 +138,7 @@ require('./namespace-list.test');
 require('./help.test');
 require('./workflow-list.test');
 require('./workflow.test');
-require('./namespace-config.test');
+require('./namespace-settings.test');
 require('./task-list.test');
 
 mocha.run();

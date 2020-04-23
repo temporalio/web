@@ -1,14 +1,16 @@
 <template>
   <section class="workflow-summary">
     <aside class="actions">
-      <a
-        href=""
-        class="terminate"
-        v-show="isWorkflowRunning"
-        @click.prevent="$modal.show('confirm-termination')"
-      >
-        Terminate
-      </a>
+      <feature-flag name="workflow-terminate">
+        <a
+          href=""
+          class="terminate"
+          v-show="isWorkflowRunning"
+          @click.prevent="$modal.show('confirm-termination')"
+        >
+          Terminate
+        </a>
+      </feature-flag>
     </aside>
 
     <modal name="confirm-termination">
@@ -29,6 +31,13 @@
     </modal>
 
     <dl v-if="workflow">
+      <div v-if="workflow.workflowExecutionInfo.isArchived">
+        <h5>Workflow archived</h5>
+        <p>
+          This workflow has been retrieved from archival. Some summary
+          information may be missing.
+        </p>
+      </div>
       <div class="workflow-name">
         <dt>Workflow Name</dt>
         <dd>{{ workflow.workflowExecutionInfo.type.name }}</dd>
@@ -126,7 +135,7 @@ import moment from 'moment';
 import { TERMINATE_DEFAULT_ERROR_MESSAGE } from './constants';
 import { NOTIFICATION_TYPE_ERROR, NOTIFICATION_TYPE_SUCCESS } from '~constants';
 import { getErrorMessage } from '~helpers';
-import { BarLoader, DataViewer, DetailList } from '~components';
+import { BarLoader, DataViewer, DetailList, FeatureFlag } from '~components';
 
 export default {
   data() {
@@ -149,6 +158,7 @@ export default {
     'bar-loader': BarLoader,
     'data-viewer': DataViewer,
     'detail-list': DetailList,
+    'feature-flag': FeatureFlag,
   },
   computed: {
     workflowCloseTime() {
@@ -198,6 +208,14 @@ export default {
 section.workflow-summary
   overflow auto
   padding layout-spacing-small
+
+  .pending-activities {
+    dl.details {
+      dd {
+        white-space: normal;
+      }
+    }
+  }
 
   dl:not(.details)
     & > div

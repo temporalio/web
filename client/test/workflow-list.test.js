@@ -2,7 +2,12 @@ import moment from 'moment';
 import fixtures from './fixtures';
 
 describe('Workflow list', () => {
-  async function workflowsTest(mochaTest, initialWorkflows, query, namespaceDesc) {
+  async function workflowsTest(
+    mochaTest,
+    initialWorkflows,
+    query,
+    namespaceDesc
+  ) {
     const [testEl, scenario] = new Scenario(mochaTest)
       .withNamespace('ci-test')
       .startingAt('/namespaces/ci-test/workflows')
@@ -24,21 +29,6 @@ describe('Workflow list', () => {
       type: { name: 'demo' },
     },
   ];
-
-  it('should show the namespace with configuration link and workflows breadcrumb in the nav bar', async function test() {
-    const [, scenario] = await workflowsTest(this.test);
-    const header = scenario.vm.$el.querySelector('header.top-bar');
-
-    header.should.have
-      .descendant('a.workflows')
-      .and.have.class('router-link-active')
-      .and.have.attribute('href', '/namespaces/ci-test/workflows');
-
-    header.should.have
-      .descendant('a.config')
-      .and.not.have.class('router-link-active')
-      .and.have.attribute('href', 'namespace/ci-test/config');
-  });
 
   it('should query for open workflows and show the results in a grid', async function test() {
     const [workflowsEl] = await workflowsTest(this.test);
@@ -264,7 +254,9 @@ describe('Workflow list', () => {
   it('should use query parameters from the URL', async function test() {
     const [testEl] = new Scenario(this.test)
       .withNamespace('ci-test')
-      .startingAt('/namespaces/ci-test/workflows?status=FAILED&workflowName=demo')
+      .startingAt(
+        '/namespaces/ci-test/workflows?status=FAILED&workflowName=demo'
+      )
       .withWorkflows('closed', {
         status: 'FAILED',
         workflowName: 'demo',

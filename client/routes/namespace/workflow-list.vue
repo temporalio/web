@@ -48,10 +48,12 @@
         <div class="field workflow-filter-by">
           <input
             class="workflow-filter-by"
+            name="filterBy"
             placeholder=" "
             readonly
             v-bind:value="filterBy"
           />
+          <label for="filterBy">Filter by</label>
         </div>
         <date-range-picker
           :date-range="range"
@@ -64,6 +66,8 @@
         filterMode === 'advanced' ? 'basic' : 'advanced'
       }}</a>
     </header>
+    <span class="error" v-if="error">{{ error }}</span>
+    <span class="no-results" v-if="showNoResults">No Results</span>
     <section
       class="results"
       v-infinite-scroll="nextPage"
@@ -100,8 +104,6 @@
         </tbody>
       </table>
     </section>
-    <span class="error" v-if="error">{{ error }}</span>
-    <span class="no-results" v-if="showNoResults">No Results</span>
   </section>
 </template>
 
@@ -110,9 +112,14 @@ import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import pagedGrid from '~components/paged-grid';
 import { DateRangePicker } from '~components';
-import { timestampToDate } from '~helpers';
+import {
+  getEndTimeIsoString,
+  getStartTimeIsoString,
+  timestampToDate,
+} from '~helpers';
 
 export default pagedGrid({
+  props: ['namespace'],
   data() {
     return {
       loading: true,
@@ -134,13 +141,13 @@ export default pagedGrid({
     };
   },
   created() {
-    this.$http(`/api/namespaces/${this.$route.params.namespace}`).then(r => {
+    this.$http(`/api/namespaces/${this.namespace}`).then(r => {
       this.maxRetentionDays =
         Number(r.configuration.workflowExecutionRetentionPeriodInDays) || 30;
 
       if (!this.isRouteRangeValid(this.minStartDate)) {
         const prevRange = localStorage.getItem(
-          `${this.$route.params.namespace}:workflows-time-range`
+          `${this.namespace}:workflows-time-range`
         );
 
         if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
@@ -165,79 +172,104 @@ export default pagedGrid({
     'date-range-picker': DateRangePicker,
   },
   computed: {
+    fetchUrl() {
+      const { namespace, queryString, state } = this;
+
+      if (queryString) {
+        return `/api/namespaces/${namespace}/workflows/list`;
+      }
+
+      return `/api/namespaces/${namespace}/workflows/${state}`;
+    },
+    endTime() {
+      const { endTime, range } = this.$route.query;
+
+      return getEndTimeIsoString(range, endTime);
+    },
     filterBy() {
       return this.status.value === 'OPEN' ? 'StartTime' : 'CloseTime';
     },
-    status() {
-      if (!this.$route.query || !this.$route.query.status) {
-        return this.statuses[0];
-      }
+    startTime() {
+      const { range, startTime } = this.$route.query;
 
-      return this.statuses.find(s => s.value === this.$route.query.status);
+      return getStartTimeIsoString(range, startTime);
+    },
+    state() {
+      const { statusName } = this;
+
+      return !statusName || statusName === 'OPEN' ? 'open' : 'closed';
+    },
+    status() {
+      return !this.$route.query || !this.$route.query.status
+        ? this.statuses[0]
+        : this.statuses.find(s => s.value === this.$route.query.status);
+    },
+    statusName() {
+      return this.status.value;
     },
     range() {
-      const q = this.$route.query || {};
-
-      return q.startTime && q.endTime
-        ? {
-            startTime: moment(q.startTime),
-            endTime: moment(q.endTime),
-          }
-        : q.range;
-    },
-    criteria() {
-      const { namespace } = this.$route.params;
-      const q = this.$route.query;
-      const startTime = this.getStartTimeIsoString(q.range, q.startTime);
-      const endTime = this.getEndTimeIsoString(q.range, q.endTime);
-
-      this.nextPageToken = undefined;
-
-      return {
-        namespace,
-        startTime,
-        endTime,
-        status: q.status,
-        workflowId: q.workflowId,
-        workflowName: q.workflowName,
-        queryString: q.queryString,
-      };
-    },
-    queryOnChange() {
-      const q = { ...this.criteria };
-      const { namespace } = q;
-      const state = !q.status || q.status === 'OPEN' ? 'open' : 'closed';
-
-      if (!q.startTime || !q.endTime || !q.status) {
-        return;
-      }
+      const query = this.$route.query || {};
 
       if (!this.isRouteRangeValid(this.minStartDate)) {
         const updatedQuery = this.setRange(
           `last-${Math.min(30, this.maxRetentionDays)}-days`
         );
 
-        q.startTime = this.getStartTimeIsoString(
+        query.startTime = getStartTimeIsoString(
           updatedQuery.range,
-          q.startTime
+          query.startTime
         );
-        q.endTime = this.getEndTimeIsoString(updatedQuery.range, q.endTime);
+        query.endTime = getEndTimeIsoString(updatedQuery.range, query.endTime);
       }
 
-      if (['OPEN', 'CLOSED'].includes(q.status)) {
-        delete q.status;
+      return query.startTime && query.endTime
+        ? {
+            startTime: moment(query.startTime),
+            endTime: moment(query.endTime),
+          }
+        : query.range;
+    },
+    criteria() {
+      const {
+        endTime,
+        queryString,
+        startTime,
+        statusName: status,
+        workflowId,
+        workflowName,
+      } = this;
+
+      this.nextPageToken = undefined;
+
+      if (!startTime || !endTime) {
+        return null;
       }
 
-      delete q.namespace;
-      q.nextPageToken = this.nextPageToken;
+      const includeStatus = !['OPEN', 'CLOSED'].includes(status);
 
-      if (q.queryString) {
-        this.fetch(`/api/namespaces/${namespace}/workflows/list`, q);
+      const criteria = {
+        startTime,
+        endTime,
+        ...(queryString && { queryString }),
+        ...(includeStatus && { status }),
+        ...(workflowId && { workflowId }),
+        ...(workflowName && { workflowName }),
+      };
 
+      return criteria;
+    },
+    queryOnChange() {
+      if (!this.criteria) {
         return;
       }
 
-      this.fetch(`/api/namespaces/${namespace}/workflows/${state}`, q);
+      const { fetchUrl, nextPageToken } = this;
+      const query = { ...this.criteria, nextPageToken };
+
+      this.fetch(fetchUrl, query);
+    },
+    queryString() {
+      return this.$route.query.queryString;
     },
     minStartDate() {
       const {
@@ -253,31 +285,14 @@ export default pagedGrid({
         .subtract(maxRetentionDays, 'days')
         .startOf('days');
     },
+    workflowId() {
+      return this.$route.query.workflowId;
+    },
+    workflowName() {
+      return this.$route.query.workflowName;
+    },
   },
   methods: {
-    getStartTimeIsoString(range, startTimeString) {
-      if (range && typeof range === 'string') {
-        const [, count, unit] = range.split('-');
-
-        return moment()
-          .subtract(count, unit)
-          .startOf(unit)
-          .toISOString();
-      }
-
-      return startTimeString;
-    },
-    getEndTimeIsoString(range, endTimeString) {
-      if (range && typeof range === 'string') {
-        const [, , unit] = range.split('-');
-
-        return moment()
-          .endOf(unit)
-          .toISOString();
-      }
-
-      return endTimeString;
-    },
     fetch: debounce(
       function fetch(url, query) {
         this.loading = true;
@@ -377,8 +392,7 @@ export default pagedGrid({
       return false;
     },
     isRouteRangeValid(minStartDate) {
-      const q = this.$route.query || {};
-      const { endTime, range, startTime } = q;
+      const { endTime, range, startTime } = this.$route.query || {};
 
       if (range) {
         return this.isRangeValid(range, minStartDate);
@@ -398,10 +412,7 @@ export default pagedGrid({
           query.range = range;
           delete query.startTime;
           delete query.endTime;
-          localStorage.setItem(
-            `${this.$route.params.namespace}:workflows-time-range`,
-            range
-          );
+          localStorage.setItem(`${this.namespace}:workflows-time-range`, range);
         } else {
           query.startTime = range.startTime.toISOString();
           query.endTime = range.endTime.toISOString();
@@ -433,10 +444,27 @@ export default pagedGrid({
 @require "../../styles/definitions.styl"
 
 section.workflow-list
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+
   .filters
-    flex-wrap wrap
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
     > .field
       flex 1 1 auto
+      margin-right: 5px;
+
+    .date-range-picker {
+      margin-right: 5px;
+    }
+
+    .dropdown {
+      margin-right: 5px;
+    }
+
     .status {
       width: 160px;
     }
@@ -447,6 +475,10 @@ section.workflow-list
       action-button()
 
   paged-grid()
+
+  section.results {
+    flex: auto;
+  }
 
   &.loading section.results table
     opacity 0.7

@@ -1,15 +1,38 @@
 <script>
 import { version } from '../package.json';
 import logo from './assets/logo.svg';
-import { NotificationBar } from '~components';
-import { NOTIFICATION_TIMEOUT, NOTIFICATION_TYPE_SUCCESS } from '~constants';
+import { FeatureFlag, NotificationBar } from '~components';
+import {
+  ENVIRONMENT_LIST,
+  NOTIFICATION_TIMEOUT,
+  NOTIFICATION_TYPE_SUCCESS,
+} from '~constants';
+import {
+  getEnvironment,
+  getEnvironmentList,
+  getEnvironmentLocation,
+} from '~helpers';
 
 export default {
   components: {
-    NotificationBar,
+    'feature-flag': FeatureFlag,
+    'notification-bar': NotificationBar,
   },
   data() {
+    const { origin } = window.location;
+    const environmentList = ENVIRONMENT_LIST;
+
     return {
+      environment: {
+        list: getEnvironmentList({
+          environmentList,
+          origin,
+        }),
+        value: getEnvironment({
+          environmentList,
+          origin,
+        }),
+      },
       logo,
       notification: {
         message: '',
@@ -39,6 +62,19 @@ export default {
           this.$router.push(href);
         }
       }
+    },
+    onEnvironmentSelectChange(environment) {
+      if (environment === this.environment.value) {
+        return;
+      }
+
+      const { pathname, search } = window.location;
+
+      window.location = getEnvironmentLocation({
+        environment,
+        pathname,
+        search,
+      });
     },
     onNotification({ message, type = NOTIFICATION_TYPE_SUCCESS }) {
       this.notification.message = message;
@@ -71,7 +107,7 @@ export default {
 
 <template>
   <main @click="globalClick">
-    <NotificationBar
+    <notification-bar
       :message="notification.message"
       :onClose="onNotificationClose"
       :show="notification.show"
@@ -82,28 +118,29 @@ export default {
         <div v-html="logo"></div>
         <span class="version">{{ version }}</span>
       </a>
+
+      <feature-flag name="environment-select">
+        <v-select
+          class="environment-select"
+          :on-change="onEnvironmentSelectChange"
+          :options="environment.list"
+          :searchable="false"
+          :value="environment.value"
+        />
+      </feature-flag>
+
       <div class="namespace" v-if="$route.params.namespace">
         <a
           class="workflows"
           :class="{
             'router-link-active':
-              $route.path === `/namespaces/${$route.params.namespace}/workflows`,
+              $route.path ===
+              `/namespaces/${$route.params.namespace}/workflows`,
           }"
           :href="`/namespaces/${$route.params.namespace}/workflows`"
         >
           {{ $route.params.namespace }}
         </a>
-        <a
-          class="config"
-          :class="{
-            'router-link-active':
-              $route.path === `/namespaces/${$route.params.namespace}/config`,
-          }"
-          :href="`/namespaces/${$route.params.namespace}/config`"
-        ></a>
-      </div>
-      <div v-if="$route.name === 'workflow-list'">
-        Workflows
       </div>
       <div class="detail-view workflow-id" v-if="$route.params.workflowId">
         <span>{{ $route.params.workflowId }}</span>
@@ -206,6 +243,21 @@ header.top-bar
     bottom: 0;
   }
 
+  .environment-select {
+    .dropdown-toggle {
+      border-color: transparent;
+    }
+
+    .open-indicator:before {
+      border-color: uber-blue;
+    }
+
+    .selected-tag {
+      color: white;
+      font-weight: bold;
+    }
+  }
+
 body, main
   height 100%
 main
@@ -238,7 +290,7 @@ area-loader, section.loading
     height size
     border-radius size
     left "calc(50% - %s)" % (size/2)
-    top "calc(25% - %s)" % (size/2)
+    top 300px;
     border 3px solid uber-blue
     border-bottom-color transparent
     animation spin 800ms linear infinite

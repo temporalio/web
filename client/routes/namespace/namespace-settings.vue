@@ -1,5 +1,8 @@
 <template>
-  <section :class="{ 'namespace-config namespace-description': true, loading }">
+  <section
+    class="namespace-settings namespace-description"
+    :class="{ loading }"
+  >
     <header>
       <h3>{{ namespace }}</h3>
     </header>
@@ -52,7 +55,7 @@ export default {
 <style lang="stylus">
 @require "../../styles/definitions.styl"
 
-section.namespace-config
+section.namespace-settings
   .foobar
     display none
 </style>

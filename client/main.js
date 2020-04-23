@@ -8,22 +8,27 @@ import qs from 'friendly-querystring';
 import moment from 'moment';
 import promiseFinally from 'promise.prototype.finally';
 
-import copyButton from './components/copy.vue';
+import copyButton from './components/copy';
 
 import snapscroll from './directives/snapscroll';
 
-import App from './App.vue';
-import Root from './routes/index.vue';
-import Help from './routes/help/index.vue';
+import App from './App';
+import Namespace from './routes/namespace/index.vue';
 import NamespaceList from './routes/namespace-list.vue';
-import WorkflowList from './routes/namespace/workflow-list.vue';
-import NamespaceConfig from './routes/namespace/namespace-config.vue';
-import WorkflowTabs from './routes/workflow/index.vue';
-import WorkflowSummary from './routes/workflow/summary.vue';
-import History from './routes/workflow/history.vue';
-import StackTrace from './routes/workflow/stack-trace.vue';
-import Query from './routes/workflow/query.vue';
-import TaskList from './routes/namespace/task-list.vue';
+import NamespaceSettings from './routes/namespace/namespace-settings.vue';
+import Help from './routes/help';
+import History from './routes/workflow/history';
+import Query from './routes/workflow/query';
+import Root from './routes';
+import StackTrace from './routes/workflow/stack-trace';
+import TaskList from './routes/namespace/task-list';
+import WorkflowArchival from './routes/namespace/workflow-archival';
+import WorkflowArchivalAdvanced from './routes/namespace/workflow-archival/advanced';
+import WorkflowArchivalBasic from './routes/namespace/workflow-archival/basic';
+import WorkflowList from './routes/namespace/workflow-list';
+import WorkflowSummary from './routes/workflow/summary';
+import WorkflowTabs from './routes/workflow';
+
 import { http, injectMomentDurationFormat, jsonTryParse } from '~helpers';
 
 const routeOpts = {
@@ -51,22 +56,53 @@ const routeOpts = {
       ],
     },
     {
-      name: 'namespaces-redirect',
-      path: '/namespace/*',
-      redirect: '/namespaces/*',
-    },
-    {
-      name: 'workflow-list',
-      path: '/namespaces/:namespace/workflows',
-      component: WorkflowList,
-    },
-    {
-      name: 'namespace-config',
-      path: '/namespaces/:namespace/config',
-      component: NamespaceConfig,
+      name: 'namespace',
+      path: '/namespaces/:namespace',
+      redirect: '/namespaces/:namespace/workflows',
+      component: Namespace,
       props: ({ params }) => ({
         namespace: params.namespace,
       }),
+      children: [
+        {
+          name: 'workflow-list',
+          path: '/namespaces/:namespace/workflows',
+          components: {
+            'workflow-list': WorkflowList,
+          },
+        },
+        {
+          name: 'namespace-settings',
+          path: '/namespaces/:namespace/settings',
+          components: {
+            'namespace-settings': NamespaceSettings,
+          },
+        },
+        {
+          name: 'workflow-archival',
+          path: '/namespaces/:namespace/archival',
+          redirect: '/namespaces/:namespace/archival/basic',
+          components: {
+            'workflow-archival': WorkflowArchival,
+          },
+          children: [
+            {
+              name: 'workflow-archival-advanced',
+              path: '/namespaces/:namespace/archival/advanced',
+              components: {
+                'workflow-archival-advanced': WorkflowArchivalAdvanced,
+              },
+            },
+            {
+              name: 'workflow-archival-basic',
+              path: '/namespaces/:namespace/archival/basic',
+              components: {
+                'workflow-archival-basic': WorkflowArchivalBasic,
+              },
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'workflow',
@@ -110,7 +146,8 @@ const routeOpts = {
         },
         {
           name: 'workflow/stack-trace',
-          path: '/namespaces/:namespace/workflows/:workflowId/:runId/stack-trace',
+          path:
+            '/namespaces/:namespace/workflows/:workflowId/:runId/stack-trace',
           components: {
             stacktrace: StackTrace,
           },
@@ -128,6 +165,19 @@ const routeOpts = {
       name: 'task-list',
       path: '/namespaces/:namespace/task-lists/:taskList',
       component: TaskList,
+    },
+
+    // redirects
+
+    {
+      name: 'namespaces-redirect',
+      path: '/namespace/*',
+      redirect: '/namespaces/*',
+    },
+    {
+      name: 'namespace-config-redirect',
+      path: '/namespaces/:namespace/config',
+      redirect: '/namespaces/:namespace/settings',
     },
     {
       path: '/namespaces/:namespace/history',
