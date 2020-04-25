@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import WorkflowArchivalService from './workflow-archival-service';
 
 describe('WorkflowArchivalService', () => {
@@ -6,17 +8,20 @@ describe('WorkflowArchivalService', () => {
       namespace: 'samples-namespace',
     });
 
+    const closeTime = '2020-03-30T00:00:00Z';
+    const startTime = '2020-03-01T00:00:00Z';
+
     fetch.mockResponseOnce(
       JSON.stringify({
         executions: [
           {
             closeStatus: 'closeStatusValue',
-            closeTime: '2020-03-30T00:00:00Z',
+            closeTime,
             execution: {
               runId: 'runIdValue',
               workflowId: 'workflowIdValue',
             },
-            startTime: '2020-03-01T00:00:00Z',
+            startTime,
             type: {
               name: 'workflowNameValue',
             },
@@ -34,9 +39,9 @@ describe('WorkflowArchivalService', () => {
       results: [
         {
           closeStatus: 'closeStatusValue',
-          closeTime: 'Mar 29, 2020 5:00 PM',
+          closeTime: moment(closeTime).format('lll'),
           runId: 'runIdValue',
-          startTime: 'Feb 29, 2020 4:00 PM',
+          startTime: moment(startTime).format('lll'),
           workflowId: 'workflowIdValue',
           workflowName: 'workflowNameValue',
         },
