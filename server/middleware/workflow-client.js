@@ -159,7 +159,6 @@ function WorkflowClient() {
       `${dir}/temporal-proto/tasklist`,
       `${dir}/temporal-proto/version`,
       `${dir}/temporal-proto/workflowservice`,
-      `${dir}/protobuf/src`,
     ],
   };
 
