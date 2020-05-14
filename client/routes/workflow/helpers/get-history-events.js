@@ -3,7 +3,7 @@ import getTimeStampDisplay from './get-time-stamp-display';
 import getEventDetails from './get-event-details';
 import getEventFullDetails from './get-event-full-details';
 import getEventSummary from './get-event-summary';
-import { timestampToDate } from '~helpers';
+import { timestampToDate, getWorkflowInputDisplay } from '~helpers';
 
 const getHistoryEvents = events => {
   if (!events) {
@@ -28,6 +28,15 @@ const getHistoryEvents = events => {
         timeStampDisplay,
         timeElapsedDisplay,
       };
+    })
+    .map(event => {
+      if (event.details && event.details.input) {
+        const input = getWorkflowInputDisplay(event.details.input);
+
+        event.details.input = input;
+      }
+
+      return event;
     })
     .map(event => {
       const details = getEventDetails(event);
