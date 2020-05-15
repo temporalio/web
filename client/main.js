@@ -16,7 +16,6 @@ import App from './App';
 import Namespace from './routes/namespace/index.vue';
 import NamespaceList from './routes/namespace-list.vue';
 import NamespaceSettings from './routes/namespace/namespace-settings.vue';
-import Help from './routes/help';
 import History from './routes/workflow/history';
 import Query from './routes/workflow/query';
 import Root from './routes';
@@ -44,13 +43,6 @@ const routeOpts = {
           path: '/namespaces',
           components: {
             'namespace-list': NamespaceList,
-          },
-        },
-        {
-          name: 'help',
-          path: '/help',
-          components: {
-            help: Help,
           },
         },
       ],
