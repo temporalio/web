@@ -18,7 +18,7 @@
         Run
       </a>
     </header>
-    <pre v-if="queryResult">{{ queryResult }}</pre>
+    <pre v-if="queryResultView">{{ queryResultView }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
     <span class="no-queries" v-if="queries && queries.length === 0">
       No queries registered
@@ -80,6 +80,19 @@ export default {
         .finally(() => {
           this.running = false;
         });
+    },
+  },
+  computed: {
+    queryResultView() {
+      if (!this.queryResult || !this.queryResult.payloads) {
+        return undefined;
+      }
+
+      const res = this.queryResult.payloads.map((p, i) => ({
+        [`res[${i}]`]: p.data,
+      }));
+
+      return res;
     },
   },
 };
