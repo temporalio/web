@@ -9,7 +9,8 @@
       />
       <a
         class="navigation-link icon_help"
-        href="http://docs.temporal.io/docs/overview"
+        href="http://docs.temporal.io/docs/learn-glossary"
+        target="_blank"
         >Docs</a
       >
     </navigation-bar>
