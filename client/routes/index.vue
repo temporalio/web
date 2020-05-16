@@ -7,7 +7,12 @@
         label="Namespaces"
         :to="{ name: 'namespace-list' }"
       />
-      <navigation-link label="Help" icon="icon_help" :to="{ name: 'help' }" />
+      <a
+        class="navigation-link icon_help"
+        href="http://docs.temporal.io/docs/learn-glossary"
+        target="_blank"
+        >Docs</a
+      >
     </navigation-bar>
     <router-view name="namespace-list" />
     <router-view name="help" />
