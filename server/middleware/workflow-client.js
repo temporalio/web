@@ -188,7 +188,7 @@ WorkflowClient.prototype.listNamespaces = async function({
 }) {
   const req = { pageSize, nextPageToken };
 
-  const res = await this.client.listNamespacesAync(req);
+  const res = await this.client.listNamespacesAsync(req);
 
   return uiTransform(res);
 };

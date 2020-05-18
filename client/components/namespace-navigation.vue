@@ -82,6 +82,8 @@ export default {
     if (this.$route && this.$route.params && this.$route.params.namespace) {
       this.recordNamespace(this.$route.params.namespace);
     }
+
+    this.getNamespaces();
   },
   methods: {
     recordNamespace(namespace) {
@@ -131,6 +133,23 @@ export default {
         this.namespaceDescCache[d] = mapNamespaceDescription(r);
 
         return this.namespaceDescCache[d];
+      });
+    },
+    getNamespaces(d) {
+      return this.$http(`/api/namespaces`).then(r => {
+        const namespaces = r.namespaces.map(n => n.namespaceInfo.name);
+
+        const newNamespaces = namespaces
+          .filter(n => !this.recentNamespaces.includes(n))
+          .filter(n => n !== 'temporal-system');
+
+        this.recentNamespaces.push(...newNamespaces);
+        this.recentNamespaces = this.recentNamespaces.slice(0, 15);
+
+        localStorage.setItem(
+          'recent-namespaces',
+          JSON.stringify(this.recentNamespaces)
+        );
       });
     },
     checkValidity: debounce(function checkValidity() {
