@@ -83,7 +83,14 @@ export default {
       this.recordNamespace(this.$route.params.namespace);
     }
 
-    this.getNamespaces();
+    this.getNamespaces().then(() => {
+      if (this.recentNamespaces.length == 1) {
+        const namespace = this.recentNamespaces[0];
+        const url = this.namespaceLink(namespace);
+
+        this.$router.push(url);
+      }
+    });
   },
   methods: {
     recordNamespace(namespace) {
