@@ -69,10 +69,10 @@
           </router-link>
         </dd>
       </div>
-      <div class="workflow-result" v-if="result">
+      <div class="workflow-result" v-if="resultView">
         <dt>Result</dt>
         <dd>
-          <data-viewer :item="result" :title="workflowId + ' Result'" />
+          <data-viewer :item="resultView" :title="workflowId + ' Result'" />
         </dd>
       </div>
       <div class="workflow-id">
@@ -172,6 +172,22 @@ export default {
       return moment(this.workflow.workflowExecutionInfo.startTime).format(
         'dddd MMMM Do, h:mm:ss a'
       );
+    },
+    resultView() {
+      if (!this.result || !this.result.jsonStringFull) {
+        return this.result;
+      }
+
+      const res = JSON.parse(this.result.jsonStringFull);
+
+      if (res.failure) {
+        return {
+          jsonStringDisplay: { message: res.failure.message },
+          jsonStringFull: res,
+        };
+      }
+
+      return this.result;
     },
   },
   methods: {

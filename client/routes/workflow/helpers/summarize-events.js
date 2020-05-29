@@ -115,4 +115,7 @@ export const summarizeEvents = {
 
     return summary;
   },
+  WorkflowExecutionFailed: d => {
+    return { message: d.failure.message };
+  },
 };
