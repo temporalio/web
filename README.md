@@ -1,6 +1,7 @@
 # Temporal Web UI
 
 [![Build status](https://badge.buildkite.com/72da2011c93761d680bc8c641d07adad16c94b99b0ed8d7566.svg?branch=master)](https://buildkite.com/temporal/temporal-web)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftemporalio%2Ftemporal-web.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftemporalio%2Ftemporal-web?ref=badge_shield)
 
 Temporal is a distributed, scalable, durable, and highly available orchestration engine we developed at Uber Engineering to execute asynchronous long-running business logic in a scalable and resilient way.
 
@@ -68,3 +69,6 @@ The [webpack](https://webpack.js.org/) configuration is also exported as `webpac
 MIT License, please see [LICENSE](https://github.com/temporalio/temporal-web/blob/master/LICENSE) for details.
 
 [temporal]: https://github.com/temporalio/temporal
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftemporalio%2Ftemporal-web.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftemporalio%2Ftemporal-web?ref=badge_large)
