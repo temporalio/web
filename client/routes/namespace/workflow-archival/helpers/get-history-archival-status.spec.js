@@ -10,10 +10,10 @@ describe('getHistoryArchivalStatus', () => {
     });
   });
 
-  describe('When namespaceSettings.configuration.historyArchivalStatus = "ENABLED"', () => {
+  describe('When namespaceSettings.config.historyArchivalStatus = "ENABLED"', () => {
     it('should return "ENABLED".', () => {
       const namespaceSettings = {
-        configuration: {
+        config: {
           historyArchivalStatus: 'ENABLED',
         },
       };

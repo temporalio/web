@@ -10,10 +10,10 @@ describe('getVisibilityArchivalStatus', () => {
     });
   });
 
-  describe('When namespaceSettings.configuration.visibilityArchivalStatus = "ENABLED"', () => {
+  describe('When namespaceSettings.config.visibilityArchivalStatus = "ENABLED"', () => {
     it('should return "ENABLED".', () => {
       const namespaceSettings = {
-        configuration: {
+        config: {
           visibilityArchivalStatus: 'ENABLED',
         },
       };

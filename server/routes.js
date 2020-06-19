@@ -263,7 +263,7 @@ router.get(
       } = archivedHistoryEvents[0];
 
       ctx.body = {
-        executionConfiguration: {
+        executionConfig: {
           taskList,
           executionStartToCloseTimeoutSeconds,
           taskStartToCloseTimeoutSeconds,

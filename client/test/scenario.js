@@ -129,13 +129,13 @@ Scenario.prototype.withNamespaceDescription = function withNamespaceDescription(
           description: 'A cool namespace',
           ownerEmail: 'ci-test@temporalio.com',
         },
-        configuration: {
+        config: {
           workflowExecutionRetentionPeriodInDays: 21,
           emitMetric: true,
           historyArchivalStatus: 'ENABLED',
           visibilityArchivalStatus: 'DISABLED',
         },
-        replicationConfiguration: {
+        replicationConfig: {
           activeClusterName: 'ci-test-cluster',
           clusters: [
             {
@@ -201,7 +201,7 @@ Scenario.prototype.withWorkflow = function withWorkflow(
   this.runId = runId;
 
   this.api.getOnce(this.execApiBase(), {
-    executionConfiguration: {
+    executionConfig: {
       taskList: { name: 'ci_task_list' },
       executionStartToCloseTimeoutSeconds: 3600,
       taskStartToCloseTimeoutSeconds: 10,

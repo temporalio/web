@@ -12,7 +12,9 @@ function buildHistory(getHistoryRes) {
     let attr = '';
 
     if (e.eventType) {
-      attr = e.eventType.replace('EventType', '') + 'EventAttributes';
+      attr = e.eventType.toLowerCase().replace(/\_\w/g, function(v) { return v.toUpperCase(); })
+      attr = attr.replace(/\_/g, '')
+      attr = attr.replace(/EventType/i, '') + 'EventAttributes';
       attr = attr.charAt(0).toLowerCase() + attr.slice(1);
     }
 
@@ -140,32 +142,35 @@ function WorkflowClient() {
   const dir = process.cwd();
   const protoFileName = 'service.proto';
   const options = {
-    keepCase: true,
+    keepCase: false,
     longs: String,
     enums: String,
     defaults: true,
     oneofs: true,
     includeDirs: [
       `${dir}/temporal-proto/`,
-      `${dir}/temporal-proto/common`,
-      `${dir}/temporal-proto/decision`,
-      `${dir}/temporal-proto/event`,
-      `${dir}/temporal-proto/execution`,
-      `${dir}/temporal-proto/failure`,
-      `${dir}/temporal-proto/filter`,
-      `${dir}/temporal-proto/namespace`,
-      `${dir}/temporal-proto/query`,
-      `${dir}/temporal-proto/replication`,
-      `${dir}/temporal-proto/tasklist`,
-      `${dir}/temporal-proto/version`,
-      `${dir}/temporal-proto/workflowservice`,
+      `${dir}/temporal-proto/temporal/common/v1`,
+      `${dir}/temporal-proto/temporal/decision/v1`,
+      `${dir}/temporal-proto/temporal/enums/v1`,
+      `${dir}/temporal-proto/temporal/errordetails/v1`,
+      `${dir}/temporal-proto/temporal/execution/v1`,
+      `${dir}/temporal-proto/temporal/failure/v1`,
+      `${dir}/temporal-proto/temporal/filter/v1`,
+      `${dir}/temporal-proto/temporal/history/v1`,
+      `${dir}/temporal-proto/temporal/namespace/v1`,
+      `${dir}/temporal-proto/temporal/query/v1`,
+      `${dir}/temporal-proto/temporal/replication/v1`,
+      `${dir}/temporal-proto/temporal/tasklist/v1`,
+      `${dir}/temporal-proto/temporal/version/v1`,
+      `${dir}/temporal-proto/temporal/workflow/v1`,
+      `${dir}/temporal-proto/temporal/workflowservice/v1`,
     ],
   };
 
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
   const service = grpc.loadPackageDefinition(packageDefinition);
 
-  let client = new service.workflowservice.WorkflowService(
+  let client = new service.temporal.workflowservice.v1.WorkflowService(
     process.env.TEMPORAL_GRPC_ENDPOINT || '127.0.0.1:7233',
     grpc.credentials.createInsecure()
   );
