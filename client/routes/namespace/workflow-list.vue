@@ -110,6 +110,7 @@
 <script>
 import moment from 'moment';
 import debounce from 'lodash-es/debounce';
+import orderBy from 'lodash-es/orderBy';
 import pagedGrid from '~components/paged-grid';
 import { DateRangePicker } from '~components';
 import {
@@ -311,7 +312,14 @@ export default pagedGrid({
           .then(res => {
             this.npt = res.nextPageToken;
             this.loading = false;
-            const formattedResults = res.executions.map(data => ({
+
+            const executions = orderBy(
+              res.executions,
+              ['startTime', 'closeTime'],
+              ['desc', 'desc']
+            );
+
+            const formattedResults = executions.map((data) => ({
               workflowId: data.execution.workflowId,
               runId: data.execution.runId,
               workflowName: data.type.name,
