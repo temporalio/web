@@ -8,12 +8,14 @@ const moment = require('moment');
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
 
-  history.events = getHistoryRes.history.events.map(e => {
+  history.events = getHistoryRes.history.events.map((e) => {
     let attr = '';
 
     if (e.eventType) {
-      attr = e.eventType.toLowerCase().replace(/\_\w/g, function(v) { return v.toUpperCase(); })
-      attr = attr.replace(/\_/g, '')
+      attr = e.eventType.toLowerCase().replace(/\_\w/g, function(v) {
+        return v.toUpperCase();
+      });
+      attr = attr.replace(/\_/g, '');
       attr = attr.replace(/EventType/i, '') + 'EventAttributes';
       attr = attr.charAt(0).toLowerCase() + attr.slice(1);
     }
@@ -94,7 +96,7 @@ function uiTransform(item) {
         // most of Temporal's uses of buffer is just line-delimited JSON.
         item[subkey] = stringval
           .split('\n')
-          .filter(x => x)
+          .filter((x) => x)
           .map(JSON.parse);
 
         if (item[subkey].length === 1) {
@@ -106,12 +108,40 @@ function uiTransform(item) {
       }
     } else if (Array.isArray(subvalue)) {
       subvalue.forEach(uiTransform);
+    }
+    if (typeof subvalue == 'string') {
+      subvalue = enumTransform(subvalue);
+      item[subkey] = subvalue;
     } else if (subvalue && typeof subvalue === 'object') {
       uiTransform(subvalue);
     }
   });
-
   return item;
+}
+
+function enumTransform(item) {
+  enumPrefixes = [
+    'workflow_execution_status',
+    'event_type_workflow_execution',
+    'event_type_decision_task',
+    'event_type_activity_task',
+    'task_list_kind',
+    'continue_as_new_initiator',
+  ];
+
+  const itemL = item.toLowerCase();
+  prefix = enumPrefixes.find((e) => itemL.includes(e));
+
+  if (!prefix) {
+    return item;
+  }
+
+  let processed = itemL.replace(prefix, '');
+  processed = processed.replace(/\_\w/g, function(v) {
+    return v.toUpperCase();
+  });
+  processed = processed.replace(/\_/g, '');
+  return processed;
 }
 
 function cliTransform(item) {
