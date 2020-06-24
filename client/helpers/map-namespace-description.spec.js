@@ -97,10 +97,10 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.configuration.workflowExecutionRetentionPeriodInDays = 3', () => {
+  describe('When namespace.config.workflowExecutionRetentionPeriodInDays = 3', () => {
     it('should return "Retention Period" = "3 days".', () => {
       const namespace = {
-        configuration: {
+        config: {
           workflowExecutionRetentionPeriodInDays: 3,
         },
       };
@@ -111,10 +111,10 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.configuration.emitMetric = true', () => {
+  describe('When namespace.config.emitMetric = true', () => {
     it('should return "Emit Metrics" = "Yes".', () => {
       const namespace = {
-        configuration: {
+        config: {
           emitMetric: true,
         },
       };
@@ -125,10 +125,10 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.configuration.historyArchivalStatus = "ENABLED"', () => {
+  describe('When namespace.config.historyArchivalStatus = "ENABLED"', () => {
     it('should return "History Archival" = "Enabled".', () => {
       const namespace = {
-        configuration: {
+        config: {
           historyArchivalStatus: 'ENABLED',
         },
       };
@@ -139,10 +139,10 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.configuration.visibilityArchivalStatus = "ENABLED"', () => {
+  describe('When namespace.config.visibilityArchivalStatus = "ENABLED"', () => {
     it('should return "Visibility Archival" = "Enabled".', () => {
       const namespace = {
-        configuration: {
+        config: {
           visibilityArchivalStatus: 'ENABLED',
         },
       };
@@ -168,7 +168,7 @@ describe('mapNamespaceDescription', () => {
   describe(`Multiple clusters with one active cluster`, () => {
     it('should return "clusters" = "cluster1 (active), cluster2".', () => {
       const namespace = {
-        replicationConfiguration: {
+        replicationConfig: {
           activeClusterName: 'cluster1',
           clusters: [{ clusterName: 'cluster1' }, { clusterName: 'cluster2' }],
         },

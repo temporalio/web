@@ -11,7 +11,7 @@ describe('Describe Namespace', function() {
       },
       isGlobalNamespace: false,
       failoverVersion: 0,
-      configuration: {
+      config: {
         badBinaries: null,
         emitMetric: false,
         historyArchivalStatus: null,
@@ -20,7 +20,7 @@ describe('Describe Namespace', function() {
         visibilityArchivalURI: null,
         workflowExecutionRetentionPeriodInDays: 14
       },
-      replicationConfiguration: {
+      replicationConfig: {
         activeClusterName: 'ci-cluster',
         clusters: []
       }
@@ -50,7 +50,7 @@ describe('Describe Namespace', function() {
       },
       failoverVersion: 0,
       isGlobalNamespace: true,
-      configuration: {
+      config: {
         badBinaries: null,
         workflowExecutionRetentionPeriodInDays: 14,
         emitMetric: true,
@@ -59,7 +59,7 @@ describe('Describe Namespace', function() {
         visibilityArchivalStatus: null,
         visibilityArchivalURI: null
       },
-      replicationConfiguration: {
+      replicationConfig: {
         activeClusterName: 'ci-cluster',
         clusters: null
       }

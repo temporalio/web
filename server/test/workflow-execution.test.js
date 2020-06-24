@@ -2,7 +2,7 @@ describe('Workflow Execution', function() {
   it('should describe the workflow', async function () {
     this.test.DescribeWorkflowExecution = ({ describeRequest }) => {
       return {
-        executionConfiguration: {
+        executionConfig: {
           taskList: { name: 'ci-task-list' },
           taskStartToCloseTimeoutSeconds: 10
         }
@@ -14,7 +14,7 @@ describe('Workflow Execution', function() {
       .expect(200)
       .expect('Content-Type', /json/)
       .expect({
-        executionConfiguration: {
+        executionConfig: {
           taskList: {
             name: 'ci-task-list',
             kind: null

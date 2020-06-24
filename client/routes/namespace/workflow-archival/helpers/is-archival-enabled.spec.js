@@ -4,7 +4,7 @@ describe('isArchivalEnabled', () => {
   describe('When historyArchivalStatus = "DISABLED" and visibilityArchivalStatus = "DISABLED"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
-        configuration: {
+        config: {
           historyArchivalStatus: 'DISABLED',
           visibilityArchivalStatus: 'DISABLED',
         },
@@ -18,7 +18,7 @@ describe('isArchivalEnabled', () => {
   describe('When historyArchivalStatus = "ENABLED" and visibilityArchivalStatus = "DISABLED"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
-        configuration: {
+        config: {
           historyArchivalStatus: 'ENABLED',
           visibilityArchivalStatus: 'DISABLED',
         },
@@ -32,7 +32,7 @@ describe('isArchivalEnabled', () => {
   describe('When historyArchivalStatus = "DISABLED" and visibilityArchivalStatus = "ENABLED"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
-        configuration: {
+        config: {
           historyArchivalStatus: 'DISABLED',
           visibilityArchivalStatus: 'ENABLED',
         },
@@ -46,7 +46,7 @@ describe('isArchivalEnabled', () => {
   describe('When historyArchivalStatus = "ENABLED" and visibilityArchivalStatus = "ENABLED"', () => {
     it('should return true.', () => {
       const namespaceSettings = {
-        configuration: {
+        config: {
           historyArchivalStatus: 'ENABLED',
           visibilityArchivalStatus: 'ENABLED',
         },

@@ -8,11 +8,15 @@ const moment = require('moment');
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
 
-  history.events = getHistoryRes.history.events.map(e => {
+  history.events = getHistoryRes.history.events.map((e) => {
     let attr = '';
 
     if (e.eventType) {
-      attr = e.eventType.replace('EventType', '') + 'EventAttributes';
+      attr = e.eventType.toLowerCase().replace(/\_\w/g, function(v) {
+        return v.toUpperCase();
+      });
+      attr = attr.replace(/\_/g, '');
+      attr = attr.replace(/EventType/i, '') + 'EventAttributes';
       attr = attr.charAt(0).toLowerCase() + attr.slice(1);
     }
 
@@ -92,7 +96,7 @@ function uiTransform(item) {
         // most of Temporal's uses of buffer is just line-delimited JSON.
         item[subkey] = stringval
           .split('\n')
-          .filter(x => x)
+          .filter((x) => x)
           .map(JSON.parse);
 
         if (item[subkey].length === 1) {
@@ -104,12 +108,39 @@ function uiTransform(item) {
       }
     } else if (Array.isArray(subvalue)) {
       subvalue.forEach(uiTransform);
+    }
+    if (typeof subvalue == 'string') {
+      subvalue = enumTransform(subvalue);
+      item[subkey] = subvalue;
     } else if (subvalue && typeof subvalue === 'object') {
       uiTransform(subvalue);
     }
   });
-
   return item;
+}
+
+function enumTransform(item) {
+  enumPrefixes = [
+    'workflow_execution_status',
+    'event_type_workflow_execution',
+    'event_type_decision_task',
+    'event_type_activity_task',
+    'task_list_kind',
+    'continue_as_new_initiator',
+  ];
+
+  const itemL = item.toLowerCase();
+  prefix = enumPrefixes.find((e) => itemL.startsWith(e));
+
+  if (!prefix) {
+    return item;
+  }
+
+  let processed = itemL.replace(new RegExp(`^${prefix}`), '');
+  processed = processed.replace(/\_\w/g, function(v) {
+    return v[1].toUpperCase();
+  });
+  return processed;
 }
 
 function cliTransform(item) {
@@ -140,32 +171,35 @@ function WorkflowClient() {
   const dir = process.cwd();
   const protoFileName = 'service.proto';
   const options = {
-    keepCase: true,
+    keepCase: false,
     longs: String,
     enums: String,
     defaults: true,
     oneofs: true,
     includeDirs: [
       `${dir}/temporal-proto/`,
-      `${dir}/temporal-proto/common`,
-      `${dir}/temporal-proto/decision`,
-      `${dir}/temporal-proto/event`,
-      `${dir}/temporal-proto/execution`,
-      `${dir}/temporal-proto/failure`,
-      `${dir}/temporal-proto/filter`,
-      `${dir}/temporal-proto/namespace`,
-      `${dir}/temporal-proto/query`,
-      `${dir}/temporal-proto/replication`,
-      `${dir}/temporal-proto/tasklist`,
-      `${dir}/temporal-proto/version`,
-      `${dir}/temporal-proto/workflowservice`,
+      `${dir}/temporal-proto/temporal/common/v1`,
+      `${dir}/temporal-proto/temporal/decision/v1`,
+      `${dir}/temporal-proto/temporal/enums/v1`,
+      `${dir}/temporal-proto/temporal/errordetails/v1`,
+      `${dir}/temporal-proto/temporal/execution/v1`,
+      `${dir}/temporal-proto/temporal/failure/v1`,
+      `${dir}/temporal-proto/temporal/filter/v1`,
+      `${dir}/temporal-proto/temporal/history/v1`,
+      `${dir}/temporal-proto/temporal/namespace/v1`,
+      `${dir}/temporal-proto/temporal/query/v1`,
+      `${dir}/temporal-proto/temporal/replication/v1`,
+      `${dir}/temporal-proto/temporal/tasklist/v1`,
+      `${dir}/temporal-proto/temporal/version/v1`,
+      `${dir}/temporal-proto/temporal/workflow/v1`,
+      `${dir}/temporal-proto/temporal/workflowservice/v1`,
     ],
   };
 
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
   const service = grpc.loadPackageDefinition(packageDefinition);
 
-  let client = new service.workflowservice.WorkflowService(
+  let client = new service.temporal.workflowservice.v1.WorkflowService(
     process.env.TEMPORAL_GRPC_ENDPOINT || '127.0.0.1:7233',
     grpc.credentials.createInsecure()
   );

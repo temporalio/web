@@ -1,6 +1,6 @@
 export default function(namespace) {
   const {
-    configuration: {
+    config: {
       emitMetric,
       historyArchivalStatus,
       workflowExecutionRetentionPeriodInDays,
@@ -9,7 +9,7 @@ export default function(namespace) {
     namespaceInfo: { description, ownerEmail } = {},
     failoverVersion,
     isGlobalNamespace,
-    replicationConfiguration: { activeClusterName, clusters = [] } = {},
+    replicationConfig: { activeClusterName, clusters = [] } = {},
   } = namespace || {};
 
   return {

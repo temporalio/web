@@ -98,11 +98,11 @@
             :to="{
               name: 'task-list',
               params: {
-                taskList: workflow.executionConfiguration.taskList.name,
+                taskList: workflow.executionConfig.taskList.name,
               },
             }"
           >
-            {{ workflow.executionConfiguration.taskList.name }}
+            {{ workflow.executionConfig.taskList.name }}
           </router-link>
         </dd>
       </div>
