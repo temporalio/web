@@ -130,17 +130,16 @@ function enumTransform(item) {
   ];
 
   const itemL = item.toLowerCase();
-  prefix = enumPrefixes.find((e) => itemL.startWith(e));
+  prefix = enumPrefixes.find((e) => itemL.startsWith(e));
 
   if (!prefix) {
     return item;
   }
 
-  let processed = itemL.replace(prefix, '');
+  let processed = itemL.replace(new RegExp(`^${prefix}`), '');
   processed = processed.replace(/\_\w/g, function(v) {
     return v[1].toUpperCase();
   });
-  processed = processed.replace(/\_/g, '');
   return processed;
 }
 
