@@ -138,7 +138,7 @@ function enumTransform(item) {
 
   let processed = itemL.replace(prefix, '');
   processed = processed.replace(/\_\w/g, function(v) {
-    return v.toUpperCase();
+    return v[1].toUpperCase();
   });
   processed = processed.replace(/\_/g, '');
   return processed;
