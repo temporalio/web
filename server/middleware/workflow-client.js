@@ -130,7 +130,7 @@ function enumTransform(item) {
   ];
 
   const itemL = item.toLowerCase();
-  prefix = enumPrefixes.find((e) => itemL.includes(e));
+  prefix = enumPrefixes.find((e) => itemL.startWith(e));
 
   if (!prefix) {
     return item;
