@@ -142,7 +142,7 @@ export default pagedGrid({
     };
   },
   created() {
-    this.$http(`/api/namespaces/${this.namespace}`).then(r => {
+    this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
       this.maxRetentionDays =
         Number(r.config.workflowExecutionRetentionPeriodInDays) || 30;
 
@@ -203,7 +203,7 @@ export default pagedGrid({
     status() {
       return !this.$route.query || !this.$route.query.status
         ? this.statuses[0]
-        : this.statuses.find(s => s.value === this.$route.query.status);
+        : this.statuses.find((s) => s.value === this.$route.query.status);
     },
     statusName() {
       return this.status.value;
@@ -300,8 +300,8 @@ export default pagedGrid({
         this.error = undefined;
 
         return this.$http(url, { query })
-          .then(res => {
-            res.executions = res.executions.map(data => ({
+          .then((res) => {
+            res.executions = res.executions.map((data) => ({
               ...data,
               startTime: timestampToDate(data.startTime),
               closeTime: timestampToDate(data.closeTime),
@@ -309,15 +309,13 @@ export default pagedGrid({
 
             return res;
           })
-          .then(res => {
+          .then((res) => {
             this.npt = res.nextPageToken;
             this.loading = false;
 
-            const executions = orderBy(
-              res.executions,
-              ['startTime', 'closeTime'],
-              ['desc', 'desc']
-            );
+            const orderField =
+              this.state === 'open' ? 'startTime' : 'closeTime';
+            const executions = orderBy(res.executions, orderField, ['desc']);
 
             const formattedResults = executions.map((data) => ({
               workflowId: data.execution.workflowId,
@@ -336,7 +334,7 @@ export default pagedGrid({
 
             return this.results;
           })
-          .catch(e => {
+          .catch((e) => {
             this.npt = undefined;
             this.loading = false;
             this.error = (e.json && e.json.message) || e.status || e.message;
