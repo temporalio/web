@@ -15,7 +15,8 @@ export default {
     open: [
       {
         execution: {
-          workflowId: 'github.com/temporalio/temporal-web/email-daily-summaries-2',
+          workflowId:
+            'github.com/temporalio/temporal-web/email-daily-summaries-2',
           runId: 'ef2c889e-e709-4d50-99ee-3748dfa0a101',
         },
         type: {
@@ -66,7 +67,7 @@ export default {
           workflowType: {
             name: 'email-daily-summaries',
           },
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           input: [839134, { env: 'prod' }],
@@ -79,7 +80,7 @@ export default {
         eventType: 'DecisionTaskScheduled',
         eventId: 2,
         details: {
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           zero: 0,
@@ -124,7 +125,7 @@ export default {
           activityType: {
             name: 'send-emails',
           },
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           input: [12345, ['bob@example.com', 'jane@somewhere.com']],
@@ -159,7 +160,7 @@ export default {
         timestamp: emailRun1Start.add(11, 'second').toISOString(),
         eventType: 'DecisionTaskScheduled',
         eventId: 9,
-        details: { taskList: { name: 'ci-task-queue' } },
+        details: { taskQueue: { name: 'ci-task-queue' } },
       },
       {
         timestamp: emailRun1Start.add(11, 'second').toISOString(),
@@ -196,7 +197,7 @@ export default {
       {
         details: {
           executionStartToCloseTimeoutSeconds: 360,
-          taskList: {
+          taskQueue: {
             name: 'canary-task-queue',
           },
           taskStartToCloseTimeoutSeconds: 180,
@@ -249,7 +250,7 @@ export default {
           scheduleToCloseTimeoutSeconds: 2,
           scheduleToStartTimeoutSeconds: 1,
           startToCloseTimeoutSeconds: 1,
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
         },
@@ -279,7 +280,7 @@ export default {
       {
         details: {
           startToCloseTimeoutSeconds: 180,
-          taskList: {
+          taskQueue: {
             name: 'compute3330-sjc1:43b62b8e-aa2a-4b58-9571-39062a073d24',
           },
         },
@@ -324,7 +325,7 @@ export default {
           workflowType: {
             name: 'email-daily-summaries',
           },
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           input: [839134, { env: 'prod' }],
@@ -337,7 +338,7 @@ export default {
         eventType: 'DecisionTaskScheduled',
         eventId: 2,
         details: {
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           zero: 0,
@@ -382,7 +383,7 @@ export default {
           activityType: {
             name: 'search-for-treasure',
           },
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           input: { location: 'volcanic island' },
@@ -427,7 +428,7 @@ export default {
         eventId: 10,
         details: {
           workflowType: { name: 'sail-the-ocean' },
-          taskList: { name: 'another-queue' },
+          taskQueue: { name: 'another-queue' },
           input: { direction: 'west' },
         },
       },
@@ -454,7 +455,7 @@ export default {
           activityType: {
             name: 'swab-the-deck',
           },
-          taskList: {
+          taskQueue: {
             name: 'ci-task-queue',
           },
           input: { moveTheGrogToo: true },

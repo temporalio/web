@@ -20,7 +20,7 @@ import History from './routes/workflow/history';
 import Query from './routes/workflow/query';
 import Root from './routes';
 import StackTrace from './routes/workflow/stack-trace';
-import TaskList from './routes/namespace/task-list';
+import TaskQueue from './routes/namespace/task-queue';
 import WorkflowArchival from './routes/namespace/workflow-archival';
 import WorkflowArchivalAdvanced from './routes/namespace/workflow-archival/advanced';
 import WorkflowArchivalBasic from './routes/namespace/workflow-archival/basic';
@@ -154,9 +154,9 @@ const routeOpts = {
       ],
     },
     {
-      name: 'task-list',
-      path: '/namespaces/:namespace/task-lists/:taskList',
-      component: TaskList,
+      name: 'task-queue',
+      path: '/namespaces/:namespace/task-queues/:taskQueue',
+      component: TaskQueue,
     },
 
     // redirects
@@ -198,7 +198,7 @@ const routeOpts = {
     },
   ],
   parseQuery: qs.parse.bind(qs),
-  stringifyQuery: query => {
+  stringifyQuery: (query) => {
     const q = qs.stringify(query);
 
     return q ? `?${q}` : '';
@@ -267,11 +267,11 @@ if (typeof mocha === 'undefined') {
   });
 
   if (module.hot) {
-    module.hot.addStatusHandler(status => {
+    module.hot.addStatusHandler((status) => {
       if (status === 'apply') {
         document
           .querySelectorAll('link[href][rel=stylesheet]')
-          .forEach(link => {
+          .forEach((link) => {
             const nextStyleHref = link.href.replace(
               /(\?\d+)?$/,
               `?${Date.now()}`

@@ -43,7 +43,7 @@ describe('Help', () => {
         'tctl --env {staging|prod|prod02} --namespace {namespace-name} namespace describe',
         'tctl --env {staging|prod|prod02} --namespace {namespace-name} namespace update -active_cluster {cluster-name}',
         'tctl --env {staging|prod|prod02} --namespace {namespace-name} namespace update --add_bad_binary {bad-binary-SHA} --reason \'"{reason}"\'',
-        'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow run --tl {task-list-name} --wt {workflow-type-name} --et 60 -i \'"{input-string}"\'',
+        'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow run --tl {task-queue-name} --wt {workflow-type-name} --et 60 -i \'"{input-string}"\'',
         'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow describe -w {workflow-id} -r {run-id}',
         'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow show -w {workflow-id} -r {run-id}',
         'tctl --env {staging|prod|prod02} --namespace {namespace-name} workflow signal -w {workflow-id} -r {run-id} --name {signal-name} --input \'"{signal-payload}"\'',

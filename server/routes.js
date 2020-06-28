@@ -3,7 +3,7 @@ const Router = require('koa-router'),
   moment = require('moment'),
   Long = require('long'),
   losslessJSON = require('lossless-json'),
-  momentToLong = m => Long.fromValue(m.unix()).mul(1000000000),
+  momentToLong = (m) => Long.fromValue(m.unix()).mul(1000000000),
   WorkflowClient = require('./middleware/workflow-client');
 
 const wfClient = new WorkflowClient();
@@ -98,7 +98,7 @@ const buildQueryString = (
     workflowId && `WorkflowID = "${workflowId}"`,
     workflowName && `WorkflowType = "${workflowName}"`,
   ]
-    .filter(subQuery => !!subQuery)
+    .filter((subQuery) => !!subQuery)
     .join(' and ');
 };
 
@@ -180,7 +180,7 @@ router.get(
         /(KnownQueryTypes|knownTypes)=\[(.*)\]/
       ) || [null, null, ''])[2]
         .split(' ')
-        .filter(q => q);
+        .filter((q) => q);
     }
   }
 );
@@ -255,7 +255,7 @@ router.get(
       const {
         timestamp: startTime,
         details: {
-          taskList,
+          taskQueue,
           executionStartToCloseTimeoutSeconds,
           taskStartToCloseTimeoutSeconds,
           workflowType: type,
@@ -264,7 +264,7 @@ router.get(
 
       ctx.body = {
         executionConfig: {
-          taskList,
+          taskQueue,
           executionStartToCloseTimeoutSeconds,
           taskStartToCloseTimeoutSeconds,
         },
@@ -285,19 +285,19 @@ router.get(
 );
 
 router.get(
-  '/api/namespaces/:namespace/task-lists/:taskList/pollers',
+  '/api/namespaces/:namespace/task-queues/:taskQueue/pollers',
   async function(ctx) {
-    const { namespace, taskList } = ctx.params;
-    const descTaskList = async taskListType =>
+    const { namespace, taskQueue } = ctx.params;
+    const descTaskQueue = async (taskQueueType) =>
       (
-        await wfClient.describeTaskList({
+        await wfClient.describeTaskQueue({
           namespace,
-          taskList: { name: taskList },
-          taskListType,
+          taskQueue: { name: taskQueue },
+          taskQueueType,
         })
       ).pollers || [];
 
-    const r = type => (o, poller) => {
+    const r = (type) => (o, poller) => {
       const i = o[poller.identity] || {};
 
       o[poller.identity] = {
@@ -305,16 +305,16 @@ router.get(
           !i.lastAccessTime || i.lastAccessTime < poller.lastAccessTime
             ? poller.lastAccessTime
             : i.lastAccessTime,
-        taskListTypes: i.taskListTypes
-          ? i.taskListTypes.concat([type])
+        taskQueueTypes: i.taskQueueTypes
+          ? i.taskQueueTypes.concat([type])
           : [type],
       };
 
       return o;
     };
 
-    const activityL = await descTaskList('Activity'),
-      decisionL = await descTaskList('Decision');
+    const activityL = await descTaskQueue('Activity'),
+      decisionL = await descTaskQueue('Decision');
 
     ctx.body = activityL.reduce(
       r('activity'),
@@ -323,6 +323,6 @@ router.get(
   }
 );
 
-router.get('/health', ctx => (ctx.body = 'OK'));
+router.get('/health', (ctx) => (ctx.body = 'OK'));
 
 module.exports = router;

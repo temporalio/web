@@ -1,13 +1,13 @@
 describe('Workflow Execution', function() {
-  it('should describe the workflow', async function () {
+  it('should describe the workflow', async function() {
     this.test.DescribeWorkflowExecution = ({ describeRequest }) => {
       return {
         executionConfig: {
-          taskList: { name: 'ci-task-list' },
-          taskStartToCloseTimeoutSeconds: 10
-        }
-      }
-    }
+          taskQueue: { name: 'ci-task-queue' },
+          taskStartToCloseTimeoutSeconds: 10,
+        },
+      };
+    };
 
     return request()
       .get('/api/namespaces/canary/workflows/ci%2Fdemo/run1')
@@ -15,47 +15,47 @@ describe('Workflow Execution', function() {
       .expect('Content-Type', /json/)
       .expect({
         executionConfig: {
-          taskList: {
-            name: 'ci-task-list',
-            kind: null
+          taskQueue: {
+            name: 'ci-task-queue',
+            kind: null,
           },
           taskStartToCloseTimeoutSeconds: 10,
-          executionStartToCloseTimeoutSeconds: null
+          executionStartToCloseTimeoutSeconds: null,
         },
         workflowExecutionInfo: null,
         pendingChildren: null,
-        pendingActivities: null
-      })
-  })
+        pendingActivities: null,
+      });
+  });
 
   it('should terminate a workflow', async function() {
-    let reason
+    let reason;
     this.test.TerminateWorkflowExecution = ({ terminateRequest }) => {
-      terminateRequest.workflowExecution.workflowId.should.equal('ci/demo')
-      terminateRequest.workflowExecution.runId.should.equal('run1')
-      reason = terminateRequest.reason
-      return {}
-    }
+      terminateRequest.workflowExecution.workflowId.should.equal('ci/demo');
+      terminateRequest.workflowExecution.runId.should.equal('run1');
+      reason = terminateRequest.reason;
+      return {};
+    };
 
     return request()
       .post('/api/namespaces/canary/workflows/ci%2Fdemo/run1/terminate')
       .send({ reason: 'example reason' })
       .expect(204)
-      .expect(() => reason.should.equal('example reason'))
-  })
+      .expect(() => reason.should.equal('example reason'));
+  });
 
   it('should signal a workflow without input', async function() {
-    let signal
+    let signal;
     this.test.SignalWorkflowExecution = ({ signalRequest }) => {
-      signalRequest.workflowExecution.workflowId.should.equal('ci/demo')
-      signalRequest.workflowExecution.runId.should.equal('run2')
-      signal = signalRequest.signalName
-      return {}
-    }
+      signalRequest.workflowExecution.workflowId.should.equal('ci/demo');
+      signalRequest.workflowExecution.runId.should.equal('run2');
+      signal = signalRequest.signalName;
+      return {};
+    };
 
     return request()
       .post('/api/namespaces/canary/workflows/ci%2Fdemo/run2/signal/firealarm')
       .expect(204)
-      .expect(() => signal.should.equal('firealarm'))
-  })
-})
+      .expect(() => signal.should.equal('firealarm'));
+  });
+});

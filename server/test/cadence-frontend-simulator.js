@@ -1,42 +1,41 @@
-const
-  supertest = require('supertest'),
+const supertest = require('supertest'),
   TChannel = require('tchannel'),
   TChannelAsThrift = require('tchannel/as/thrift'),
   Long = require('long'),
-  path = require('path')
+  path = require('path');
 
-var tchanServer, currTest, client, app
+var tchanServer, currTest, client, app;
 
-global.should = require('chai').should()
-global.dateToLong = d => Long.fromValue(Number(new Date(d))).mul(1000000)
+global.should = require('chai').should();
+global.dateToLong = (d) => Long.fromValue(Number(new Date(d))).mul(1000000);
 
 before(function(done) {
-  tchanServer = new TChannel({ serviceName: 'temporal-frontend' })
+  tchanServer = new TChannel({ serviceName: 'temporal-frontend' });
 
-  client = new TChannel()
+  client = new TChannel();
   var temporalChan = client.makeSubChannel({
-    serviceName: 'temporal-frontend'
-  })
+    serviceName: 'temporal-frontend',
+  });
   var tchan = TChannelAsThrift({
     channel: temporalChan,
-    entryPoint: path.join(__dirname, '../idl/cadence.thrift')
-  })
+    entryPoint: path.join(__dirname, '../idl/cadence.thrift'),
+  });
 
   const handler = (ctx, req, head, body, cb) => {
-    var mockName = req.endpoint.replace('WorkflowService::', '')
+    var mockName = req.endpoint.replace('WorkflowService::', '');
     if (!currTest[mockName]) {
-      throw new Error(`unexpected request to ${req.endpoint}`)
+      throw new Error(`unexpected request to ${req.endpoint}`);
     }
 
-    var body = currTest[mockName](body, req)
+    var body = currTest[mockName](body, req);
     if (body instanceof Error) {
-      cb(body)
+      cb(body);
     } else if (body && body.ok === false) {
-      cb(null, body)
+      cb(null, body);
     } else {
-      cb(null, { ok: true, head, body })
+      cb(null, { ok: true, head, body });
     }
-  }
+  };
 
   [
     'ListOpenWorkflowExecutions',
@@ -48,22 +47,26 @@ before(function(done) {
     'SignalWorkflowExecution',
     'ListNamespaces',
     'DescribeNamespace',
-    'DescribeTaskList'
-  ].forEach(endpoint => tchan.register(tchanServer, 'WorkflowService::' + endpoint, {}, handler))
+    'DescribeTaskQueue',
+  ].forEach((endpoint) =>
+    tchan.register(tchanServer, 'WorkflowService::' + endpoint, {}, handler)
+  );
 
-  process.env.CADENCE_TCHANNEL_PEERS = '127.0.0.1:11343'
-  tchanServer.listen(11343, '127.0.0.1', () => done())
+  process.env.CADENCE_TCHANNEL_PEERS = '127.0.0.1:11343';
+  tchanServer.listen(11343, '127.0.0.1', () => done());
 
-  app = require('../').init({ useWebpack: false, logErrors: false }).listen()
-  global.request = supertest.bind(supertest, app)
-})
+  app = require('../')
+    .init({ useWebpack: false, logErrors: false })
+    .listen();
+  global.request = supertest.bind(supertest, app);
+});
 
 after(function() {
-  app.close()
-  tchanServer.close()
-  client.close()
-})
+  app.close();
+  tchanServer.close();
+  client.close();
+});
 
 beforeEach(function() {
-  currTest = this.currentTest
-})
+  currTest = this.currentTest;
+});

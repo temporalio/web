@@ -202,7 +202,7 @@ Scenario.prototype.withWorkflow = function withWorkflow(
 
   this.api.getOnce(this.execApiBase(), {
     executionConfig: {
-      taskList: { name: 'ci_task_list' },
+      taskQueue: { name: 'ci_task_queue' },
       executionStartToCloseTimeoutSeconds: 3600,
       taskStartToCloseTimeoutSeconds: 10,
       childPolicy: 'TERMINATE',
@@ -291,30 +291,30 @@ Scenario.prototype.withWorkflowTermination = function withWorkflowTermination(
   return this;
 };
 
-Scenario.prototype.withTaskListPollers = function withTaskListPollers(
-  taskList,
+Scenario.prototype.withTaskQueuePollers = function withTaskQueuePollers(
+  taskQueue,
   pollers
 ) {
   this.api.getOnce(
-    `/api/namespaces/${this.namespace}/task-lists/${taskList}/pollers`,
+    `/api/namespaces/${this.namespace}/task-queues/${taskQueue}/pollers`,
     pollers || {
       node1: {
         lastAccessTime: moment()
           .startOf('hour')
           .add(5, 'minutes'),
-        taskListTypes: ['decision', 'activity'],
+        taskQueueTypes: ['decision', 'activity'],
       },
       node2: {
         lastAccessTime: moment()
           .startOf('hour')
           .add(3, 'minutes'),
-        taskListTypes: ['decision'],
+        taskQueueTypes: ['decision'],
       },
       node3: {
         lastAccessTime: moment()
           .startOf('hour')
           .add(4, 'minutes'),
-        taskListTypes: ['activity'],
+        taskQueueTypes: ['activity'],
       },
     }
   );

@@ -4,13 +4,13 @@ import workflowLink from './workflow-link';
 import { shortName } from '~helpers';
 
 export const summarizeEvents = {
-  ActivityTaskCancelRequested: d => ({ Id: d.activityId }),
-  ActivityTaskCompleted: d => ({ result: d.result }),
-  ActivityTaskFailed: d => ({
+  ActivityTaskCancelRequested: (d) => ({ Id: d.activityId }),
+  ActivityTaskCompleted: (d) => ({ result: d.result }),
+  ActivityTaskFailed: (d) => ({
     details: d.details,
     reason: d.reason,
   }),
-  ActivityTaskScheduled: d => ({
+  ActivityTaskScheduled: (d) => ({
     'Close Timeout': moment
       .duration(d.scheduleToCloseTimeoutSeconds, 'seconds')
       .format(),
@@ -18,30 +18,30 @@ export const summarizeEvents = {
     input: d.input,
     Name: shortName(d.activityType.name),
   }),
-  ActivityTaskStarted: d => ({
+  ActivityTaskStarted: (d) => ({
     attempt: d.attempt,
     identity: d.identity,
     requestId: d.requestId,
   }),
-  ActivityTaskTimedOut: d => ({ 'Timeout Type': d.timeoutType }),
-  ChildWorkflowExecutionCompleted: d => ({
+  ActivityTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
+  ChildWorkflowExecutionCompleted: (d) => ({
     result: d.result,
     Workflow: workflowLink(d, true),
   }),
-  ChildWorkflowExecutionStarted: d => ({
+  ChildWorkflowExecutionStarted: (d) => ({
     Workflow: workflowLink(d),
   }),
-  DecisionTaskCompleted: d => ({ identity: d.identity }),
-  DecisionTaskScheduled: d => ({
-    Tasklist: d.taskList.name,
+  DecisionTaskCompleted: (d) => ({ identity: d.identity }),
+  DecisionTaskScheduled: (d) => ({
+    Taskqueue: d.taskQueue.name,
     Timeout: moment.duration(d.startToCloseTimeoutSeconds, 'seconds').format(),
   }),
-  DecisionTaskStarted: d => ({ requestId: d.requestId }),
-  DecisionTaskTimedOut: d => ({ 'Timeout Type': d.timeoutType }),
-  ExternalWorkflowExecutionSignaled: d => ({
+  DecisionTaskStarted: (d) => ({ requestId: d.requestId }),
+  DecisionTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
+  ExternalWorkflowExecutionSignaled: (d) => ({
     Workflow: workflowLink(d),
   }),
-  MarkerRecorded: d => {
+  MarkerRecorded: (d) => {
     const details = d.details || {};
 
     if (d.markerName === 'LocalActivity') {
@@ -78,23 +78,23 @@ export const summarizeEvents = {
 
     return d;
   },
-  StartChildWorkflowExecutionInitiated: d => ({
+  StartChildWorkflowExecutionInitiated: (d) => ({
     input: d.input,
-    Tasklist: d.taskList.name,
+    Taskqueue: d.taskQueue.name,
     Workflow: shortName(d.workflowType.name),
   }),
-  SignalExternalWorkflowExecutionInitiated: d => ({
+  SignalExternalWorkflowExecutionInitiated: (d) => ({
     input: d.input,
     signal: d.signalName,
     Workflow: workflowLink(d),
   }),
-  TimerStarted: d => ({
+  TimerStarted: (d) => ({
     'Fire Timeout': moment
       .duration(d.startToFireTimeoutSeconds, 'seconds')
       .format(),
     'Timer ID': d.timerId,
   }),
-  WorkflowExecutionStarted: d => {
+  WorkflowExecutionStarted: (d) => {
     const summary = {
       'Close Timeout': moment
         .duration(d.executionStartToCloseTimeoutSeconds, 'seconds')
@@ -115,7 +115,7 @@ export const summarizeEvents = {
 
     return summary;
   },
-  WorkflowExecutionFailed: d => {
+  WorkflowExecutionFailed: (d) => {
     return { message: d.failure.message };
   },
 };
