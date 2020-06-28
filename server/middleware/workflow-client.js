@@ -125,8 +125,10 @@ function enumTransform(item) {
     'event_type_workflow_execution',
     'event_type_decision_task',
     'event_type_activity_task',
-    'task_list_kind',
+    'task_queue_kind',
     'continue_as_new_initiator',
+    'event_type_timer',
+    'timeout_type',
   ];
 
   const itemL = item.toLowerCase();
@@ -189,7 +191,7 @@ function WorkflowClient() {
       `${dir}/temporal-proto/temporal/namespace/v1`,
       `${dir}/temporal-proto/temporal/query/v1`,
       `${dir}/temporal-proto/temporal/replication/v1`,
-      `${dir}/temporal-proto/temporal/tasklist/v1`,
+      `${dir}/temporal-proto/temporal/taskqueue/v1`,
       `${dir}/temporal-proto/temporal/version/v1`,
       `${dir}/temporal-proto/temporal/workflow/v1`,
       `${dir}/temporal-proto/temporal/workflowservice/v1`,
@@ -411,13 +413,13 @@ WorkflowClient.prototype.describeWorkflow = async function({
   return uiTransform(res);
 };
 
-WorkflowClient.prototype.describeTaskList = async function({
+WorkflowClient.prototype.describeTaskQueue = async function({
   namespace,
-  taskList,
-  taskListType,
+  taskQueue,
+  taskQueueType,
 }) {
-  const req = { namespace, taskList, taskListType };
-  const res = await this.client.describeTaskListAsync(req);
+  const req = { namespace, taskQueue, taskQueueType };
+  const res = await this.client.describeTaskQueueAsync(req);
 
   return uiTransform(res);
 };

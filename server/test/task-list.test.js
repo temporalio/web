@@ -1,43 +1,52 @@
-describe('Task List Pollers', function() {
+describe('Task Queue Pollers', function() {
   it('should aggregate decision and activity pollers together by instance', function() {
-    this.test.DescribeTaskList = ({ request }) => {
-      request.namespace.should.equal('canary')
-      request.taskList.name.should.equal('demo-task-list')
+    this.test.DescribeTaskQueue = ({ request }) => {
+      request.namespace.should.equal('canary');
+      request.taskQueue.name.should.equal('demo-task-queue');
 
       return {
-        pollers: request.taskListType === 'Activity' ? [{
-          identity: '100@node1@demo-task-list',
-          lastAccessTime: dateToLong('2018-03-22T20:21:40.000Z')
-        }, {
-          identity: '102@node3@demo-task-list',
-          lastAccessTime: dateToLong('2018-03-22T20:21:32.000Z')
-        }] : [{
-          identity: '100@node1@demo-task-list',
-          lastAccessTime: dateToLong('2018-03-22T20:20:40.000Z')
-        }, {
-          identity: '101@node2@demo-task-list',
-          lastAccessTime: dateToLong('2018-03-22T20:22:05.000Z')
-        }]
-      }
-    }
+        pollers:
+          request.taskQueueType === 'Activity'
+            ? [
+                {
+                  identity: '100@node1@demo-task-queue',
+                  lastAccessTime: dateToLong('2018-03-22T20:21:40.000Z'),
+                },
+                {
+                  identity: '102@node3@demo-task-queue',
+                  lastAccessTime: dateToLong('2018-03-22T20:21:32.000Z'),
+                },
+              ]
+            : [
+                {
+                  identity: '100@node1@demo-task-queue',
+                  lastAccessTime: dateToLong('2018-03-22T20:20:40.000Z'),
+                },
+                {
+                  identity: '101@node2@demo-task-queue',
+                  lastAccessTime: dateToLong('2018-03-22T20:22:05.000Z'),
+                },
+              ],
+      };
+    };
 
     return request()
-      .get('/api/namespaces/canary/task-lists/demo-task-list/pollers')
+      .get('/api/namespaces/canary/task-queues/demo-task-queue/pollers')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect({
-        '100@node1@demo-task-list': {
+        '100@node1@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:21:40.000Z',
-          taskListTypes: ['decision', 'activity']
+          taskQueueTypes: ['decision', 'activity'],
         },
-        '101@node2@demo-task-list': {
+        '101@node2@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:22:05.000Z',
-          taskListTypes: ['decision']
+          taskQueueTypes: ['decision'],
         },
-        '102@node3@demo-task-list': {
+        '102@node3@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:21:32.000Z',
-          taskListTypes: ['activity']
+          taskQueueTypes: ['activity'],
         },
-      })
-  })
-})
+      });
+  });
+});

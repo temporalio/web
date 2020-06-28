@@ -145,8 +145,8 @@ export default {
       <div class="detail-view workflow-id" v-if="$route.params.workflowId">
         <span>{{ $route.params.workflowId }}</span>
       </div>
-      <div class="detail-view task-list" v-if="$route.params.taskList">
-        <span>{{ $route.params.taskList }}</span>
+      <div class="detail-view task-queue" v-if="$route.params.taskQueue">
+        <span>{{ $route.params.taskQueue }}</span>
       </div>
     </header>
     <router-view @onNotification="onNotification"></router-view>
@@ -233,7 +233,7 @@ header.top-bar
     margin-right spacing
   div.workflow-id span::before
       content 'WORKFLOW ID'
-  div.task-list span::before
+  div.task-queue span::before
       content 'TASK LIST'
   .version {
     color: #c6c6c6;

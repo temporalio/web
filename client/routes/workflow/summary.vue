@@ -91,18 +91,18 @@
           </router-link>
         </dd>
       </div>
-      <div class="task-list">
-        <dt>Task List</dt>
+      <div class="task-queue">
+        <dt>Task Queue</dt>
         <dd>
           <router-link
             :to="{
-              name: 'task-list',
+              name: 'task-queue',
               params: {
-                taskList: workflow.executionConfig.taskList.name,
+                taskQueue: workflow.executionConfig.taskQueue.name,
               },
             }"
           >
-            {{ workflow.executionConfig.taskList.name }}
+            {{ workflow.executionConfig.taskQueue.name }}
           </router-link>
         </dd>
       </div>
@@ -198,7 +198,7 @@ export default {
           reason: this.terminationReason,
         })
         .then(
-          r => {
+          (r) => {
             this.$emit('onNotification', {
               message: 'Workflow terminated.',
               type: NOTIFICATION_TYPE_SUCCESS,
@@ -206,7 +206,7 @@ export default {
             // eslint-disable-next-line no-console
             console.dir(r);
           },
-          error => {
+          (error) => {
             this.$emit('onNotification', {
               message: getErrorMessage(error, TERMINATE_DEFAULT_ERROR_MESSAGE),
               type: NOTIFICATION_TYPE_ERROR,
@@ -246,7 +246,7 @@ section.workflow-summary
     margin-bottom 1em
     dt
       padding 0 4px
-  .run-id, .task-list, .workflow-id, .workflow-name
+  .run-id, .task-queue, .workflow-id, .workflow-name
     dd
       font-weight 300
       font-family monospace-font-family

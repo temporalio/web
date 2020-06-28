@@ -1,5 +1,5 @@
 <template>
-  <section :class="{ 'task-list': true, loading }">
+  <section :class="{ 'task-queue': true, loading }">
     <header><h3>Pollers</h3></header>
     <table v-if="pollers">
       <thead>
@@ -33,18 +33,18 @@ export default {
   },
   created() {
     this.$http(
-      `/api/namespaces/${this.$route.params.namespace}/task-lists/${this.$route.params.taskList}/pollers`
+      `/api/namespaces/${this.$route.params.namespace}/task-queues/${this.$route.params.taskQueue}/pollers`
     )
       .then(
-        p => {
-          this.pollers = Object.keys(p).map(identity => ({
+        (p) => {
+          this.pollers = Object.keys(p).map((identity) => ({
             identity,
             lastAccessTime: moment(p[identity].lastAccessTime),
-            handlesDecisions: p[identity].taskListTypes.includes('decision'),
-            handlesActivities: p[identity].taskListTypes.includes('activity'),
+            handlesDecisions: p[identity].taskQueueTypes.includes('decision'),
+            handlesActivities: p[identity].taskQueueTypes.includes('activity'),
           }));
         },
-        e => {
+        (e) => {
           this.error = (e.json && e.json.message) || e.status || e.message;
         }
       )
@@ -59,7 +59,7 @@ export default {
 <style lang="stylus">
 @require "../../styles/definitions.styl"
 
-section.task-list
+section.task-queue
   > header
     padding inline-spacing-medium
   table

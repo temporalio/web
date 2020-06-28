@@ -2,7 +2,7 @@ import moment from 'moment';
 import getJsonStringObject from './get-json-string-object';
 import { jsonKeys, preKeys } from '~constants';
 
-const getKeyValuePairs = event => {
+const getKeyValuePairs = (event) => {
   const kvps = [];
   const flatten = (prefix, obj, root) => {
     Object.entries(obj).forEach(([k, value]) => {
@@ -57,13 +57,13 @@ const getKeyValuePairs = event => {
           },
           value,
         });
-      } else if (key === 'taskList.name' || key === 'Tasklist') {
+      } else if (key === 'taskQueue.name' || key === 'Taskqueue') {
         kvps.push({
           key,
           routeLink: {
-            name: 'task-list',
+            name: 'task-queue',
             params: {
-              taskList: value,
+              taskQueue: value,
             },
           },
           value,

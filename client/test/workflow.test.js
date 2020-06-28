@@ -64,9 +64,12 @@ describe('Workflow', () => {
           .querySelector('.workflow-name dd')
           .should.have.text('CIDemoWorkflow');
         summaryEl
-          .querySelector('.task-list dd a[href]')
-          .should.contain.text('ci_task_list')
-          .and.have.attr('href', '/namespaces/ci-test/task-lists/ci_task_list');
+          .querySelector('.task-queue dd a[href]')
+          .should.contain.text('ci_task_queue')
+          .and.have.attr(
+            'href',
+            '/namespaces/ci-test/task-queues/ci_task_queue'
+          );
         summaryEl.querySelector('.started-at dd').should.have.text(
           moment()
             .startOf('hour')
@@ -203,7 +206,7 @@ describe('Workflow', () => {
                 name:
                   'code.temporalio.internal/marketplace/dsp-scheduler/scheduler/workflow.CTBWorkflow',
               },
-              taskList: {
+              taskQueue: {
                 name: 'ctb-decider',
                 kind: null,
               },
@@ -735,7 +738,7 @@ describe('Workflow', () => {
             .should.deep.equal(
               fixtures.history.emailRun1
                 .filter((_value, index) => index < 6)
-                .map(e => moment(e.timestamp).format('MMM Do h:mm:ss a'))
+                .map((e) => moment(e.timestamp).format('MMM Do h:mm:ss a'))
             )
         );
         localStorage
@@ -753,7 +756,7 @@ describe('Workflow', () => {
             .should.deep.equal(
               fixtures.history.emailRun1
                 .filter((_value, index) => index < 6)
-                .map(e => moment(e.timestamp).format('MMM Do h:mm:ss a'))
+                .map((e) => moment(e.timestamp).format('MMM Do h:mm:ss a'))
             )
         );
       });
@@ -773,7 +776,7 @@ describe('Workflow', () => {
           .textNodes('dl.details dt')
           .should.deep.equal([
             'workflowType.name',
-            'taskList.name',
+            'taskQueue.name',
             'input',
             'executionStartToCloseTimeout',
             'taskStartToCloseTimeout',
