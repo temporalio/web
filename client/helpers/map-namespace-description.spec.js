@@ -125,11 +125,11 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.config.historyArchivalStatus = "ENABLED"', () => {
+  describe('When namespace.config.historyArchivalStatus = "Enabled"', () => {
     it('should return "History Archival" = "Enabled".', () => {
       const namespace = {
         config: {
-          historyArchivalStatus: 'ENABLED',
+          historyArchivalStatus: 'Enabled',
         },
       };
 
@@ -139,11 +139,11 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.config.visibilityArchivalStatus = "ENABLED"', () => {
+  describe('When namespace.config.visibilityArchivalStatus = "Enabled"', () => {
     it('should return "Visibility Archival" = "Enabled".', () => {
       const namespace = {
         config: {
-          visibilityArchivalStatus: 'ENABLED',
+          visibilityArchivalStatus: 'Enabled',
         },
       };
 

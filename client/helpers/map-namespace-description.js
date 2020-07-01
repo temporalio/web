@@ -21,9 +21,9 @@ export default function(namespace) {
       : 'Unknown',
     'Emit Metrics': emitMetric ? 'Yes' : 'No',
     'History Archival':
-      historyArchivalStatus === 'ENABLED' ? 'Enabled' : 'Disabled',
+      historyArchivalStatus == 'Enabled' ? 'Enabled' : 'Disabled',
     'Visibility Archival':
-      visibilityArchivalStatus === 'ENABLED' ? 'Enabled' : 'Disabled',
+      visibilityArchivalStatus == 'Enabled' ? 'Enabled' : 'Disabled',
     ...(failoverVersion !== undefined && {
       'Failover Version': failoverVersion,
     }),
