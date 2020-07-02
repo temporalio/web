@@ -94,7 +94,7 @@ const buildQueryString = (
   return [
     `CloseTime >= "${startTime.toISOString()}"`,
     `CloseTime <= "${endTime.toISOString()}"`,
-    status && `CloseStatus = "${status}"`,
+    status && `ExecutionStatus = "${status}"`,
     workflowId && `WorkflowID = "${workflowId}"`,
     workflowName && `WorkflowType = "${workflowName}"`,
   ]
