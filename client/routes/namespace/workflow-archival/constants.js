@@ -1,5 +1,4 @@
 export const ARCHIVAL_STATUS_LIST = [
-  { value: 'CLOSED', label: 'Closed' },
   { value: 'COMPLETED', label: 'Completed' },
   { value: 'FAILED', label: 'Failed' },
   { value: 'CANCELED', label: 'Cancelled' },

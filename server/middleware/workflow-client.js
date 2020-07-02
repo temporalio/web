@@ -130,6 +130,7 @@ function enumTransform(item) {
     'event_type_timer',
     'timeout_type',
     'archival_status',
+    'retry_status',
   ];
 
   const itemL = item.toLowerCase();
