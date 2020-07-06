@@ -122,12 +122,9 @@ function uiTransform(item) {
 function enumTransform(item) {
   const enumPrefixes = [
     'workflow_execution_status',
-    'event_type_workflow_execution',
-    'event_type_decision_task',
-    'event_type_activity_task',
+    'event_type',
     'task_queue_kind',
     'continue_as_new_initiator',
-    'event_type_timer',
     'timeout_type',
     'archival_status',
     'retry_status',
