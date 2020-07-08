@@ -70,6 +70,9 @@ function buildStatusFilter(statusFilter) {
   return { status: filter };
 }
 
+[_searchAttributes, _memo] = ['searchAttributes', 'memo'];
+_uiTransformPayloadKeys = [_searchAttributes, _memo];
+
 function uiTransform(item) {
   if (!item || typeof item !== 'object') {
     return item;
@@ -108,12 +111,31 @@ function uiTransform(item) {
       }
     } else if (Array.isArray(subvalue)) {
       subvalue.forEach(uiTransform);
-    }
-    if (typeof subvalue == 'string') {
+    } else if (typeof subvalue == 'string') {
       subvalue = enumTransform(subvalue);
       item[subkey] = subvalue;
     } else if (subvalue && typeof subvalue === 'object') {
-      uiTransform(subvalue);
+      if (_uiTransformPayloadKeys.includes(subkey)) {
+        if (subkey === _searchAttributes) {
+          let values = [];
+          Object.entries(subvalue.indexedFields).forEach(
+            ([subkey, subvalue]) => {
+              values = [...values, subvalue.data.toString('utf8')];
+            }
+          );
+          item[subkey] = values;
+        } else if (subkey === _memo) {
+          let values = [];
+          Object.entries(subvalue.fields).forEach(([subkey, subvalue]) => {
+            values = [...values, subvalue.data.toString('utf8')];
+          });
+          item[subkey] = values;
+        } else {
+          uiTransform(subvalue);
+        }
+      } else {
+        uiTransform(subvalue);
+      }
     }
   });
   return item;
