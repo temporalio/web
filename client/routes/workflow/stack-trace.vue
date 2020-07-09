@@ -5,10 +5,10 @@
       <a href="#" class="refresh" @click="getStackTrace">Refresh</a>
     </header>
 
-    <pre v-if="typeof stackTrace === 'string'">{{ stackTrace }}</pre>
-    <span class="error" v-if="stackTrace && stackTrace.error">{{
-      stackTrace.error
-    }}</span>
+    <pre v-if="stackTrace && stackTrace.results">{{ stackTrace }}</pre>
+    <span class="error" v-if="stackTrace && stackTrace.error">
+      {{ stackTrace.error }}
+    </span>
   </section>
 </template>
 
@@ -37,7 +37,7 @@ export default {
           this.stackTrace = queryResult;
           this.stackTraceTimestamp = moment();
         })
-        .catch(e => {
+        .catch((e) => {
           // eslint-disable-next-line no-console
           console.error(e);
           this.stackTrace = {

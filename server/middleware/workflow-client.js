@@ -70,8 +70,12 @@ function buildStatusFilter(statusFilter) {
   return { status: filter };
 }
 
-[_searchAttributes, _memo] = ['searchAttributes', 'memo'];
-_uiTransformPayloadKeys = [_searchAttributes, _memo];
+[_searchAttributes, _memo, _queryResult] = [
+  'searchAttributes',
+  'memo',
+  'queryResult',
+];
+_uiTransformPayloadKeys = [_searchAttributes, _memo, _queryResult];
 
 function uiTransform(item) {
   if (!item || typeof item !== 'object') {
@@ -130,6 +134,12 @@ function uiTransform(item) {
             values = [...values, subvalue.data.toString('utf8')];
           });
           item[subkey] = values;
+        } else if (subkey === _queryResult) {
+          let values = [];
+          Object.entries(subvalue.payloads).forEach(([subkey, subvalue]) => {
+            values = [...values, subvalue.data.toString('utf8')];
+          });
+          item[subkey] = { results: values };
         } else {
           uiTransform(subvalue);
         }
