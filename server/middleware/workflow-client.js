@@ -70,6 +70,13 @@ function buildStatusFilter(statusFilter) {
   return { status: filter };
 }
 
+[_searchAttributes, _memo, _queryResult] = [
+  'searchAttributes',
+  'memo',
+  'queryResult',
+];
+_uiTransformPayloadKeys = [_searchAttributes, _memo, _queryResult];
+
 function uiTransform(item) {
   if (!item || typeof item !== 'object') {
     return item;
@@ -108,27 +115,51 @@ function uiTransform(item) {
       }
     } else if (Array.isArray(subvalue)) {
       subvalue.forEach(uiTransform);
-    }
-    if (typeof subvalue == 'string') {
+    } else if (typeof subvalue == 'string') {
       subvalue = enumTransform(subvalue);
       item[subkey] = subvalue;
     } else if (subvalue && typeof subvalue === 'object') {
-      uiTransform(subvalue);
+      if (_uiTransformPayloadKeys.includes(subkey)) {
+        if (subkey === _searchAttributes) {
+          let values = [];
+          Object.entries(subvalue.indexedFields).forEach(
+            ([subkey, subvalue]) => {
+              values = [...values, subvalue.data.toString('utf8')];
+            }
+          );
+          item[subkey] = values;
+        } else if (subkey === _memo) {
+          let values = [];
+          Object.entries(subvalue.fields).forEach(([subkey, subvalue]) => {
+            values = [...values, subvalue.data.toString('utf8')];
+          });
+          item[subkey] = values;
+        } else if (subkey === _queryResult) {
+          let values = [];
+          Object.entries(subvalue.payloads).forEach(([subkey, subvalue]) => {
+            values = [...values, subvalue.data.toString('utf8')];
+          });
+          item[subkey] = { results: values };
+        } else {
+          uiTransform(subvalue);
+        }
+      } else {
+        uiTransform(subvalue);
+      }
     }
   });
   return item;
 }
 
 function enumTransform(item) {
-  enumPrefixes = [
+  const enumPrefixes = [
     'workflow_execution_status',
-    'event_type_workflow_execution',
-    'event_type_decision_task',
-    'event_type_activity_task',
+    'event_type',
     'task_queue_kind',
     'continue_as_new_initiator',
-    'event_type_timer',
     'timeout_type',
+    'archival_status',
+    'retry_status',
   ];
 
   const itemL = item.toLowerCase();

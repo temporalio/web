@@ -94,7 +94,7 @@ const buildQueryString = (
   return [
     `CloseTime >= "${startTime.toISOString()}"`,
     `CloseTime <= "${endTime.toISOString()}"`,
-    status && `CloseStatus = "${status}"`,
+    status && `ExecutionStatus = "${status}"`,
     workflowId && `WorkflowID = "${workflowId}"`,
     workflowName && `WorkflowType = "${workflowName}"`,
   ]
@@ -179,6 +179,7 @@ router.get(
       ctx.body = ((e.message || '').match(
         /(KnownQueryTypes|knownTypes)=\[(.*)\]/
       ) || [null, null, ''])[2]
+        .replace(',', '')
         .split(' ')
         .filter((q) => q);
     }

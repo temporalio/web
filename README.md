@@ -12,11 +12,13 @@ This web UI is used to view workflows from [Temporalio][temporal], see what's ru
 
 Set these environment variables if you need to change their defaults
 
-| Variable                  | Description                                   | Default           |
-| ------------------------- | --------------------------------------------- | ----------------- |
-| TEMPORAL_GRPC_ENDPOINT    | String representing server gRPC endpoint      | 127.0.0.1:7233    |
-| TEMPORAL_WEB_PORT         | HTTP port to serve on                         | 8088              |
-| TEMPORAL_EXTERNAL_SCRIPTS | Addtional JavaScript tags to serve in the UI  |                   |
+| Variable                      | Description                                    | Default        |
+| ----------------------------- | ---------------------------------------------- | -------------- |
+| TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint       | 127.0.0.1:7233 |
+| TEMPORAL_WEB_PORT             | HTTP port to serve on                          | 8088           |
+| TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development | 8081           |
+| TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests       | 8082           |
+| TEMPORAL_EXTERNAL_SCRIPTS     | Addtional JavaScript tags to serve in the UI   |                |
 
 ### Running locally
 
@@ -59,7 +61,6 @@ app.use(async function(ctx, next) {
 .init()
 .listen(7000)
 ```
-
 
 The [webpack](https://webpack.js.org/) configuration is also exported as `webpackConfig`, and can be modified before calling `init()`.
 
