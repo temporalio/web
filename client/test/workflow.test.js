@@ -217,7 +217,7 @@ describe('Workflow', () => {
               },
               executionStartToCloseTimeoutSeconds: 2604800,
               taskStartToCloseTimeoutSeconds: 300,
-              decisionTaskCompletedEventId: 41,
+              workflowTaskCompletedEventId: 41,
             },
           },
         ],
@@ -283,7 +283,7 @@ describe('Workflow', () => {
           },
           {
             eventId: 1,
-            eventType: 'DecisionTaskScheduled',
+            eventType: 'WorkflowTaskScheduled',
             timestamp: moment().toISOString(),
           },
         ],
@@ -699,8 +699,8 @@ describe('Workflow', () => {
             .slice(0, 3)
             .should.deep.equal([
               'WorkflowExecutionStarted',
-              'DecisionTaskScheduled',
-              'DecisionTaskStarted',
+              'WorkflowTaskScheduled',
+              'WorkflowTaskStarted',
             ]);
           historyEl
             .textNodes('.table .vue-recycle-scroller__item-view .td.col-time')

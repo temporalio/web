@@ -5,14 +5,14 @@
       <thead>
         <th>Identity</th>
         <th>Last Access Time</th>
-        <th>Decision Handler</th>
+        <th>Command Handler</th>
         <th>Activity Handler</th>
       </thead>
       <tbody>
         <tr v-for="p in pollers" :key="p.identity">
           <td>{{ p.identity }}</td>
           <td>{{ p.lastAccessTime.format('ddd MMMM Do, h:mm:ss a') }}</td>
-          <td class="decision" :data-handled="p.handlesDecisions"></td>
+          <td class="command" :data-handled="p.handlesCommands"></td>
           <td class="activity" :data-handled="p.handlesActivities"></td>
         </tr>
       </tbody>
@@ -40,7 +40,7 @@ export default {
           this.pollers = Object.keys(p).map((identity) => ({
             identity,
             lastAccessTime: moment(p[identity].lastAccessTime),
-            handlesDecisions: p[identity].taskQueueTypes.includes('decision'),
+            handlesCommands: p[identity].taskQueueTypes.includes('command'),
             handlesActivities: p[identity].taskQueueTypes.includes('activity'),
           }));
         },

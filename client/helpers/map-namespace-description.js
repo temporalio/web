@@ -2,9 +2,9 @@ export default function(namespace) {
   const {
     config: {
       emitMetric,
-      historyArchivalStatus,
+      historyArchivalState,
       workflowExecutionRetentionPeriodInDays,
-      visibilityArchivalStatus,
+      visibilityArchivalState,
     } = {},
     namespaceInfo: { description, ownerEmail } = {},
     failoverVersion,
@@ -21,9 +21,9 @@ export default function(namespace) {
       : 'Unknown',
     'Emit Metrics': emitMetric ? 'Yes' : 'No',
     'History Archival':
-      historyArchivalStatus == 'Enabled' ? 'Enabled' : 'Disabled',
+      historyArchivalState == 'Enabled' ? 'Enabled' : 'Disabled',
     'Visibility Archival':
-      visibilityArchivalStatus == 'Enabled' ? 'Enabled' : 'Disabled',
+      visibilityArchivalState == 'Enabled' ? 'Enabled' : 'Disabled',
     ...(failoverVersion !== undefined && {
       'Failover Version': failoverVersion,
     }),

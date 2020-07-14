@@ -32,7 +32,7 @@ export default {
   line-height 1.5em
   span
     vertical-align top
-  &.DecisionTaskCompleted, &.DecisionTaskStarted, &.DecisionTaskScheduled
+  &.WorkflowTaskCompleted, &.WorkflowTaskStarted, &.WorkflowTaskScheduled
     > .event-id
       display none
     > .event-children > div

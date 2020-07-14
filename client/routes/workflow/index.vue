@@ -176,7 +176,7 @@ export default {
       this.history.loading = true;
       this.pqu = pagedQueryUrl;
       this.$http(pagedQueryUrl)
-        .then(res => {
+        .then((res) => {
           // eslint-disable-next-line no-underscore-dangle
           if (this._isDestroyed || this.pqu !== pagedQueryUrl) {
             return null;
@@ -222,7 +222,7 @@ export default {
 
           return this.events;
         })
-        .catch(error => {
+        .catch((error) => {
           // eslint-disable-next-line no-console
           console.error(error);
 
@@ -257,13 +257,13 @@ export default {
 
       return this.$http(baseAPIURL)
         .then(
-          wf => {
+          (wf) => {
             this.workflow = wf;
             this.isWorkflowRunning = !wf.workflowExecutionInfo.closeTime;
             this.setupQueryUrlWatch();
             this.baseApiUrlRetryCount = 0;
           },
-          error => {
+          (error) => {
             this.$emit('onNotification', {
               message: getErrorMessage(error),
               type: NOTIFICATION_TYPE_ERROR,

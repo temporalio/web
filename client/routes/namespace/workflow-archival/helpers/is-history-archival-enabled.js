@@ -1,4 +1,4 @@
-import getHistoryArchivalStatus from './get-history-archival-status';
+import getHistoryArchivalState from './get-history-archival-state';
 
 export default (namespaceSettings) =>
-  getHistoryArchivalStatus(namespaceSettings) === 'Enabled';
+  getHistoryArchivalState(namespaceSettings) === 'Enabled';

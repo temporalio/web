@@ -10,11 +10,11 @@ describe('isHistoryArchivalEnabled', () => {
     });
   });
 
-  describe('When namespaceSettings.config.historyArchivalStatus = "Disabled"', () => {
+  describe('When namespaceSettings.config.historyArchivalState = "Disabled"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
         config: {
-          historyArchivalStatus: 'Disabled',
+          historyArchivalState: 'Disabled',
         },
       };
       const output = isHistoryArchivalEnabled(namespaceSettings);
@@ -23,11 +23,11 @@ describe('isHistoryArchivalEnabled', () => {
     });
   });
 
-  describe('When namespaceSettings.config.historyArchivalStatus = "Enabled"', () => {
+  describe('When namespaceSettings.config.historyArchivalState = "Enabled"', () => {
     it('should return true.', () => {
       const namespaceSettings = {
         config: {
-          historyArchivalStatus: 'Enabled',
+          historyArchivalState: 'Enabled',
         },
       };
       const output = isHistoryArchivalEnabled(namespaceSettings);

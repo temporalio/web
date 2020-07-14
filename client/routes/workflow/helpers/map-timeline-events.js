@@ -6,7 +6,7 @@ export default function(historyEvents) {
   const events = [];
   const hash = {};
 
-  const add = i => {
+  const add = (i) => {
     hash[i.id] = i;
     events.push(i);
 
@@ -20,7 +20,7 @@ export default function(historyEvents) {
     item.end = moment(end);
   };
 
-  historyEvents.forEach(e => {
+  historyEvents.forEach((e) => {
     if (e.eventType.startsWith('ActivityTask')) {
       const scheduledEvent =
         'activityId' in e.details
@@ -183,13 +183,13 @@ export default function(historyEvents) {
         // assignEnd(item, e.timestamp);
       }
     } else if (
-      e.eventType === 'DecisionTaskFailed' ||
-      e.eventType === 'DecisionTaskTimedOut'
+      e.eventType === 'WorkflowTaskFailed' ||
+      e.eventType === 'WorkflowTaskTimedOut'
     ) {
       add({
-        id: `decision${e.eventId}`,
-        className: `decision ${e.eventType
-          .replace('DecisionTask', '')
+        id: `command${e.eventId}`,
+        className: `command ${e.eventType
+          .replace('WorkflowTask', '')
           .toLowerCase()}`,
         eventIds: [e.eventId],
         start: moment(e.timestamp),

@@ -77,7 +77,7 @@ export default {
       },
       {
         timestamp: emailRun1Start.toISOString(),
-        eventType: 'DecisionTaskScheduled',
+        eventType: 'WorkflowTaskScheduled',
         eventId: 2,
         details: {
           taskQueue: {
@@ -88,7 +88,7 @@ export default {
       },
       {
         timestamp: emailRun1Start.toISOString(),
-        eventType: 'DecisionTaskStarted',
+        eventType: 'WorkflowTaskStarted',
         eventId: 3,
         details: {
           scheduledEventId: 2,
@@ -98,7 +98,7 @@ export default {
       },
       {
         timestamp: emailRun1Start.add(1, 'second').toISOString(),
-        eventType: 'DecisionTaskCompleted',
+        eventType: 'WorkflowTaskCompleted',
         eventId: 4,
         details: {
           scheduledEventId: 2,
@@ -113,7 +113,7 @@ export default {
         details: {
           markerName: 'Version',
           details: [0, 'initial version'],
-          decisionTaskCompletedEventId: 4,
+          workflowTaskCompletedEventId: 4,
         },
       },
       {
@@ -133,7 +133,7 @@ export default {
           scheduleToStartTimeoutSeconds: 180,
           startToCloseTimeoutSeconds: 180,
           heartbeatTimeoutSeconds: 0,
-          decisionTaskCompletedEventId: 4,
+          workflowTaskCompletedEventId: 4,
         },
       },
       {
@@ -158,13 +158,13 @@ export default {
       },
       {
         timestamp: emailRun1Start.add(11, 'second').toISOString(),
-        eventType: 'DecisionTaskScheduled',
+        eventType: 'WorkflowTaskScheduled',
         eventId: 9,
         details: { taskQueue: { name: 'ci-task-queue' } },
       },
       {
         timestamp: emailRun1Start.add(11, 'second').toISOString(),
-        eventType: 'DecisionTaskStarted',
+        eventType: 'WorkflowTaskStarted',
         eventId: 10,
         details: {
           scheduledEventId: 9,
@@ -173,7 +173,7 @@ export default {
       },
       {
         timestamp: emailRun1Start.add(11, 'second').toISOString(),
-        eventType: 'DecisionTaskCompleted',
+        eventType: 'WorkflowTaskCompleted',
         eventId: 11,
         details: {
           scheduledEventId: 9,
@@ -189,7 +189,7 @@ export default {
             recipients: ['bob@example.com', 'jane@example.com'],
             trackingTag: 'foobarbaz',
           },
-          decisionTaskCompletedEventId: 11,
+          workflowTaskCompletedEventId: 11,
         },
       },
     ],
@@ -211,7 +211,7 @@ export default {
       },
       {
         eventId: 2,
-        eventType: 'DecisionTaskScheduled',
+        eventType: 'WorkflowTaskScheduled',
         timestamp: exampleTimeoutStart.toISOString(),
       },
       {
@@ -219,7 +219,7 @@ export default {
           scheduledEventId: 2,
         },
         eventId: 3,
-        eventType: 'DecisionTaskStarted',
+        eventType: 'WorkflowTaskStarted',
         timestamp: exampleTimeoutStart.toISOString(),
       },
       {
@@ -228,12 +228,12 @@ export default {
           startedEventId: 3,
         },
         eventId: 4,
-        eventType: 'DecisionTaskCompleted',
+        eventType: 'WorkflowTaskCompleted',
         timestamp: exampleTimeoutStart.toISOString(),
       },
       {
         details: {
-          decisionTaskCompletedEventId: 4,
+          workflowTaskCompletedEventId: 4,
         },
         eventId: 5,
         eventType: 'MarkerRecorded',
@@ -245,7 +245,7 @@ export default {
           activityType: {
             name: 'activity.timeout',
           },
-          decisionTaskCompletedEventId: 4,
+          workflowTaskCompletedEventId: 4,
           heartbeatTimeoutSeconds: 0,
           scheduleToCloseTimeoutSeconds: 2,
           scheduleToStartTimeoutSeconds: 1,
@@ -285,7 +285,7 @@ export default {
           },
         },
         eventId: 9,
-        eventType: 'DecisionTaskScheduled',
+        eventType: 'WorkflowTaskScheduled',
         timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
@@ -293,7 +293,7 @@ export default {
           scheduledEventId: 9,
         },
         eventId: 10,
-        eventType: 'DecisionTaskStarted',
+        eventType: 'WorkflowTaskStarted',
         timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
@@ -303,7 +303,7 @@ export default {
           startedEventId: 10,
         },
         eventId: 11,
-        eventType: 'DecisionTaskCompleted',
+        eventType: 'WorkflowTaskCompleted',
         timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
@@ -335,7 +335,7 @@ export default {
       },
       {
         timestamp: timelineVarietyStart.toISOString(),
-        eventType: 'DecisionTaskScheduled',
+        eventType: 'WorkflowTaskScheduled',
         eventId: 2,
         details: {
           taskQueue: {
@@ -346,7 +346,7 @@ export default {
       },
       {
         timestamp: timelineVarietyStart.toISOString(),
-        eventType: 'DecisionTaskStarted',
+        eventType: 'WorkflowTaskStarted',
         eventId: 3,
         details: {
           scheduledEventId: 2,
@@ -356,7 +356,7 @@ export default {
       },
       {
         timestamp: timelineVarietyStart.add(1, 'second').toISOString(),
-        eventType: 'DecisionTaskCompleted',
+        eventType: 'WorkflowTaskCompleted',
         eventId: 4,
         details: {
           scheduledEventId: 2,
@@ -371,7 +371,7 @@ export default {
         details: {
           markerName: 'Version',
           details: [0, 'initial version'],
-          decisionTaskCompletedEventId: 4,
+          workflowTaskCompletedEventId: 4,
         },
       },
       {
@@ -391,7 +391,7 @@ export default {
           scheduleToStartTimeoutSeconds: 180,
           startToCloseTimeoutSeconds: 180,
           heartbeatTimeoutSeconds: 0,
-          decisionTaskCompletedEventId: 4,
+          workflowTaskCompletedEventId: 4,
         },
       },
       {
@@ -560,7 +560,7 @@ export default {
             recipients: ['bob@example.com', 'jane@example.com'],
             trackingTag: 'foobarbaz',
           },
-          decisionTaskCompletedEventId: 11,
+          workflowTaskCompletedEventId: 11,
         },
       },
     ],

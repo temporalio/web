@@ -31,13 +31,13 @@ export const summarizeEvents = {
   ChildWorkflowExecutionStarted: (d) => ({
     Workflow: workflowLink(d),
   }),
-  DecisionTaskCompleted: (d) => ({ identity: d.identity }),
-  DecisionTaskScheduled: (d) => ({
+  WorkflowTaskCompleted: (d) => ({ identity: d.identity }),
+  WorkflowTaskScheduled: (d) => ({
     Taskqueue: d.taskQueue.name,
     Timeout: moment.duration(d.startToCloseTimeoutSeconds, 'seconds').format(),
   }),
-  DecisionTaskStarted: (d) => ({ requestId: d.requestId }),
-  DecisionTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
+  WorkflowTaskStarted: (d) => ({ requestId: d.requestId }),
+  WorkflowTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
   ExternalWorkflowExecutionSignaled: (d) => ({
     Workflow: workflowLink(d),
   }),

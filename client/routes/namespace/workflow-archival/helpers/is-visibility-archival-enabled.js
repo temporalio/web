@@ -1,4 +1,4 @@
-import getVisibilityArchivalStatus from './get-visibility-archival-status';
+import getVisibilityArchivalState from './get-visibility-archival-state';
 
 export default (namespaceSettings) =>
-  getVisibilityArchivalStatus(namespaceSettings) === 'Enabled';
+  getVisibilityArchivalState(namespaceSettings) === 'Enabled';

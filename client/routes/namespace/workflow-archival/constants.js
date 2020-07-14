@@ -1,4 +1,4 @@
-export const ARCHIVAL_STATUS_LIST = [
+export const ARCHIVAL_STATE_LIST = [
   { value: 'COMPLETED', label: 'Completed' },
   { value: 'FAILED', label: 'Failed' },
   { value: 'CANCELED', label: 'Cancelled' },
