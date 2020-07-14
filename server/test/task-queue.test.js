@@ -37,7 +37,7 @@ describe('Task Queue Pollers', function() {
       .expect({
         '100@node1@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:21:40.000Z',
-          taskQueueTypes: ['command', 'activity'],
+          taskQueueTypes: ['workflow', 'activity'],
         },
         '101@node2@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:22:05.000Z',
