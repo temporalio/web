@@ -12,7 +12,7 @@
         <tr v-for="p in pollers" :key="p.identity">
           <td>{{ p.identity }}</td>
           <td>{{ p.lastAccessTime.format('ddd MMMM Do, h:mm:ss a') }}</td>
-          <td class="command" :data-handled="p.handlesCommands"></td>
+          <td class="workflowTask" :data-handled="p.handlesWorkflowTasks"></td>
           <td class="activity" :data-handled="p.handlesActivities"></td>
         </tr>
       </tbody>
