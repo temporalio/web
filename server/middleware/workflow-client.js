@@ -59,17 +59,6 @@ function buildWorkflowExecutionRequest(execution) {
   return req;
 }
 
-function buildStatusFilter(statusFilter) {
-  if (!statusFilter) {
-    return statusFilter;
-  }
-
-  const filter =
-    statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1).toLowerCase();
-
-  return { status: filter };
-}
-
 [_searchAttributes, _memo, _queryResult] = [
   'searchAttributes',
   'memo',
@@ -263,18 +252,18 @@ WorkflowClient.prototype.listNamespaces = async function({
 WorkflowClient.prototype.openWorkflows = async function({
   namespace,
   startTimeFilter,
-  typeFilter,
   executionFilter,
+  typeFilter,
   nextPageToken,
   maximumPageSize = 100,
 }) {
   const req = {
     namespace,
+    nextPageToken,
+    maximumPageSize,
     startTimeFilter,
     typeFilter,
     executionFilter,
-    nextPageToken,
-    maximumPageSize,
   };
   const res = await this.client.listOpenWorkflowExecutionsAsync(req);
 
@@ -284,20 +273,20 @@ WorkflowClient.prototype.openWorkflows = async function({
 WorkflowClient.prototype.closedWorkflows = async function({
   namespace,
   startTimeFilter,
-  typeFilter,
   executionFilter,
-  statusFilter,
+  typeFilter,
+  status,
   nextPageToken,
   maximumPageSize = 100,
 }) {
   const req = {
     namespace,
-    startTimeFilter,
-    typeFilter,
-    executionFilter,
-    statusFilter: buildStatusFilter(statusFilter),
     nextPageToken,
     maximumPageSize,
+    startTimeFilter,
+    executionFilter,
+    typeFilter,
+    statusFilter: status ? { status } : undefined,
   };
 
   const res = await this.client.listClosedWorkflowExecutionsAsync(req);

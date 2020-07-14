@@ -38,7 +38,7 @@ async function listWorkflows(state, ctx) {
     },
     typeFilter: q.workflowName ? { name: q.workflowName } : undefined,
     executionFilter: q.workflowId ? { workflowId: q.workflowId } : undefined,
-    statusFilter: q.status || undefined,
+    status: q.status || undefined,
     nextPageToken: q.nextPageToken
       ? Buffer.from(q.nextPageToken, 'base64')
       : undefined,
