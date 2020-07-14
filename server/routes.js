@@ -315,11 +315,11 @@ router.get(
     };
 
     const activityL = await descTaskQueue('Activity'),
-      decisionL = await descTaskQueue('Decision');
+      commandL = await descTaskQueue('Command');
 
     ctx.body = activityL.reduce(
       r('activity'),
-      decisionL.reduce(r('decision'), {})
+      commandL.reduce(r('command'), {})
     );
   }
 );
