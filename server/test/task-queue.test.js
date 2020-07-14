@@ -1,5 +1,5 @@
 describe('Task Queue Pollers', function() {
-  it('should aggregate command and activity pollers together by instance', function() {
+  it('should aggregate workflow and activity pollers together by instance', function() {
     this.test.DescribeTaskQueue = ({ request }) => {
       request.namespace.should.equal('canary');
       request.taskQueue.name.should.equal('demo-task-queue');
