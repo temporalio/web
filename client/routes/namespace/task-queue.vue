@@ -40,7 +40,9 @@ export default {
           this.pollers = Object.keys(p).map((identity) => ({
             identity,
             lastAccessTime: moment(p[identity].lastAccessTime),
-            handlesCommands: p[identity].taskQueueTypes.includes('command'),
+            handlesWorkflowTasks: p[identity].taskQueueTypes.includes(
+              'workflow'
+            ),
             handlesActivities: p[identity].taskQueueTypes.includes('activity'),
           }));
         },

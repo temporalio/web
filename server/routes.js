@@ -314,8 +314,8 @@ router.get(
       return o;
     };
 
-    const activityL = await descTaskQueue('Activity'),
-      workflowL = await descTaskQueue('Workflow');
+    const activityL = await descTaskQueue('TASK_QUEUE_TYPE_ACTIVITY'),
+      workflowL = await descTaskQueue('TASK_QUEUE_TYPE_WORKFLOW');
 
     ctx.body = activityL.reduce(
       r('activity'),
