@@ -200,11 +200,10 @@ function WorkflowClient() {
     oneofs: true,
     includeDirs: [
       `${dir}/proto/`,
+      `${dir}/proto/temporal/api/command/v1`,
       `${dir}/proto/temporal/api/common/v1`,
-      `${dir}/proto/temporal/api/decision/v1`,
       `${dir}/proto/temporal/api/enums/v1`,
       `${dir}/proto/temporal/api/errordetails/v1`,
-      `${dir}/proto/temporal/api/execution/v1`,
       `${dir}/proto/temporal/api/failure/v1`,
       `${dir}/proto/temporal/api/filter/v1`,
       `${dir}/proto/temporal/api/history/v1`,
