@@ -187,8 +187,8 @@ export default function(historyEvents) {
       e.eventType === 'WorkflowTaskTimedOut'
     ) {
       add({
-        id: `command${e.eventId}`,
-        className: `command ${e.eventType
+        id: `workflowTask${e.eventId}`,
+        className: `workflowTask ${e.eventType
           .replace('WorkflowTask', '')
           .toLowerCase()}`,
         eventIds: [e.eventId],
