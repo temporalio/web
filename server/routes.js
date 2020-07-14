@@ -319,7 +319,7 @@ router.get(
 
     ctx.body = activityL.reduce(
       r('activity'),
-      commandL.reduce(r('command'), {})
+      workflowL.reduce(r('workflow'), {})
     );
   }
 );
