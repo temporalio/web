@@ -5,7 +5,7 @@
       <thead>
         <th>Identity</th>
         <th>Last Access Time</th>
-        <th>Command Handler</th>
+        <th>Workflow Task Handler</th>
         <th>Activity Handler</th>
       </thead>
       <tbody>
