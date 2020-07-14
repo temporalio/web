@@ -1,3 +1,0 @@
-[submodule "temporal-api"]
-	path = temporal-api
-	url = git@github.com:temporalio/api.git
