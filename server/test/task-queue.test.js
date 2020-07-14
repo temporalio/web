@@ -41,7 +41,7 @@ describe('Task Queue Pollers', function() {
         },
         '101@node2@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:22:05.000Z',
-          taskQueueTypes: ['command'],
+          taskQueueTypes: ['workflow'],
         },
         '102@node3@demo-task-queue': {
           lastAccessTime: '2018-03-22T20:21:32.000Z',
