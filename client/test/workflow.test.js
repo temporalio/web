@@ -207,7 +207,7 @@ describe('Workflow', () => {
                   'code.temporalio.internal/marketplace/dsp-scheduler/scheduler/workflow.CTBWorkflow',
               },
               taskQueue: {
-                name: 'ctb-decider',
+                name: 'ctb-workflow-worker',
                 kind: null,
               },
               input: {
