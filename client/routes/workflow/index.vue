@@ -191,8 +191,6 @@ export default {
             setTimeout(() => {
               this.nextPageToken = res.nextPageToken;
             });
-          } else {
-            this.isWorkflowRunning = false;
           }
 
           const shouldHighlightEventId =
