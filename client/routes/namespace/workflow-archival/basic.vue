@@ -77,7 +77,7 @@
 <script>
 import debounce from 'lodash-es/debounce';
 import { ArchivalTable, ArchivalTableRow } from './components';
-import { ARCHIVAL_STATUS_LIST, LOADING_MESSAGE_DELAY } from './constants';
+import { ARCHIVAL_STATE_LIST, LOADING_MESSAGE_DELAY } from './constants';
 import {
   getQueryParams,
   getRange,
@@ -116,7 +116,7 @@ export default pagedGrid({
       nextPageToken: undefined,
       npt: undefined,
       results: undefined,
-      statusList: ARCHIVAL_STATUS_LIST,
+      statusList: ARCHIVAL_STATE_LIST,
     };
   },
   computed: {

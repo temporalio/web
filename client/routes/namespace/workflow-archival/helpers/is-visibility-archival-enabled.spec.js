@@ -10,11 +10,11 @@ describe('isVisibilityArchivalEnabled', () => {
     });
   });
 
-  describe('When namespaceSettings.config.visibilityArchivalStatus = "Disabled"', () => {
+  describe('When namespaceSettings.config.visibilityArchivalState = "Disabled"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
         config: {
-          visibilityArchivalStatus: 'Disabled',
+          visibilityArchivalState: 'Disabled',
         },
       };
       const output = isVisibilityArchivalEnabled(namespaceSettings);
@@ -23,11 +23,11 @@ describe('isVisibilityArchivalEnabled', () => {
     });
   });
 
-  describe('When namespaceSettings.config.visibilityArchivalStatus = "Enabled"', () => {
+  describe('When namespaceSettings.config.visibilityArchivalState = "Enabled"', () => {
     it('should return true.', () => {
       const namespaceSettings = {
         config: {
-          visibilityArchivalStatus: 'Enabled',
+          visibilityArchivalState: 'Enabled',
         },
       };
       const output = isVisibilityArchivalEnabled(namespaceSettings);

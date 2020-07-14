@@ -7,7 +7,7 @@ describe('eventFullTransforms', () => {
 
       beforeEach(() => {
         event = {
-          decisionTaskCompletedEventId: 'decisionTaskCompletedEventIdValue',
+          workflowTaskCompletedEventId: 'workflowTaskCompletedEventIdValue',
           details: [
             'sideEffectIdValue',
             'eyAiaGVsbG8iOiAid29ybGQiIH0', // { "hello": "world" }
@@ -28,11 +28,11 @@ describe('eventFullTransforms', () => {
         expect(output.data).toEqual({ hello: 'world' });
       });
 
-      it('should return an object with property decisionTaskCompletedEventId.', () => {
+      it('should return an object with property workflowTaskCompletedEventId.', () => {
         const output = eventFullTransforms.MarkerRecorded(event);
 
-        expect(output.decisionTaskCompletedEventId).toEqual(
-          'decisionTaskCompletedEventIdValue'
+        expect(output.workflowTaskCompletedEventId).toEqual(
+          'workflowTaskCompletedEventIdValue'
         );
       });
     });
@@ -43,7 +43,7 @@ describe('eventFullTransforms', () => {
 
     beforeEach(() => {
       event = {
-        decisionTaskCompletedEventId: 'decisionTaskCompletedEventIdValue',
+        workflowTaskCompletedEventId: 'workflowTaskCompletedEventIdValue',
         details: [
           'sideEffectIdValue',
           'eyAiaGVsbG8iOiAid29ybGQiIH0', // { "hello": "world" }

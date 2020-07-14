@@ -147,8 +147,8 @@ function enumTransform(item) {
     'task_queue_kind',
     'continue_as_new_initiator',
     'timeout_type',
-    'archival_status',
-    'retry_status',
+    'archival_state',
+    'retry_state',
   ];
 
   const itemL = item.toLowerCase();
@@ -199,29 +199,28 @@ function WorkflowClient() {
     defaults: true,
     oneofs: true,
     includeDirs: [
-      `${dir}/temporal-proto/`,
-      `${dir}/temporal-proto/temporal/common/v1`,
-      `${dir}/temporal-proto/temporal/decision/v1`,
-      `${dir}/temporal-proto/temporal/enums/v1`,
-      `${dir}/temporal-proto/temporal/errordetails/v1`,
-      `${dir}/temporal-proto/temporal/execution/v1`,
-      `${dir}/temporal-proto/temporal/failure/v1`,
-      `${dir}/temporal-proto/temporal/filter/v1`,
-      `${dir}/temporal-proto/temporal/history/v1`,
-      `${dir}/temporal-proto/temporal/namespace/v1`,
-      `${dir}/temporal-proto/temporal/query/v1`,
-      `${dir}/temporal-proto/temporal/replication/v1`,
-      `${dir}/temporal-proto/temporal/taskqueue/v1`,
-      `${dir}/temporal-proto/temporal/version/v1`,
-      `${dir}/temporal-proto/temporal/workflow/v1`,
-      `${dir}/temporal-proto/temporal/workflowservice/v1`,
+      `${dir}/proto/`,
+      `${dir}/proto/temporal/api/command/v1`,
+      `${dir}/proto/temporal/api/common/v1`,
+      `${dir}/proto/temporal/api/enums/v1`,
+      `${dir}/proto/temporal/api/errordetails/v1`,
+      `${dir}/proto/temporal/api/failure/v1`,
+      `${dir}/proto/temporal/api/filter/v1`,
+      `${dir}/proto/temporal/api/history/v1`,
+      `${dir}/proto/temporal/api/namespace/v1`,
+      `${dir}/proto/temporal/api/query/v1`,
+      `${dir}/proto/temporal/api/replication/v1`,
+      `${dir}/proto/temporal/api/taskqueue/v1`,
+      `${dir}/proto/temporal/api/version/v1`,
+      `${dir}/proto/temporal/api/workflow/v1`,
+      `${dir}/proto/temporal/api/workflowservice/v1`,
     ],
   };
 
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
   const service = grpc.loadPackageDefinition(packageDefinition);
 
-  let client = new service.temporal.workflowservice.v1.WorkflowService(
+  let client = new service.temporal.api.workflowservice.v1.WorkflowService(
     process.env.TEMPORAL_GRPC_ENDPOINT || '127.0.0.1:7233',
     grpc.credentials.createInsecure()
   );

@@ -18,7 +18,7 @@
         Run
       </a>
     </header>
-    <pre v-if="queryResultView">{{ queryResultView }}</pre>
+    <pre v-if="queryResult">{{ queryResult }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
     <span class="no-queries" v-if="queries && queries.length === 0">
       No queries registered
@@ -44,14 +44,14 @@ export default {
     this.loading = true;
     this.$http(`${this.baseAPIURL}/query`)
       .then(
-        queries => {
-          this.queries = queries.filter(query => query !== '__stack_trace');
+        (queries) => {
+          this.queries = queries.filter((query) => query !== '__stack_trace');
 
           if (!this.queryName) {
             [this.queryName] = this.queries;
           }
         },
-        e => {
+        (e) => {
           this.error = (e.json && e.json.message) || e.status || e.message;
         }
       )
@@ -70,29 +70,16 @@ export default {
       this.$http
         .post(`${this.baseAPIURL}/query/${this.queryName}`)
         .then(
-          r => {
+          (r) => {
             this.queryResult = r.queryResult;
           },
-          e => {
+          (e) => {
             this.error = (e.json && e.json.message) || e.status || e.message;
           }
         )
         .finally(() => {
           this.running = false;
         });
-    },
-  },
-  computed: {
-    queryResultView() {
-      if (!this.queryResult || !this.queryResult.payloads) {
-        return undefined;
-      }
-
-      const res = this.queryResult.payloads.map((p, i) => ({
-        [`res[${i}]`]: p.data,
-      }));
-
-      return res;
     },
   },
 };

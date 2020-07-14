@@ -315,11 +315,11 @@ router.get(
     };
 
     const activityL = await descTaskQueue('Activity'),
-      decisionL = await descTaskQueue('Decision');
+      workflowL = await descTaskQueue('Workflow');
 
     ctx.body = activityL.reduce(
       r('activity'),
-      decisionL.reduce(r('decision'), {})
+      workflowL.reduce(r('workflow'), {})
     );
   }
 );

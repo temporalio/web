@@ -25,7 +25,7 @@ const Long = require('long'),
         continuedFailureDetails: null,
         continuedFailureReason: null,
         cronSchedule: null,
-        firstDecisionTaskBackoffSeconds: null,
+        firstWorkflowTaskBackoffSeconds: null,
         firstExecutionRunId: null,
         header: null,
         initiator: null,
@@ -45,8 +45,8 @@ const Long = require('long'),
     {
       eventId: new Long(2),
       timestamp: new Long(800610625, 351737684, false),
-      eventType: 'DecisionTaskScheduled',
-      decisionTaskScheduledEventAttributes: {
+      eventType: 'WorkflowTaskScheduled',
+      workflowTaskScheduledEventAttributes: {
         startToCloseTimeoutSeconds: 180,
         attempt: 1,
         taskQueue: {
@@ -58,8 +58,8 @@ const Long = require('long'),
     {
       eventId: new Long(3),
       timestamp: new Long(800610625, 351737688, false),
-      eventType: 'DecisionTaskStarted',
-      decisionTaskStartedEventAttributes: {
+      eventType: 'WorkflowTaskStarted',
+      workflowTaskStartedEventAttributes: {
         identity: 'box1@ci-task-queue',
         requestId: 'fafa095d-b4ca-423a-a812-223e62b5ccf8',
         scheduledEventId: new Long(2),
@@ -85,13 +85,13 @@ const Long = require('long'),
     {
       eventId: 2,
       timestamp: '2017-11-14T23:24:10.351Z',
-      eventType: 'DecisionTaskScheduled',
-      details: wfHistoryThrift[1].decisionTaskScheduledEventAttributes,
+      eventType: 'WorkflowTaskScheduled',
+      details: wfHistoryThrift[1].workflowTaskScheduledEventAttributes,
     },
     {
       eventId: 3,
       timestamp: '2017-11-14T23:24:27.531Z',
-      eventType: 'DecisionTaskStarted',
+      eventType: 'WorkflowTaskStarted',
       details: {
         identity: 'box1@ci-task-queue',
         requestId: 'fafa095d-b4ca-423a-a812-223e62b5ccf8',
@@ -191,7 +191,7 @@ describe('Workflow History', function() {
   });
 
   describe('Export', function() {
-    const wfHistoryCliJson = `[{"eventId":1,"timestamp":1510701850351393089,"eventType":"WorkflowExecutionStarted","workflowExecutionStartedEventAttributes":{"workflowType":{"name":"github.com/temporalio/temporal/demo"},"taskQueue":{"name":"ci-task-queue"},"input":"eyJlbWFpbHMiOlsiamFuZUBleGFtcGxlLmNvbSIsImJvYkBleGFtcGxlLmNvbSJdLCJpbmNsdWRlRm9vdGVyIjp0cnVlfQ==","executionStartToCloseTimeoutSeconds":1080,"taskStartToCloseTimeoutSeconds":30}},{"eventId":2,"timestamp":1510701850351393089,"eventType":"DecisionTaskScheduled","decisionTaskScheduledEventAttributes":{"taskQueue":{"name":"canary-task-queue"},"startToCloseTimeoutSeconds":180,"attempt":1}},{"eventId":3,"timestamp":1510701867531262273,"eventType":"DecisionTaskStarted","decisionTaskStartedEventAttributes":{"scheduledEventId":2,"identity":"box1@ci-task-queue","requestId":"fafa095d-b4ca-423a-a812-223e62b5ccf8"}}]`;
+    const wfHistoryCliJson = `[{"eventId":1,"timestamp":1510701850351393089,"eventType":"WorkflowExecutionStarted","workflowExecutionStartedEventAttributes":{"workflowType":{"name":"github.com/temporalio/temporal/demo"},"taskQueue":{"name":"ci-task-queue"},"input":"eyJlbWFpbHMiOlsiamFuZUBleGFtcGxlLmNvbSIsImJvYkBleGFtcGxlLmNvbSJdLCJpbmNsdWRlRm9vdGVyIjp0cnVlfQ==","executionStartToCloseTimeoutSeconds":1080,"taskStartToCloseTimeoutSeconds":30}},{"eventId":2,"timestamp":1510701850351393089,"eventType":"WorkflowTaskScheduled","workflowTaskScheduledEventAttributes":{"taskQueue":{"name":"canary-task-queue"},"startToCloseTimeoutSeconds":180,"attempt":1}},{"eventId":3,"timestamp":1510701867531262273,"eventType":"WorkflowTaskStarted","workflowTaskStartedEventAttributes":{"scheduledEventId":2,"identity":"box1@ci-task-queue","requestId":"fafa095d-b4ca-423a-a812-223e62b5ccf8"}}]`;
 
     it('should be able to export history in a format compatible with the CLI', function() {
       this.test.GetWorkflowExecutionHistory = ({ getRequest }) => ({

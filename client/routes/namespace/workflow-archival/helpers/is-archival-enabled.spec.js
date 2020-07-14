@@ -1,12 +1,12 @@
 import isArchivalEnabled from './is-archival-enabled';
 
 describe('isArchivalEnabled', () => {
-  describe('When historyArchivalStatus = "Disabled" and visibilityArchivalStatus = "Disabled"', () => {
+  describe('When historyArchivalState = "Disabled" and visibilityArchivalState = "Disabled"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
         config: {
-          historyArchivalStatus: 'Disabled',
-          visibilityArchivalStatus: 'Disabled',
+          historyArchivalState: 'Disabled',
+          visibilityArchivalState: 'Disabled',
         },
       };
       const output = isArchivalEnabled(namespaceSettings);
@@ -15,12 +15,12 @@ describe('isArchivalEnabled', () => {
     });
   });
 
-  describe('When historyArchivalStatus = "Enabled" and visibilityArchivalStatus = "Disabled"', () => {
+  describe('When historyArchivalState = "Enabled" and visibilityArchivalState = "Disabled"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
         config: {
-          historyArchivalStatus: 'Enabled',
-          visibilityArchivalStatus: 'Disabled',
+          historyArchivalState: 'Enabled',
+          visibilityArchivalState: 'Disabled',
         },
       };
       const output = isArchivalEnabled(namespaceSettings);
@@ -29,12 +29,12 @@ describe('isArchivalEnabled', () => {
     });
   });
 
-  describe('When historyArchivalStatus = "Disabled" and visibilityArchivalStatus = "Enabled"', () => {
+  describe('When historyArchivalState = "Disabled" and visibilityArchivalState = "Enabled"', () => {
     it('should return false.', () => {
       const namespaceSettings = {
         config: {
-          historyArchivalStatus: 'Disabled',
-          visibilityArchivalStatus: 'Enabled',
+          historyArchivalState: 'Disabled',
+          visibilityArchivalState: 'Enabled',
         },
       };
       const output = isArchivalEnabled(namespaceSettings);
@@ -43,12 +43,12 @@ describe('isArchivalEnabled', () => {
     });
   });
 
-  describe('When historyArchivalStatus = "Enabled" and visibilityArchivalStatus = "Enabled"', () => {
+  describe('When historyArchivalState = "Enabled" and visibilityArchivalState = "Enabled"', () => {
     it('should return true.', () => {
       const namespaceSettings = {
         config: {
-          historyArchivalStatus: 'Enabled',
-          visibilityArchivalStatus: 'Enabled',
+          historyArchivalState: 'Enabled',
+          visibilityArchivalState: 'Enabled',
         },
       };
       const output = isArchivalEnabled(namespaceSettings);

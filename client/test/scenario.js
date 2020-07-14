@@ -132,8 +132,8 @@ Scenario.prototype.withNamespaceDescription = function withNamespaceDescription(
         config: {
           workflowExecutionRetentionPeriodInDays: 21,
           emitMetric: true,
-          historyArchivalStatus: 'ENABLED',
-          visibilityArchivalStatus: 'DISABLED',
+          historyArchivalState: 'ENABLED',
+          visibilityArchivalState: 'DISABLED',
         },
         replicationConfig: {
           activeClusterName: 'ci-test-cluster',
@@ -302,13 +302,13 @@ Scenario.prototype.withTaskQueuePollers = function withTaskQueuePollers(
         lastAccessTime: moment()
           .startOf('hour')
           .add(5, 'minutes'),
-        taskQueueTypes: ['decision', 'activity'],
+        taskQueueTypes: ['command', 'activity'],
       },
       node2: {
         lastAccessTime: moment()
           .startOf('hour')
           .add(3, 'minutes'),
-        taskQueueTypes: ['decision'],
+        taskQueueTypes: ['command'],
       },
       node3: {
         lastAccessTime: moment()
