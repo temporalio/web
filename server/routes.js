@@ -315,7 +315,7 @@ router.get(
     };
 
     const activityL = await descTaskQueue('Activity'),
-      commandL = await descTaskQueue('Command');
+      workflowL = await descTaskQueue('Workflow');
 
     ctx.body = activityL.reduce(
       r('activity'),
