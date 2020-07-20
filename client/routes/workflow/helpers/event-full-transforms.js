@@ -2,8 +2,7 @@ export const eventFullTransforms = {
   MarkerRecorded: (d) => {
     if (d.markerName === 'SideEffect') {
       return {
-        sideEffectId: d.details[0],
-        data: JSON.tryParse(atob(d.details[1])) || d.details[1],
+        data: d.details.data,
         workflowTaskCompletedEventId: d.workflowTaskCompletedEventId,
       };
     }
