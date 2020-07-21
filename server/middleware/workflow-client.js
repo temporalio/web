@@ -107,7 +107,12 @@ function uiTransform(item) {
       if (subkey === _payloads) {
         let values = [];
         Object.entries(subvalue).forEach(([subkey, payload]) => {
-          values = [...values, payload.data.toString('utf8')];
+          if (
+            ['json', 'protobuf-json'].includes(payload.metadata.encoding) &&
+            payload.data
+          ) {
+            values = [...values, payload.data.toString('utf8')];
+          }
         });
         item[_payloads] = values;
       } else {
