@@ -8,8 +8,8 @@ const path = require('path'),
 require('babel-polyfill');
 
 const envKeys = {
-  VUE_APP_ALLOW_WRITING: [true, 'true'].includes(
-    process.env.TEMPORAL_ALLOW_WRITING
+  VUE_APP_PERMIT_WRITE_API: [true, 'true'].includes(
+    process.env.TEMPORAL_PERMIT_WRITE_API
   ),
 };
 
