@@ -1,11 +1,11 @@
 <template>
   <section class="workflow-summary">
-    <aside class="actions" v-if="showTerminate">
+    <aside class="actions">
       <feature-flag name="workflow-terminate">
         <a
           href=""
           class="terminate"
-          v-show="isWorkflowRunning"
+          v-show="showTerminate"
           @click.prevent="$modal.show('confirm-termination')"
         >
           Terminate
@@ -141,8 +141,6 @@ export default {
   data() {
     return {
       terminationReason: undefined,
-      showTerminate:
-        process.env.VUE_APP_ALLOW_WRITING === 'true' ? true : false,
     };
   },
   props: [
@@ -190,6 +188,9 @@ export default {
       }
 
       return this.result;
+    },
+    showTerminate() {
+      return this.isWorkflowRunning && process.env.VUE_APP_ALLOW_WRITING;
     },
   },
   methods: {
