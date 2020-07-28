@@ -5,6 +5,8 @@ const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
 
+const _allowWrite = process.env.TEMPORAL_ALLOW_WRITING === 'true';
+
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
 
@@ -405,6 +407,10 @@ WorkflowClient.prototype.terminateWorkflow = async function({
   execution,
   reason,
 }) {
+  if (!_allowWrite) {
+    throw Error('Terminate method is disabled');
+  }
+
   const req = {
     namespace,
     workflowExecution: buildWorkflowExecutionRequest(execution),

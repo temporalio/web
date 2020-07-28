@@ -1,6 +1,6 @@
 <template>
   <section class="workflow-summary">
-    <aside class="actions">
+    <aside class="actions" v-if="showTerminate">
       <feature-flag name="workflow-terminate">
         <a
           href=""
@@ -141,6 +141,8 @@ export default {
   data() {
     return {
       terminationReason: undefined,
+      showTerminate:
+        process.env.VUE_APP_ALLOW_WRITING === 'true' ? true : false,
     };
   },
   props: [
