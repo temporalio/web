@@ -70,10 +70,7 @@ export const summarizeEvents = {
     }
 
     if (d.markerName === 'SideEffect') {
-      return {
-        data: JSON.tryParse(atob(details[1])) || details[1],
-        'Side Effect ID': details[0],
-      };
+      return details.data;
     }
 
     return d;

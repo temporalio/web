@@ -11,6 +11,5 @@ export { default as http } from './http';
 export { default as injectMomentDurationFormat } from './inject-moment-duration-format';
 export { default as jsonTryParse } from './json-try-parse';
 export { default as mapNamespaceDescription } from './map-namespace-description';
-export { default as getWorkflowInputDisplay } from './get-workflow-input-display';
 export { default as timestampToDate } from './timestamp-to-date';
 export { default as shortName } from './short-name';

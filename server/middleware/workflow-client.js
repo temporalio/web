@@ -59,12 +59,13 @@ function buildWorkflowExecutionRequest(execution) {
   return req;
 }
 
-[_searchAttributes, _memo, _queryResult] = [
+[_searchAttributes, _memo, _queryResult, _payloads] = [
   'searchAttributes',
   'memo',
   'queryResult',
+  'payloads',
 ];
-_uiTransformPayloadKeys = [_searchAttributes, _memo, _queryResult];
+_uiTransformPayloadKeys = [_searchAttributes, _memo, _queryResult, _payloads];
 
 function uiTransform(item) {
   if (!item || typeof item !== 'object') {
@@ -103,7 +104,20 @@ function uiTransform(item) {
         item[subkey] = stringval;
       }
     } else if (Array.isArray(subvalue)) {
-      subvalue.forEach(uiTransform);
+      if (subkey === _payloads) {
+        let values = [];
+        Object.entries(subvalue).forEach(([subkey, payload]) => {
+          if (
+            ['json', 'protobuf-json'].includes(payload.metadata.encoding) &&
+            payload.data
+          ) {
+            values = [...values, payload.data.toString('utf8')];
+          }
+        });
+        item[_payloads] = values;
+      } else {
+        subvalue.forEach(uiTransform);
+      }
     } else if (typeof subvalue == 'string') {
       subvalue = enumTransform(subvalue);
       item[subkey] = subvalue;

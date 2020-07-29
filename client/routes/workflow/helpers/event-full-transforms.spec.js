@@ -8,10 +8,10 @@ describe('eventFullTransforms', () => {
       beforeEach(() => {
         event = {
           workflowTaskCompletedEventId: 'workflowTaskCompletedEventIdValue',
-          details: [
-            'sideEffectIdValue',
-            'eyAiaGVsbG8iOiAid29ybGQiIH0', // { "hello": "world" }
-          ],
+          details: {
+            data: { payloads: ['hello', 'world'] },
+            sideEffectId: 'sideEffectIdValue',
+          },
           markerName: 'SideEffect',
         };
       });
@@ -25,7 +25,7 @@ describe('eventFullTransforms', () => {
       it('should return an object with property data.', () => {
         const output = eventFullTransforms.MarkerRecorded(event);
 
-        expect(output.data).toEqual({ hello: 'world' });
+        expect(output.data).toEqual({ payloads: ['hello', 'world'] });
       });
 
       it('should return an object with property workflowTaskCompletedEventId.', () => {
@@ -44,10 +44,10 @@ describe('eventFullTransforms', () => {
     beforeEach(() => {
       event = {
         workflowTaskCompletedEventId: 'workflowTaskCompletedEventIdValue',
-        details: [
-          'sideEffectIdValue',
-          'eyAiaGVsbG8iOiAid29ybGQiIH0', // { "hello": "world" }
-        ],
+        details: {
+          data: { payloads: ['hello', 'world'] },
+          sideEffectId: 'sideEffectIdValue',
+        },
         markerName: 'NotSideEffect',
       };
     });
