@@ -44,10 +44,10 @@ describe('eventFullTransforms', () => {
     beforeEach(() => {
       event = {
         workflowTaskCompletedEventId: 'workflowTaskCompletedEventIdValue',
-        details: [
-          'sideEffectIdValue',
-          'eyAiaGVsbG8iOiAid29ybGQiIH0', // { "hello": "world" }
-        ],
+        details: {
+          data: { payloads: ['hello', 'world'] },
+          sideEffectId: 'sideEffectIdValue',
+        },
         markerName: 'NotSideEffect',
       };
     });
