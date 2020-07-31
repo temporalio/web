@@ -15,9 +15,9 @@ describe('getTimeElapsedDisplay', () => {
 
   describe('When passed a timestamp and index = -1', () => {
     it('should return "".', () => {
-      timestamp = moment(DATE);
+      const ts = moment(DATE);
       const index = -1;
-      const output = getTimeElapsedDisplay(timestamp, index);
+      const output = getTimeElapsedDisplay(ts, index);
 
       expect(output).toEqual('');
     });
@@ -25,20 +25,19 @@ describe('getTimeElapsedDisplay', () => {
 
   describe('When passed a timestamp and index = 0', () => {
     it('should return the date string.', () => {
-      timestamp = moment(DATE);
+      const ts = moment(DATE);
       const index = 0;
-      const output = getTimeElapsedDisplay(event, index);
+      const output = getTimeElapsedDisplay(ts, index);
 
       expect(output).toEqual('Jan 1st 12:00:00 am');
     });
   });
 
-  describe('When passed a timestamp and index = 1 and events times', () => {
-    it('should return the elapsed time between the first event and the second.', () => {
-      const ts = moment(DATE);
-      const eventsTimes = [ts, moment(DATE_PLUS_ONE_HOUR)];
+  describe('When passed a timestamp and index = 1 and list of times', () => {
+    it('should return the elapsed time between the first time and the second.', () => {
+      const times = [moment(DATE), moment(DATE_PLUS_ONE_HOUR)];
       const index = 1;
-      const output = getTimeElapsedDisplay(ts, index, eventsTimes);
+      const output = getTimeElapsedDisplay(times[index], index, times);
 
       expect(output).toEqual('1h (+1h)');
     });

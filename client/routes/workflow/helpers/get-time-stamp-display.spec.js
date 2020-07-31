@@ -14,9 +14,9 @@ describe('getTimeStampDisplay', () => {
 
   describe('When passed a timestamp and index = -1', () => {
     it('should return "".', () => {
-      timestamp = moment(DATE);
+      const ts = moment(DATE);
       const index = -1;
-      const output = getTimeStampDisplay(timestamp, index);
+      const output = getTimeStampDisplay(ts, index);
 
       expect(output).toEqual('');
     });
@@ -24,9 +24,9 @@ describe('getTimeStampDisplay', () => {
 
   describe('When passed a timestamp and index = 0', () => {
     it('should return the date string.', () => {
-      timestamp: moment(DATE);
+      const ts = moment(DATE);
       const index = 0;
-      const output = getTimeStampDisplay(timestamp, index);
+      const output = getTimeStampDisplay(ts, index);
 
       expect(output).toEqual('Jan 1st 12:00:00 am');
     });
