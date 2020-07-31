@@ -34,7 +34,7 @@ export default function(historyEvents) {
           id: `activity${activityId}`,
           className: 'activity',
           eventIds: [e.eventId],
-          start: moment(scheduledEvent.timestamp),
+          start: moment(scheduledEvent.eventTime),
           ongoing: true,
           content: `Activity ${activityId}: ${shortName(
             scheduledEvent.details.activityType &&
@@ -60,7 +60,7 @@ export default function(historyEvents) {
         e.eventType !== 'ActivityTaskScheduled' &&
         e.eventType !== 'ActivityTaskStarted'
       ) {
-        assignEnd(item, e.timestamp);
+        assignEnd(item, e.eventTime);
         item.className = `activity ${e.eventType
           .replace('ActivityTask', '')
           .toLowerCase()}`;
@@ -78,7 +78,7 @@ export default function(historyEvents) {
           id: `childWf${initiatedEventId}`,
           className: 'child-workflow',
           eventIds: [e.eventId],
-          start: moment(initiatedEvent.timestamp),
+          start: moment(initiatedEvent.eventTime),
           ongoing: true,
           content: `Child Workflow: ${shortName(e.details.workflowType.name)}`,
           details: {
@@ -107,7 +107,7 @@ export default function(historyEvents) {
         e.eventType !== 'StartChildWorkflowExecutionInitiated' &&
         e.eventType !== 'ChildWorkflowExecutionStarted'
       ) {
-        assignEnd(item, e.timestamp);
+        assignEnd(item, e.eventTime);
         item.className = `child-workflow ${e.eventType
           .replace('ChildWorkflowExecution', '')
           .toLowerCase()}`;
@@ -117,8 +117,8 @@ export default function(historyEvents) {
         id: `timer${e.details.timerId}`,
         className: 'timer',
         eventIds: [e.eventId],
-        start: moment(e.timestamp),
-        end: moment(e.timestamp).add(
+        start: moment(e.eventTime),
+        end: moment(e.eventTime).add(
           e.details.startToFireTimeoutSeconds,
           'seconds'
         ),
@@ -142,7 +142,7 @@ export default function(historyEvents) {
         id: `marker${e.eventId}`,
         className: `marker marker-${markerName}`,
         eventIds: [e.eventId],
-        start: moment(e.timestamp),
+        start: moment(e.eventTime),
         content:
           {
             Version: 'Version Marker',
@@ -156,7 +156,7 @@ export default function(historyEvents) {
         id: `signal${e.eventId}`,
         className: 'signal',
         eventIds: [e.eventId],
-        start: moment(e.timestamp),
+        start: moment(e.eventTime),
         content: 'Workflow Signaled',
         details: {
           input: e.details.input,
@@ -167,7 +167,7 @@ export default function(historyEvents) {
         id: `extsignal${e.eventId}`,
         className: 'external-signal',
         eventIds: [e.eventId],
-        start: moment(e.timestamp),
+        start: moment(e.eventTime),
         ongoing: true,
         content: 'External Workflow Signaled',
         details: summarizeEvents.SignalExternalWorkflowExecutionInitiated(
@@ -180,7 +180,7 @@ export default function(historyEvents) {
       if (initiatedEvent) {
         initiatedEvent.eventIds.push(e.eventId);
         // TODO - code will break as item is not defined.
-        // assignEnd(item, e.timestamp);
+        // assignEnd(item, e.eventTime);
       }
     } else if (
       e.eventType === 'WorkflowTaskFailed' ||
@@ -192,7 +192,7 @@ export default function(historyEvents) {
           .replace('WorkflowTask', '')
           .toLowerCase()}`,
         eventIds: [e.eventId],
-        start: moment(e.timestamp),
+        start: moment(e.eventTime),
         content: e.eventType,
         details: e.details,
       });

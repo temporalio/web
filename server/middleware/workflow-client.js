@@ -41,7 +41,7 @@ function buildHistory(getHistoryRes) {
     }
 
     return {
-      timestamp: e.timestamp,
+      eventTime: e.eventTime,
       eventType: e.eventType,
       eventId: e.eventId,
       details,
@@ -61,6 +61,13 @@ function buildWorkflowExecutionRequest(execution) {
   return req;
 }
 
+function momentToProtoTime(time) {
+  return {
+    seconds: time / 1000,
+    nanos: (time % 1000) * 1e6,
+  };
+}
+
 [_searchAttributes, _memo, _queryResult, _payloads] = [
   'searchAttributes',
   'memo',
@@ -75,12 +82,13 @@ function uiTransform(item) {
   }
 
   Object.entries(item).forEach(([subkey, subvalue]) => {
-    if (subvalue && typeof subvalue.unsigned === 'boolean') {
-      item[subkey] = Long.fromValue(subvalue).toNumber();
-      const m = moment(item[subkey] / 1000000);
+    if (subvalue && subvalue.seconds) {
+      const seconds = Number(subvalue.seconds);
+      item[subkey] = seconds;
 
-      if (m.isValid() && m.isAfter('2017-01-01')) {
-        item[subkey] = m.toISOString();
+      const dt = moment(seconds * 1000);
+      if (dt.isValid() && dt.isAfter('2017-01-01')) {
+        item[subkey] = dt.toISOString();
       }
     } else if (Buffer.isBuffer(subvalue)) {
       if (subkey === 'nextPageToken') {
@@ -266,12 +274,17 @@ WorkflowClient.prototype.listNamespaces = async function({
 
 WorkflowClient.prototype.openWorkflows = async function({
   namespace,
-  startTimeFilter,
+  startTime,
+  endTime,
   executionFilter,
   typeFilter,
   nextPageToken,
   maximumPageSize = 100,
 }) {
+  const startTimeFilter = {
+    earliestTime: momentToProtoTime(startTime),
+    latestTime: momentToProtoTime(endTime),
+  };
   const req = {
     namespace,
     nextPageToken,
@@ -287,13 +300,18 @@ WorkflowClient.prototype.openWorkflows = async function({
 
 WorkflowClient.prototype.closedWorkflows = async function({
   namespace,
-  startTimeFilter,
+  startTime,
+  endTime,
   executionFilter,
   typeFilter,
   status,
   nextPageToken,
   maximumPageSize = 100,
 }) {
+  const startTimeFilter = {
+    earliestTime: momentToProtoTime(startTime),
+    latestTime: momentToProtoTime(endTime),
+  };
   const req = {
     namespace,
     nextPageToken,

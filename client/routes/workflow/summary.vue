@@ -163,13 +163,13 @@ export default {
   computed: {
     workflowCloseTime() {
       return this.workflow.workflowExecutionInfo.closeTime
-        ? moment(this.workflow.workflowExecutionInfo.closeTime).format(
+        ? this.workflow.workflowExecutionInfo.closeTime.format(
             'dddd MMMM Do, h:mm:ss a'
           )
         : '';
     },
     workflowStartTime() {
-      return moment(this.workflow.workflowExecutionInfo.startTime).format(
+      return this.workflow.workflowExecutionInfo.startTime.format(
         'dddd MMMM Do, h:mm:ss a'
       );
     },

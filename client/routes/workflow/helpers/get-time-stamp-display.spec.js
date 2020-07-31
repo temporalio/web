@@ -4,34 +4,29 @@ import getTimeStampDisplay from './get-time-stamp-display';
 describe('getTimeStampDisplay', () => {
   const DATE = '2020-01-01 00:00:00';
 
-  describe('When passed an event with no timestamp', () => {
+  describe('When passed no timestamp', () => {
     it('should return "".', () => {
-      const event = {};
-      const output = getTimeStampDisplay(event);
+      const output = getTimeStampDisplay(undefined);
 
       expect(output).toEqual('');
     });
   });
 
-  describe('When passed an event with a timestamp and index = -1', () => {
+  describe('When passed a timestamp and index = -1', () => {
     it('should return "".', () => {
-      const event = {
-        timestamp: moment(DATE),
-      };
+      const ts = moment(DATE);
       const index = -1;
-      const output = getTimeStampDisplay(event, index);
+      const output = getTimeStampDisplay(ts, index);
 
       expect(output).toEqual('');
     });
   });
 
-  describe('When passed an event with a timestamp and index = 0', () => {
+  describe('When passed a timestamp and index = 0', () => {
     it('should return the date string.', () => {
-      const event = {
-        timestamp: moment(DATE),
-      };
+      const ts = moment(DATE);
       const index = 0;
-      const output = getTimeStampDisplay(event, index);
+      const output = getTimeStampDisplay(ts, index);
 
       expect(output).toEqual('Jan 1st 12:00:00 am');
     });

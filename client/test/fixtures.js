@@ -60,7 +60,7 @@ export default {
   history: {
     emailRun1: [
       {
-        timestamp: emailRun1Start.toISOString(),
+        eventTime: emailRun1Start.toISOString(),
         eventType: 'WorkflowExecutionStarted',
         eventId: 1,
         details: {
@@ -76,7 +76,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.toISOString(),
+        eventTime: emailRun1Start.toISOString(),
         eventType: 'WorkflowTaskScheduled',
         eventId: 2,
         details: {
@@ -87,7 +87,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.toISOString(),
+        eventTime: emailRun1Start.toISOString(),
         eventType: 'WorkflowTaskStarted',
         eventId: 3,
         details: {
@@ -97,7 +97,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(1, 'second').toISOString(),
+        eventTime: emailRun1Start.add(1, 'second').toISOString(),
         eventType: 'WorkflowTaskCompleted',
         eventId: 4,
         details: {
@@ -107,7 +107,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(1, 'second').toISOString(),
+        eventTime: emailRun1Start.add(1, 'second').toISOString(),
         eventType: 'MarkerRecorded',
         eventId: 5,
         details: {
@@ -117,7 +117,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(1, 'second').toISOString(),
+        eventTime: emailRun1Start.add(1, 'second').toISOString(),
         eventType: 'ActivityTaskScheduled',
         eventId: 6,
         details: {
@@ -137,7 +137,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(5, 'second').toISOString(),
+        eventTime: emailRun1Start.add(5, 'second').toISOString(),
         eventType: 'ActivityTaskStarted',
         eventId: 7,
         details: {
@@ -146,7 +146,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(11, 'second').toISOString(),
+        eventTime: emailRun1Start.add(11, 'second').toISOString(),
         eventType: 'ActivityTaskCompleted',
         eventId: 8,
         details: {
@@ -157,13 +157,13 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(11, 'second').toISOString(),
+        eventTime: emailRun1Start.add(11, 'second').toISOString(),
         eventType: 'WorkflowTaskScheduled',
         eventId: 9,
         details: { taskQueue: { name: 'ci-task-queue' } },
       },
       {
-        timestamp: emailRun1Start.add(11, 'second').toISOString(),
+        eventTime: emailRun1Start.add(11, 'second').toISOString(),
         eventType: 'WorkflowTaskStarted',
         eventId: 10,
         details: {
@@ -172,7 +172,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(11, 'second').toISOString(),
+        eventTime: emailRun1Start.add(11, 'second').toISOString(),
         eventType: 'WorkflowTaskCompleted',
         eventId: 11,
         details: {
@@ -181,7 +181,7 @@ export default {
         },
       },
       {
-        timestamp: emailRun1Start.add(12, 'second').toISOString(),
+        eventTime: emailRun1Start.add(12, 'second').toISOString(),
         eventType: 'WorkflowExecutionCompleted',
         eventId: 12,
         details: {
@@ -207,12 +207,12 @@ export default {
         },
         eventId: 1,
         eventType: 'WorkflowExecutionStarted',
-        timestamp: exampleTimeoutStart.toISOString(),
+        eventTime: exampleTimeoutStart.toISOString(),
       },
       {
         eventId: 2,
         eventType: 'WorkflowTaskScheduled',
-        timestamp: exampleTimeoutStart.toISOString(),
+        eventTime: exampleTimeoutStart.toISOString(),
       },
       {
         details: {
@@ -220,7 +220,7 @@ export default {
         },
         eventId: 3,
         eventType: 'WorkflowTaskStarted',
-        timestamp: exampleTimeoutStart.toISOString(),
+        eventTime: exampleTimeoutStart.toISOString(),
       },
       {
         details: {
@@ -229,7 +229,7 @@ export default {
         },
         eventId: 4,
         eventType: 'WorkflowTaskCompleted',
-        timestamp: exampleTimeoutStart.toISOString(),
+        eventTime: exampleTimeoutStart.toISOString(),
       },
       {
         details: {
@@ -237,7 +237,7 @@ export default {
         },
         eventId: 5,
         eventType: 'MarkerRecorded',
-        timestamp: exampleTimeoutStart.toISOString(),
+        eventTime: exampleTimeoutStart.toISOString(),
       },
       {
         details: {
@@ -256,7 +256,7 @@ export default {
         },
         eventId: 6,
         eventType: 'ActivityTaskScheduled',
-        timestamp: exampleTimeoutStart.add(1, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(1, 'second').toISOString(),
       },
       {
         details: {
@@ -265,7 +265,7 @@ export default {
         },
         eventId: 7,
         eventType: 'ActivityTaskStarted',
-        timestamp: exampleTimeoutStart.add(1, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(1, 'second').toISOString(),
       },
       {
         details: {
@@ -275,7 +275,7 @@ export default {
         },
         eventId: 8,
         eventType: 'ActivityTaskTimedOut',
-        timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
         details: {
@@ -286,7 +286,7 @@ export default {
         },
         eventId: 9,
         eventType: 'WorkflowTaskScheduled',
-        timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
         details: {
@@ -294,7 +294,7 @@ export default {
         },
         eventId: 10,
         eventType: 'WorkflowTaskStarted',
-        timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
         details: {
@@ -304,7 +304,7 @@ export default {
         },
         eventId: 11,
         eventType: 'WorkflowTaskCompleted',
-        timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
       {
         details: {
@@ -313,12 +313,12 @@ export default {
         },
         eventId: 12,
         eventType: 'WorkflowExecutionCompleted',
-        timestamp: exampleTimeoutStart.add(2, 'second').toISOString(),
+        eventTime: exampleTimeoutStart.add(2, 'second').toISOString(),
       },
     ],
     timelineVariety: [
       {
-        timestamp: timelineVarietyStart.toISOString(),
+        eventTime: timelineVarietyStart.toISOString(),
         eventType: 'WorkflowExecutionStarted',
         eventId: 1,
         details: {
@@ -334,7 +334,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.toISOString(),
+        eventTime: timelineVarietyStart.toISOString(),
         eventType: 'WorkflowTaskScheduled',
         eventId: 2,
         details: {
@@ -345,7 +345,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.toISOString(),
+        eventTime: timelineVarietyStart.toISOString(),
         eventType: 'WorkflowTaskStarted',
         eventId: 3,
         details: {
@@ -355,7 +355,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(1, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(1, 'second').toISOString(),
         eventType: 'WorkflowTaskCompleted',
         eventId: 4,
         details: {
@@ -365,7 +365,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(1, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(1, 'second').toISOString(),
         eventType: 'MarkerRecorded',
         eventId: 5,
         details: {
@@ -375,7 +375,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(1, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(1, 'second').toISOString(),
         eventType: 'ActivityTaskScheduled',
         eventId: 6,
         details: {
@@ -395,7 +395,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(5, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(5, 'second').toISOString(),
         eventType: 'ActivityTaskStarted',
         eventId: 7,
         details: {
@@ -404,7 +404,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(1, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(1, 'second').toISOString(),
         eventType: 'MarkerRecorded',
         eventId: 8,
         details: {
@@ -413,7 +413,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(11, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(11, 'second').toISOString(),
         eventType: 'ActivityTaskCompleted',
         eventId: 9,
         details: {
@@ -423,7 +423,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(11, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(11, 'second').toISOString(),
         eventType: 'StartChildWorkflowExecutionInitiated',
         eventId: 10,
         details: {
@@ -433,7 +433,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(11, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(11, 'second').toISOString(),
         eventType: 'ChildWorkflowExecutionStarted',
         eventId: 11,
         details: {
@@ -447,7 +447,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(11, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(11, 'second').toISOString(),
         eventType: 'ActivityTaskScheduled',
         eventId: 12,
         details: {
@@ -466,7 +466,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(12, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(12, 'second').toISOString(),
         eventType: 'ActivityTaskStarted',
         eventId: 13,
         details: {
@@ -476,7 +476,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(13, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(13, 'second').toISOString(),
         eventType: 'MarkerRecorded',
         eventId: 14,
         details: {
@@ -489,7 +489,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart.add(15, 'second').toISOString(),
+        eventTime: timelineVarietyStart.add(15, 'second').toISOString(),
         eventType: 'MarkerRecorded',
         eventId: 15,
         details: {
@@ -501,7 +501,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart
+        eventTime: timelineVarietyStart
           .add(1, 'minute')
           .add(2, 'second')
           .toISOString(),
@@ -515,7 +515,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart
+        eventTime: timelineVarietyStart
           .add(1, 'minute')
           .add(20, 'second')
           .toISOString(),
@@ -529,7 +529,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart
+        eventTime: timelineVarietyStart
           .add(2, 'minute')
           .add(10, 'seconds')
           .toISOString(),
@@ -549,7 +549,7 @@ export default {
         },
       },
       {
-        timestamp: timelineVarietyStart
+        eventTime: timelineVarietyStart
           .add(2, 'minute')
           .add(10, 'seconds')
           .toISOString(),

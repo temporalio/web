@@ -32,10 +32,8 @@ async function listWorkflows(state, ctx) {
 
   ctx.body = await wfClient[state + 'Workflows']({
     namespace,
-    startTimeFilter: {
-      earliestTime: momentToLong(startTime),
-      latestTime: momentToLong(endTime),
-    },
+    startTime,
+    endTime,
     typeFilter: q.workflowName ? { name: q.workflowName } : undefined,
     executionFilter: q.workflowId ? { workflowId: q.workflowId } : undefined,
     status: q.status || undefined,
@@ -254,7 +252,7 @@ router.get(
       const { runId, workflowId } = ctx.params;
 
       const {
-        timestamp: startTime,
+        eventTime: startTime,
         details: {
           taskQueue,
           executionStartToCloseTimeoutSeconds,
