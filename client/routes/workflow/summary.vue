@@ -5,7 +5,7 @@
         <a
           href=""
           class="terminate"
-          v-show="isWorkflowRunning"
+          v-show="showTerminate"
           @click.prevent="$modal.show('confirm-termination')"
         >
           Terminate
@@ -188,6 +188,9 @@ export default {
       }
 
       return this.result;
+    },
+    showTerminate() {
+      return this.isWorkflowRunning && process.env.VUE_APP_PERMIT_WRITE_API;
     },
   },
   methods: {
