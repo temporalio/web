@@ -324,10 +324,8 @@ export default pagedGrid({
               workflowId: data.execution.workflowId,
               runId: data.execution.runId,
               workflowName: data.type.name,
-              startTime: moment(data.startTime).format('lll'),
-              endTime: data.closeTime
-                ? moment(data.closeTime).format('lll')
-                : '',
+              startTime: data.startTime.format('lll'),
+              endTime: data.closeTime ? data.closeTime.format('lll') : '',
               status: (data.status || 'open').toLowerCase(),
             }));
 

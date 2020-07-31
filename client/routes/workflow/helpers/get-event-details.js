@@ -1,9 +1,9 @@
 import { getKeyValuePairs } from '~helpers';
 
-const getEventDetails = event => {
-  const { details, eventId, eventType, timeStampDisplay } = event;
+const getEventDetails = (event) => {
+  const { details, eventId, eventType, eventTimeDisplay } = event;
   const kvps = getKeyValuePairs({
-    timestamp: timeStampDisplay,
+    eventTime: eventTimeDisplay,
     eventId,
     ...details,
   });
@@ -13,7 +13,7 @@ const getEventDetails = event => {
     eventId,
     eventType,
     kvps,
-    timestamp: timeStampDisplay,
+    eventTime: eventTimeDisplay,
   };
 };
 

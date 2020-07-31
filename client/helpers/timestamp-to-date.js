@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const timestampToDate = timestamp => {
+const timestampToDate = (timestamp) => {
   if (!timestamp) {
     return timestamp;
   }
@@ -10,7 +10,7 @@ const timestampToDate = timestamp => {
   if (typeof timestamp === 'number') {
     ts = timestamp;
   } else if (typeof timestamp === 'string') {
-    ts = parseInt(timestamp);
+    return moment(timestamp);
   } else if (typeof timestamp === 'object') {
     if (typeof timestamp.value === 'string') {
       ts = parseInt(timestamp.value);

@@ -12,20 +12,25 @@ const getHistoryEvents = (events) => {
 
   return events
     .map((event) => {
-      const timestamp = timestampToDate(event.timestamp);
+      const eventTime = timestampToDate(event.eventTime);
 
       return {
         ...event,
-        timestamp,
+        eventTime,
       };
     })
     .map((event, index, eventList) => {
-      const timeStampDisplay = getTimeStampDisplay(event);
-      const timeElapsedDisplay = getTimeElapsedDisplay(event, index, eventList);
+      const eventTimeDisplay = getTimeStampDisplay(event.eventTime);
+      const eventTimes = eventList.map((a) => a.eventTime);
+      const timeElapsedDisplay = getTimeElapsedDisplay(
+        event.eventTime,
+        index,
+        eventTimes
+      );
 
       return {
         ...event,
-        timeStampDisplay,
+        eventTimeDisplay,
         timeElapsedDisplay,
       };
     })

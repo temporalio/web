@@ -152,7 +152,7 @@
                       {{
                         tsFormat === 'elapsed'
                           ? item.timeElapsedDisplay
-                          : item.timeStampDisplay
+                          : item.eventTimeDisplay
                       }}
                     </div>
                     <div class="td col-summary">
@@ -390,7 +390,7 @@ export default {
       }
 
       return {
-        timestamp: this.selectedEvent.timestamp.format('MMM Do h:mm:ss a'),
+        eventTime: this.selectedEvent.eventTime.format('MMM Do h:mm:ss a'),
         eventId: this.selectedEvent.eventId,
         ...this.selectedEvent.details,
       };

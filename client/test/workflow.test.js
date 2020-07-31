@@ -150,7 +150,7 @@ describe('Workflow', () => {
               execution: {},
               input,
             },
-            timestamp: new Date().toISOString(),
+            eventTime: new Date().toISOString(),
           },
         ],
       });
@@ -194,10 +194,10 @@ describe('Workflow', () => {
               execution: {},
               input: { greet: 'hello' },
             },
-            timestamp: new Date().toISOString(),
+            eventTime: new Date().toISOString(),
           },
           {
-            timestamp: '2018-08-16T01:00:01.582Z',
+            eventTime: '2018-08-16T01:00:01.582Z',
             eventType: 'WorkflowExecutionContinuedAsNew',
             eventId: 42,
             details: {
@@ -270,7 +270,7 @@ describe('Workflow', () => {
         events: [
           {
             eventType: 'WorkflowExecutionStarted',
-            timestamp: moment().toISOString(),
+            eventTime: moment().toISOString(),
             eventId: 1,
             details: {
               workflowType: { name: 'com.github/temporalio/ci-test-parent' },
@@ -284,7 +284,7 @@ describe('Workflow', () => {
           {
             eventId: 1,
             eventType: 'WorkflowTaskScheduled',
-            timestamp: moment().toISOString(),
+            eventTime: moment().toISOString(),
           },
         ],
       });
@@ -705,7 +705,7 @@ describe('Workflow', () => {
           historyEl
             .textNodes('.table .vue-recycle-scroller__item-view .td.col-time')
             .should.deep.equal([
-              moment(fixtures.history.emailRun1[0].timestamp).format(
+              moment(fixtures.history.emailRun1[0].eventTime).format(
                 'MMM Do h:mm:ss a'
               ),
               '',
@@ -717,7 +717,7 @@ describe('Workflow', () => {
         });
       });
 
-      it('should allow toggling of the time column between elapsed and local timestamp', async function test() {
+      it('should allow toggling of the time column between elapsed and local eventTime', async function test() {
         const [historyEl] = await historyTest(this.test);
 
         await historyEl.waitUntilExists(
@@ -738,7 +738,7 @@ describe('Workflow', () => {
             .should.deep.equal(
               fixtures.history.emailRun1
                 .filter((_value, index) => index < 6)
-                .map((e) => moment(e.timestamp).format('MMM Do h:mm:ss a'))
+                .map((e) => moment(e.eventTime).format('MMM Do h:mm:ss a'))
             )
         );
         localStorage
@@ -746,7 +746,7 @@ describe('Workflow', () => {
           .should.equal('ts');
       });
 
-      it('should use the timestamp format from local storage if available', async function test() {
+      it('should use the eventTime format from local storage if available', async function test() {
         localStorage.setItem('ci-test:history-ts-col-format', 'ts');
         const [historyEl] = await historyTest(this.test);
 
@@ -756,7 +756,7 @@ describe('Workflow', () => {
             .should.deep.equal(
               fixtures.history.emailRun1
                 .filter((_value, index) => index < 6)
-                .map((e) => moment(e.timestamp).format('MMM Do h:mm:ss a'))
+                .map((e) => moment(e.eventTime).format('MMM Do h:mm:ss a'))
             )
         );
       });
@@ -812,7 +812,7 @@ describe('Workflow', () => {
                 execution: {},
                 input,
               },
-              timestamp: new Date().toISOString(),
+              eventTime: new Date().toISOString(),
             },
           ],
         });
@@ -904,7 +904,7 @@ describe('Workflow', () => {
                 },
                 execution: {},
               },
-              timestamp: new Date().toISOString(),
+              eventTime: new Date().toISOString(),
             },
             {
               eventId: 2,
@@ -913,7 +913,7 @@ describe('Workflow', () => {
                 markerName: 'Version',
                 details: ['initial version', 0],
               },
-              timestamp: new Date().toISOString(),
+              eventTime: new Date().toISOString(),
             },
             {
               eventId: 3,
@@ -922,7 +922,7 @@ describe('Workflow', () => {
                 markerName: 'SideEffect',
                 details: [0, btoa(JSON.stringify({ foo: 'bar' }))],
               },
-              timestamp: new Date().toISOString(),
+              eventTime: new Date().toISOString(),
             },
             {
               eventId: 4,
@@ -936,7 +936,7 @@ describe('Workflow', () => {
                   ResultJSON: JSON.stringify({ result: 'in json' }),
                 },
               },
-              timestamp: new Date().toISOString(),
+              eventTime: new Date().toISOString(),
             },
           ],
         });
@@ -1018,7 +1018,7 @@ describe('Workflow', () => {
           events: [
             {
               eventType: 'WorkflowExecutionStarted',
-              timestamp: moment().toISOString(),
+              eventTime: moment().toISOString(),
               eventId: 1,
               details: {
                 workflowType: { name: 'com.github/temporalio/ci-test-parent' },
@@ -1027,7 +1027,7 @@ describe('Workflow', () => {
             {
               eventId: 1,
               eventType: 'ChildWorkflowExecutionInitiated',
-              timestamp: moment().toISOString(),
+              eventTime: moment().toISOString(),
               details: {
                 namespace: 'child-namespace',
                 workflowExecution: {

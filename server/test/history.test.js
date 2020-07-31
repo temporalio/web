@@ -2,7 +2,7 @@ const Long = require('long'),
   wfHistoryThrift = [
     {
       eventId: new Long(1),
-      timestamp: new Long(800610625, 351737684, false),
+      eventTime: new Long(800610625, 351737684, false),
       eventType: 'WorkflowExecutionStarted',
       workflowExecutionStartedEventAttributes: {
         attempt: null,
@@ -20,7 +20,7 @@ const Long = require('long'),
             includeFooter: true,
           })
         ),
-        expirationTimestamp: null,
+        expirationeventTime: null,
         continuedExecutionRunId: null,
         continuedFailureDetails: null,
         continuedFailureReason: null,
@@ -44,7 +44,7 @@ const Long = require('long'),
     },
     {
       eventId: new Long(2),
-      timestamp: new Long(800610625, 351737684, false),
+      eventTime: new Long(800610625, 351737684, false),
       eventType: 'WorkflowTaskScheduled',
       workflowTaskScheduledEventAttributes: {
         startToCloseTimeoutSeconds: 180,
@@ -57,7 +57,7 @@ const Long = require('long'),
     },
     {
       eventId: new Long(3),
-      timestamp: new Long(800610625, 351737688, false),
+      eventTime: new Long(800610625, 351737688, false),
       eventType: 'WorkflowTaskStarted',
       workflowTaskStartedEventAttributes: {
         identity: 'box1@ci-task-queue',
@@ -69,7 +69,7 @@ const Long = require('long'),
   wfHistoryJson = [
     {
       eventId: 1,
-      timestamp: '2017-11-14T23:24:10.351Z',
+      eventTime: '2017-11-14T23:24:10.351Z',
       eventType: 'WorkflowExecutionStarted',
       details: Object.assign(
         {},
@@ -84,13 +84,13 @@ const Long = require('long'),
     },
     {
       eventId: 2,
-      timestamp: '2017-11-14T23:24:10.351Z',
+      eventTime: '2017-11-14T23:24:10.351Z',
       eventType: 'WorkflowTaskScheduled',
       details: wfHistoryThrift[1].workflowTaskScheduledEventAttributes,
     },
     {
       eventId: 3,
-      timestamp: '2017-11-14T23:24:27.531Z',
+      eventTime: '2017-11-14T23:24:27.531Z',
       eventType: 'WorkflowTaskStarted',
       details: {
         identity: 'box1@ci-task-queue',
@@ -191,7 +191,7 @@ describe('Workflow History', function() {
   });
 
   describe('Export', function() {
-    const wfHistoryCliJson = `[{"eventId":1,"timestamp":1510701850351393089,"eventType":"WorkflowExecutionStarted","workflowExecutionStartedEventAttributes":{"workflowType":{"name":"github.com/temporalio/temporal/demo"},"taskQueue":{"name":"ci-task-queue"},"input":"eyJlbWFpbHMiOlsiamFuZUBleGFtcGxlLmNvbSIsImJvYkBleGFtcGxlLmNvbSJdLCJpbmNsdWRlRm9vdGVyIjp0cnVlfQ==","executionStartToCloseTimeoutSeconds":1080,"taskStartToCloseTimeoutSeconds":30}},{"eventId":2,"timestamp":1510701850351393089,"eventType":"WorkflowTaskScheduled","workflowTaskScheduledEventAttributes":{"taskQueue":{"name":"canary-task-queue"},"startToCloseTimeoutSeconds":180,"attempt":1}},{"eventId":3,"timestamp":1510701867531262273,"eventType":"WorkflowTaskStarted","workflowTaskStartedEventAttributes":{"scheduledEventId":2,"identity":"box1@ci-task-queue","requestId":"fafa095d-b4ca-423a-a812-223e62b5ccf8"}}]`;
+    const wfHistoryCliJson = `[{"eventId":1,"eventTime":1510701850351393089,"eventType":"WorkflowExecutionStarted","workflowExecutionStartedEventAttributes":{"workflowType":{"name":"github.com/temporalio/temporal/demo"},"taskQueue":{"name":"ci-task-queue"},"input":"eyJlbWFpbHMiOlsiamFuZUBleGFtcGxlLmNvbSIsImJvYkBleGFtcGxlLmNvbSJdLCJpbmNsdWRlRm9vdGVyIjp0cnVlfQ==","executionStartToCloseTimeoutSeconds":1080,"taskStartToCloseTimeoutSeconds":30}},{"eventId":2,"eventTime":1510701850351393089,"eventType":"WorkflowTaskScheduled","workflowTaskScheduledEventAttributes":{"taskQueue":{"name":"canary-task-queue"},"startToCloseTimeoutSeconds":180,"attempt":1}},{"eventId":3,"eventTime":1510701867531262273,"eventType":"WorkflowTaskStarted","workflowTaskStartedEventAttributes":{"scheduledEventId":2,"identity":"box1@ci-task-queue","requestId":"fafa095d-b4ca-423a-a812-223e62b5ccf8"}}]`;
 
     it('should be able to export history in a format compatible with the CLI', function() {
       this.test.GetWorkflowExecutionHistory = ({ getRequest }) => ({

@@ -5,32 +5,27 @@ describe('getTimeElapsedDisplay', () => {
   const DATE = '2020-01-01 00:00:00';
   const DATE_PLUS_ONE_HOUR = '2020-01-01 01:00:00';
 
-  describe('When passed an event with no timestamp', () => {
+  describe('When passed no timestamp', () => {
     it('should return "".', () => {
-      const event = {};
-      const output = getTimeElapsedDisplay(event);
+      const output = getTimeElapsedDisplay(null);
 
       expect(output).toEqual('');
     });
   });
 
-  describe('When passed an event with a timestamp and index = -1', () => {
+  describe('When passed a timestamp and index = -1', () => {
     it('should return "".', () => {
-      const event = {
-        timestamp: moment(DATE),
-      };
+      timestamp = moment(DATE);
       const index = -1;
-      const output = getTimeElapsedDisplay(event, index);
+      const output = getTimeElapsedDisplay(timestamp, index);
 
       expect(output).toEqual('');
     });
   });
 
-  describe('When passed an event with a timestamp and index = 0', () => {
+  describe('When passed a timestamp and index = 0', () => {
     it('should return the date string.', () => {
-      const event = {
-        timestamp: moment(DATE),
-      };
+      timestamp = moment(DATE);
       const index = 0;
       const output = getTimeElapsedDisplay(event, index);
 
@@ -38,19 +33,12 @@ describe('getTimeElapsedDisplay', () => {
     });
   });
 
-  describe('When passed an event with a timestamp and index = 1 and eventList', () => {
+  describe('When passed a timestamp and index = 1 and events times', () => {
     it('should return the elapsed time between the first event and the second.', () => {
-      const eventList = [
-        {
-          timestamp: moment(DATE),
-        },
-        {
-          timestamp: moment(DATE_PLUS_ONE_HOUR),
-        },
-      ];
+      const ts = moment(DATE);
+      const eventsTimes = [ts, moment(DATE_PLUS_ONE_HOUR)];
       const index = 1;
-      const event = eventList[index];
-      const output = getTimeElapsedDisplay(event, index, eventList);
+      const output = getTimeElapsedDisplay(ts, index, eventsTimes);
 
       expect(output).toEqual('1h (+1h)');
     });
