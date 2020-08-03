@@ -83,7 +83,7 @@ function uiTransform(item) {
   Object.entries(item).forEach(([subkey, subvalue]) => {
     if (subvalue && subvalue.seconds) {
       const seconds = Number(subvalue.seconds);
-      item[subkey] = seconds;
+      item[subkey] = { duration: seconds };
 
       const dt = moment(seconds * 1000);
       if (dt.isValid() && dt.isAfter('2017-01-01')) {
