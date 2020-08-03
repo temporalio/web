@@ -118,10 +118,13 @@ function uiTransform(item) {
         let values = [];
         Object.entries(subvalue).forEach(([subkey, payload]) => {
           if (
-            ['json', 'protobuf-json'].includes(payload.metadata.encoding) &&
+            ['json/plain', 'protobuf-json'].includes(payload.metadata.encoding) &&
             payload.data
           ) {
             values = [...values, payload.data.toString('utf8')];
+          }
+          else if (typeof payload.data === 'string'){
+            values = [...values, payload.data.slice(0, 20)];
           }
         });
         item[_payloads] = values;
