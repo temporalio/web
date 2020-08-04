@@ -62,7 +62,6 @@ describe('Namespace list', () => {
         'owner',
         'Global?',
         'Retention Period',
-        'Emit Metrics',
         'Failover Version',
         'clusters',
       ]);
@@ -73,7 +72,6 @@ describe('Namespace list', () => {
         'ci-test@uber.com',
         'No',
         '21 days',
-        'Yes',
         '0',
         'ci-test-cluster (active)',
       ]);

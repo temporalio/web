@@ -3,7 +3,6 @@ import moment from 'moment';
 export default function(namespace) {
   const {
     config: {
-      emitMetric,
       historyArchivalState,
       workflowExecutionRetentionTtl,
       visibilityArchivalState,
@@ -23,7 +22,6 @@ export default function(namespace) {
           .duration(workflowExecutionRetentionTtl?.duration, 'seconds')
           .asDays()} days`
       : 'Unknown',
-    'Emit Metrics': emitMetric ? 'Yes' : 'No',
     'History Archival':
       historyArchivalState == 'Enabled' ? 'Enabled' : 'Disabled',
     'Visibility Archival':
