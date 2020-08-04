@@ -160,6 +160,10 @@ export default {
     'detail-list': DetailList,
     'feature-flag': FeatureFlag,
   },
+  created() {
+    this.namespaceDescCache = {};
+    this.getWebSettings()
+  },
   computed: {
     workflowCloseTime() {
       return this.workflow.workflowExecutionInfo.closeTime
@@ -190,7 +194,7 @@ export default {
       return this.result;
     },
     showTerminate() {
-      return this.isWorkflowRunning && process.env.VUE_APP_PERMIT_WRITE_API;
+      return this.isWorkflowRunning && this.webSettingsCache.permitWriteApi;
     },
   },
   methods: {
@@ -216,6 +220,16 @@ export default {
             });
           }
         );
+    },
+    getWebSettings() {
+      if (this.webSettingsCache) {
+        return Promise.resolve(this.webSettingsCache);
+      }
+
+      return this.$http(`/api/web-settings`).then((r) => {
+        this.webSettingsCache = r;
+        return this.webSettingsCache;
+      });
     },
   },
 };

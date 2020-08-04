@@ -16,7 +16,7 @@ Set these environment variables if you need to change their defaults
 | ----------------------------- | ----------------------------------------------------------------- | -------------- |
 | TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint                          | 127.0.0.1:7233 |
 | TEMPORAL_WEB_PORT             | HTTP port to serve on                                             | 8088           |
-| TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | false          |
+| TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | true           |
 | TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development                    | 8081           |
 | TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082           |
 | TEMPORAL_EXTERNAL_SCRIPTS     | Addtional JavaScript tags to serve in the UI                      |                |

@@ -4,8 +4,7 @@ const protoLoader = require('@grpc/proto-loader');
 const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
-
-const _permitWrite = process.env.TEMPORAL_PERMIT_WRITE_API === 'true';
+const utils = require('./utils');
 
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
@@ -428,7 +427,7 @@ WorkflowClient.prototype.terminateWorkflow = async function({
   execution,
   reason,
 }) {
-  if (!_permitWrite) {
+  if (!utils.isWriteApiPermitted()) {
     throw Error('Terminate method is disabled');
   }
 
