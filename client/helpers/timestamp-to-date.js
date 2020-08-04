@@ -20,7 +20,6 @@ const timestampToDate = (timestamp) => {
   }
 
   ts = ts / 1000000;
-
   return moment(ts);
 };
 

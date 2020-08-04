@@ -12,7 +12,7 @@ export const summarizeEvents = {
   }),
   ActivityTaskScheduled: (d) => ({
     'Close Timeout': moment
-      .duration(d.scheduleToCloseTimeoutSeconds, 'seconds')
+      .duration(d.scheduleToCloseTimeout?.duration, 'seconds')
       .format(),
     Id: d.activityId,
     input: d.input,
@@ -34,7 +34,7 @@ export const summarizeEvents = {
   WorkflowTaskCompleted: (d) => ({ identity: d.identity }),
   WorkflowTaskScheduled: (d) => ({
     Taskqueue: d.taskQueue.name,
-    Timeout: moment.duration(d.startToCloseTimeoutSeconds, 'seconds').format(),
+    Timeout: moment.duration(d.startToCloseTimeout?.duration, 'seconds').format(),
   }),
   WorkflowTaskStarted: (d) => ({ requestId: d.requestId }),
   WorkflowTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
@@ -87,14 +87,14 @@ export const summarizeEvents = {
   }),
   TimerStarted: (d) => ({
     'Fire Timeout': moment
-      .duration(d.startToFireTimeoutSeconds, 'seconds')
+      .duration(d.startToFireTimeout?.duration, 'seconds')
       .format(),
     'Timer ID': d.timerId,
   }),
   WorkflowExecutionStarted: (d) => {
     const summary = {
       'Close Timeout': moment
-        .duration(d.executionStartToCloseTimeoutSeconds, 'seconds')
+        .duration(d.workflowExecutionTimeout?.duration, 'seconds')
         .format(),
       identity: d.identity,
       input: d.input,

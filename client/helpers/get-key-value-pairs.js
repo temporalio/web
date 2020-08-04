@@ -18,6 +18,11 @@ const getKeyValuePairs = (event) => {
           routeLink: value.routeLink,
           value: value.text,
         });
+      } else if (value.duration !== undefined) {
+        kvps.push({
+          key,
+          value: moment.duration(value.duration, 'seconds').format(),
+        });
       } else if (typeof value === 'object' && !jsonKeys.includes(key)) {
         flatten(key, value, root);
       } else if (key === 'newExecutionRunId') {
@@ -67,11 +72,6 @@ const getKeyValuePairs = (event) => {
             },
           },
           value,
-        });
-      } else if (/.+TimeoutSeconds/.test(key)) {
-        kvps.push({
-          key: key.replace(/Seconds$/, ''),
-          value: moment.duration(value, 'seconds').format(),
         });
       } else if (preKeys.includes(k)) {
         kvps.push({
