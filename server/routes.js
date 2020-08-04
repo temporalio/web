@@ -4,7 +4,8 @@ const Router = require('koa-router'),
   Long = require('long'),
   losslessJSON = require('lossless-json'),
   momentToLong = (m) => Long.fromValue(m.unix()).mul(1000000000),
-  WorkflowClient = require('./middleware/workflow-client');
+  WorkflowClient = require('./workflow-client'),
+  utils = require('./utils');
 
 const wfClient = new WorkflowClient();
 
@@ -322,6 +323,11 @@ router.get(
   }
 );
 
-router.get('/health', (ctx) => (ctx.body = 'OK'));
+router.get('/api/web-settings', (ctx) => {
+  ctx.body = {
+    health: 'OK',
+    permitWriteApi: utils.isWriteApiPermitted(),
+  };
+});
 
 module.exports = router;
