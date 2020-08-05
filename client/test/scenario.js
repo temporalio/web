@@ -130,7 +130,7 @@ Scenario.prototype.withNamespaceDescription = function withNamespaceDescription(
           ownerEmail: 'ci-test@temporalio.com',
         },
         config: {
-          workflowExecutionRetentionPeriodInDays: 21,
+          workflowExecutionRetentionTtl: { duration: 21 * 60 * 60 },
           emitMetric: true,
           historyArchivalState: 'ENABLED',
           visibilityArchivalState: 'DISABLED',
