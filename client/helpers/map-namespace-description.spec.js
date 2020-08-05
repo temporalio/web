@@ -8,12 +8,6 @@ describe('mapNamespaceDescription', () => {
       namespace = undefined;
     });
 
-    it('should return "Emit Metrics" = "No".', () => {
-      const output = mapNamespaceDescription(namespace);
-
-      expect(output['Emit Metrics']).toEqual('No');
-    });
-
     it('should return "Global?" = "No".', () => {
       const output = mapNamespaceDescription(namespace);
 
@@ -108,20 +102,6 @@ describe('mapNamespaceDescription', () => {
       const output = mapNamespaceDescription(namespace);
 
       expect(output['Retention Period']).toEqual('3 days');
-    });
-  });
-
-  describe('When namespace.config.emitMetric = true', () => {
-    it('should return "Emit Metrics" = "Yes".', () => {
-      const namespace = {
-        config: {
-          emitMetric: true,
-        },
-      };
-
-      const output = mapNamespaceDescription(namespace);
-
-      expect(output['Emit Metrics']).toEqual('Yes');
     });
   });
 

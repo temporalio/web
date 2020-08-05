@@ -131,7 +131,6 @@ Scenario.prototype.withNamespaceDescription = function withNamespaceDescription(
         },
         config: {
           workflowExecutionRetentionTtl: { duration: 21 * 60 * 60 },
-          emitMetric: true,
           historyArchivalState: 'ENABLED',
           visibilityArchivalState: 'DISABLED',
         },

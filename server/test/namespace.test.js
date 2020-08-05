@@ -14,7 +14,6 @@ describe('Describe Namespace', function() {
         failoverVersion: 0,
         config: {
           badBinaries: null,
-          emitMetric: false,
           historyArchivalState: null,
           historyArchivalURI: null,
           visibilityArchivalState: null,
@@ -55,7 +54,6 @@ describe('Describe Namespace', function() {
       config: {
         badBinaries: null,
         workflowExecutionRetentionTtl: { duration: 14 * 60 * 60 },
-        emitMetric: true,
         historyArchivalState: null,
         historyArchivalURI: null,
         visibilityArchivalState: null,
