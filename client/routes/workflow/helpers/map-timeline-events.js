@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { summarizeEvents } from './summarize-events';
+import { isKnownEventType, extractEventSummary } from './summarize-events';
 import { shortName } from '~helpers';
 
 export default function(historyEvents) {
@@ -52,7 +52,10 @@ export default function(historyEvents) {
         item.eventIds.push(e.eventId);
 
         if (e.eventType !== 'ActivityTaskStarted') {
-          Object.assign(item.details, summarizeEvents[e.eventType](e.details));
+          Object.assign(
+            item.details,
+            extractEventSummary(e.eventType, e.details)
+          );
         }
       }
 
@@ -88,8 +91,8 @@ export default function(historyEvents) {
       } else {
         item.eventIds.push(e.eventId);
 
-        if (e.eventType in summarizeEvents) {
-          const summary = summarizeEvents[e.eventType](e.details);
+        if (isKnownEventType(e.eventType)) {
+          const summary = extractEventSummary(e.eventType, e.details);
 
           if (
             !item.titleLink &&
@@ -149,7 +152,7 @@ export default function(historyEvents) {
             SideEffect: 'Side Effect',
             LocalActivity: 'Local Activity',
           }[e.details.markerName] || `${e.details.markerName} Marker`,
-        details: summarizeEvents.MarkerRecorded(e.details),
+        details: extractEventSummary('MarkerRecorded', e.details),
       });
     } else if (e.eventType === 'WorkflowExecutionSignaled') {
       add({
@@ -170,7 +173,8 @@ export default function(historyEvents) {
         start: moment(e.eventTime),
         ongoing: true,
         content: 'External Workflow Signaled',
-        details: summarizeEvents.SignalExternalWorkflowExecutionInitiated(
+        details: extractEventSummary(
+          'SignalExternalWorkflowExecutionInitiated',
           e.details
         ),
       });

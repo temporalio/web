@@ -3,7 +3,7 @@ import parentWorkflowLink from './parent-workflow-link';
 import workflowLink from './workflow-link';
 import { shortName } from '~helpers';
 
-export const summarizeEvents = {
+const summaryExtractors = {
   ActivityTaskCancelRequested: (d) => ({ Id: d.activityId }),
   ActivityTaskCompleted: (d) => ({ result: d.result }),
   ActivityTaskFailed: (d) => ({
@@ -34,7 +34,9 @@ export const summarizeEvents = {
   WorkflowTaskCompleted: (d) => ({ identity: d.identity }),
   WorkflowTaskScheduled: (d) => ({
     Taskqueue: d.taskQueue.name,
-    Timeout: moment.duration(d.startToCloseTimeout?.duration, 'seconds').format(),
+    Timeout: moment
+      .duration(d.startToCloseTimeout?.duration, 'seconds')
+      .format(),
   }),
   WorkflowTaskStarted: (d) => ({ requestId: d.requestId }),
   WorkflowTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
@@ -116,3 +118,15 @@ export const summarizeEvents = {
     return { message: d.failure.message };
   },
 };
+
+const isKnownEventType = (eventType) => {
+  return eventType in summaryExtractors;
+};
+
+const extractEventSummary = (eventType, eventDetails) => {
+  return isKnownEventType(eventType)
+    ? summaryExtractors[eventType](eventDetails)
+    : eventDetails;
+};
+
+export { isKnownEventType, extractEventSummary };
