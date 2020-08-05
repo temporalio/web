@@ -184,7 +184,7 @@ describe('Namespace list', () => {
 
     scenario.withNamespaceDescription('demo', {
       namespaceInfo: { description: 'demo playground' },
-      config: { workflowExecutionRetentionPeriodInDays: 3 },
+      config: { workflowExecutionRetentionTtl: { duration: 3 * 60 * 60 } }, // 3 days
     });
     recentNamespaces.querySelectorAll('li a')[0].trigger('mouseover');
 
