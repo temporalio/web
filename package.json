@@ -1,6 +1,6 @@
 {
   "name": "temporal-web",
-  "version": "0.28.0-web",
+  "version": "0.28.1-web",
   "description": "Temporal Web UI",
   "main": "server/index.js",
   "licence": "MIT",
