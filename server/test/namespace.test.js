@@ -19,7 +19,7 @@ describe('Describe Namespace', function() {
           historyArchivalURI: null,
           visibilityArchivalState: null,
           visibilityArchivalURI: null,
-          workflowExecutionRetentionPeriodInDays: 14,
+          workflowExecutionRetentionTtl: { duration: 14 * 60 * 60 },
         },
         replicationConfig: {
           activeClusterName: 'ci-cluster',
@@ -54,7 +54,7 @@ describe('Describe Namespace', function() {
       isGlobalNamespace: true,
       config: {
         badBinaries: null,
-        workflowExecutionRetentionPeriodInDays: 14,
+        workflowExecutionRetentionTtl: { duration: 14 * 60 * 60 },
         emitMetric: true,
         historyArchivalState: null,
         historyArchivalURI: null,

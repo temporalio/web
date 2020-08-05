@@ -97,11 +97,11 @@ describe('mapNamespaceDescription', () => {
     });
   });
 
-  describe('When namespace.config.workflowExecutionRetentionPeriodInDays = 3', () => {
+  describe('When namespace.config.workflowExecutionRetentionTtl = 3 days', () => {
     it('should return "Retention Period" = "3 days".', () => {
       const namespace = {
         config: {
-          workflowExecutionRetentionPeriodInDays: 3,
+          workflowExecutionRetentionTtl: { duration: 3 * 24 * 60 * 60 },
         },
       };
 

@@ -1,9 +1,11 @@
+import moment from 'moment';
+
 export default function(namespace) {
   const {
     config: {
       emitMetric,
       historyArchivalState,
-      workflowExecutionRetentionPeriodInDays,
+      workflowExecutionRetentionTtl,
       visibilityArchivalState,
     } = {},
     namespaceInfo: { description, ownerEmail } = {},
@@ -16,8 +18,10 @@ export default function(namespace) {
     description: description || 'No description available',
     owner: ownerEmail || 'Unknown',
     'Global?': isGlobalNamespace ? 'Yes' : 'No',
-    'Retention Period': workflowExecutionRetentionPeriodInDays
-      ? `${workflowExecutionRetentionPeriodInDays} days`
+    'Retention Period': workflowExecutionRetentionTtl
+      ? `${moment
+          .duration(workflowExecutionRetentionTtl?.duration, 'seconds')
+          .asDays()} days`
       : 'Unknown',
     'Emit Metrics': emitMetric ? 'Yes' : 'No',
     'History Archival':
