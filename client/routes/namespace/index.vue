@@ -8,6 +8,7 @@
       />
       <navigation-link
         label="Settings"
+        data-cy="namespace-settings-link"
         icon="icon_settings"
         :to="{ name: 'namespace-settings' }"
       />

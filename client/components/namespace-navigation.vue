@@ -24,7 +24,11 @@
         {{ validationMessage }}
       </p>
     </div>
-    <ul class="recent-namespaces" v-if="recentNamespaces.length">
+    <ul
+      class="recent-namespaces"
+      v-if="recentNamespaces.length"
+      data-cy="recent-namespaces"
+    >
       <h3>Recent Namespaces</h3>
       <li v-for="namespace in recentNamespaces" :key="namespace">
         <a
@@ -42,6 +46,7 @@
         pending: !!namespaceDescRequest,
       }"
       v-if="namespaceDesc"
+      data-cy="namespace-description"
     >
       <span class="namespace-name">{{ namespaceDescName }}</span>
       <detail-list :item="namespaceDesc" :title="namespaceDescName" />

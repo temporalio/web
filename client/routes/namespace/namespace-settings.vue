@@ -2,6 +2,7 @@
   <section
     class="namespace-settings namespace-description"
     :class="{ loading }"
+    data-cy="namespace-settings"
   >
     <header>
       <h3>{{ namespace }}</h3>
