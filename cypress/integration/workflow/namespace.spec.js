@@ -5,7 +5,7 @@ context('Namespace', () => {
     cy.visit('/namespaces');
   });
 
-  it('render namespace details', () => {
+  it('renders namespace details', () => {
     cy.get('[data-cy=recent-namespaces]')
       .contains('namespace-web-e2e')
       .trigger('mouseover');
@@ -20,7 +20,7 @@ context('Namespace', () => {
       .should('contain.text', 'active (active)'); // Clusters
   });
 
-  it('navigate to recent namespace', () => {
+  it('navigates to recent namespace', () => {
     cy.get('[data-cy=recent-namespaces]')
       .contains('namespace-web-e2e')
       .click();
@@ -28,7 +28,7 @@ context('Namespace', () => {
     cy.url().should('include', '/namespaces/namespace-web-e2e/workflows');
   });
 
-  it('render namespace settings', () => {
+  it('renders namespace settings', () => {
     cy.get('[data-cy=recent-namespaces]')
       .contains('namespace-web-e2e')
       .click();
