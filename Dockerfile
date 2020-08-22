@@ -1,18 +1,18 @@
-FROM node:8.17.0-jessie as builder
+FROM node:14.8.0-slim as builder
 WORKDIR /usr/build
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm install --production
+RUN yarn install --production
 
 # Bundle app source
 COPY . .
 # Bundle the client code
-RUN npm run build-production
+RUN yarn build-production
 
 
 # Build final image
-FROM node:8.17.0-jessie-slim
+FROM node:14.8.0-slim
 WORKDIR /usr/app
 
 COPY --from=builder ./usr/build ./

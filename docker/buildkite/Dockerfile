@@ -1,4 +1,4 @@
-FROM node:dubnium
+FROM node:14.8.0-slim
 
 WORKDIR /usr/temporal-web
 
@@ -6,10 +6,10 @@ ENV NODE_ENV=development
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm install
+RUN yarn install
 
 # Bundle app source
 COPY . .
 
 # Bundle the client code
-RUN npm run build
+RUN yarn build
