@@ -1,4 +1,4 @@
-FROM node:14.8.0-slim as builder
+FROM node:14.8.0-stretch as builder
 WORKDIR /usr/build
 
 # Install app dependencies

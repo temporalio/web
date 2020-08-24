@@ -1,4 +1,4 @@
-FROM node:14.8.0-slim
+FROM node:14.8.0-stretch
 
 WORKDIR /usr/temporal-web
 
