@@ -6,10 +6,10 @@ ENV NODE_ENV=development
 
 # Install app dependencies
 COPY package*.json ./
-RUN yarn install
+RUN npm install
 
 # Bundle app source
 COPY . .
 
 # Bundle the client code
-RUN yarn build
+RUN npm run build

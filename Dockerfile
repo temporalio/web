@@ -3,12 +3,12 @@ WORKDIR /usr/build
 
 # Install app dependencies
 COPY package*.json ./
-RUN yarn install --production
+RUN npm install --production
 
 # Bundle app source
 COPY . .
 # Bundle the client code
-RUN yarn build-production
+RUN npm run build-production
 
 
 # Build final image
