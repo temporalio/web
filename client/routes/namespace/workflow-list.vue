@@ -44,6 +44,7 @@
           :options="statuses"
           :on-change="setStatus"
           :searchable="false"
+          data-cy="status-filter"
         />
         <div class="field workflow-filter-by">
           <input
@@ -74,6 +75,7 @@
       infinite-scroll-disabled="disableInfiniteScroll"
       infinite-scroll-distance="20"
       infinite-scroll-immediate-check="false"
+      data-cy="workflow-list"
     >
       <table v-show="showTable">
         <thead>
@@ -93,6 +95,7 @@
                   name: 'workflow/summary',
                   params: { runId: wf.runId, workflowId: wf.workflowId },
                 }"
+                data-cy="workflow-link"
                 >{{ wf.runId }}</router-link
               >
             </td>
@@ -146,7 +149,6 @@ export default pagedGrid({
   },
   created() {
     this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
-      
       this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
         ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
         : 30;
