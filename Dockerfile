@@ -1,4 +1,4 @@
-FROM node:8.17.0-jessie as builder
+FROM node:14.8.0-stretch as builder
 WORKDIR /usr/build
 
 # Install app dependencies
@@ -12,7 +12,7 @@ RUN npm run build-production
 
 
 # Build final image
-FROM node:8.17.0-jessie-slim
+FROM node:14.8.0-slim
 WORKDIR /usr/app
 
 COPY --from=builder ./usr/build ./
