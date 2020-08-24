@@ -131,7 +131,7 @@ const routeOpts = {
               eventId: Number(query.eventId) || undefined,
               format: query.format || 'grid',
               runId: params.runId,
-              showGraph: query.showGraph === true,
+              showGraph: [true, 'true'].includes(query.showGraph),
               workflowId: params.workflowId,
             }),
           },
