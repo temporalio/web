@@ -38,15 +38,15 @@
           information may be missing.
         </p>
       </div>
-      <div class="workflow-name">
+      <div class="workflow-name" data-cy="workflow-name">
         <dt>Workflow Name</dt>
         <dd>{{ workflow.workflowExecutionInfo.type.name }}</dd>
       </div>
-      <div class="started-at">
+      <div class="started-at" data-cy="started-at">
         <dt>Started At</dt>
         <dd>{{ workflowStartTime }}</dd>
       </div>
-      <div class="close-time" v-if="workflowCloseTime">
+      <div class="close-time" v-if="workflowCloseTime" data-cy="closed-at">
         <dt>Closed Time</dt>
         <dd>{{ workflowCloseTime }}</dd>
       </div>
@@ -56,6 +56,7 @@
           wfStatus !== undefined &&
             (typeof wfStatus === 'string' ? wfStatus : wfStatus.status)
         "
+        data-cy="workflow-status"
       >
         <dt>Status</dt>
         <dd>
@@ -69,21 +70,25 @@
           </router-link>
         </dd>
       </div>
-      <div class="workflow-result" v-if="resultView">
+      <div class="workflow-result" v-if="resultView" data-cy="workflow-result">
         <dt>Result</dt>
         <dd>
           <data-viewer :item="resultView" :title="workflowId + ' Result'" />
         </dd>
       </div>
-      <div class="workflow-id">
+      <div class="workflow-id" data-cy="workflow-id">
         <dt>Workflow Id</dt>
         <dd>{{ workflowId }}</dd>
       </div>
-      <div class="run-id">
+      <div class="run-id" data-cy="run-id">
         <dt>Run Id</dt>
         <dd>{{ runId }}</dd>
       </div>
-      <div class="parent-workflow" v-if="parentWorkflowRoute">
+      <div
+        class="parent-workflow"
+        v-if="parentWorkflowRoute"
+        data-cy="parent-workflow"
+      >
         <dt>Parent Workflow</dt>
         <dd>
           <router-link :to="parentWorkflowRoute.to">
@@ -91,7 +96,7 @@
           </router-link>
         </dd>
       </div>
-      <div class="task-queue">
+      <div class="task-queue" data-cy="task-queue">
         <dt>Task Queue</dt>
         <dd>
           <router-link
@@ -106,11 +111,11 @@
           </router-link>
         </dd>
       </div>
-      <div class="history-length">
+      <div class="history-length" data-cy="history-length">
         <dt>History Events</dt>
         <dd>{{ workflow.workflowExecutionInfo.historyLength }}</dd>
       </div>
-      <div class="workflow-input">
+      <div class="workflow-input" data-cy="workflow-input">
         <dt>Input</dt>
         <dd>
           <data-viewer
@@ -120,7 +125,11 @@
           />
         </dd>
       </div>
-      <div class="pending-activities" v-if="workflow.pendingActivities">
+      <div
+        class="pending-activities"
+        v-if="workflow.pendingActivities"
+        data-cy="pending-activities"
+      >
         <dt>Pending Activities</dt>
         <dd v-for="pa in workflow.pendingActivities" :key="pa.activityId">
           <detail-list :item="pa" />
@@ -162,7 +171,7 @@ export default {
   },
   created() {
     this.namespaceDescCache = {};
-    this.getWebSettings()
+    this.getWebSettings();
   },
   computed: {
     workflowCloseTime() {
