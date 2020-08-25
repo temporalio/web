@@ -1,0 +1,48 @@
+/// <reference types="cypress" />
+
+context('Workflow Summary', () => {
+  beforeEach(() => {
+    cy.visit('/namespaces/namespace-web-e2e/workflows');
+
+    cy.get('[data-cy=status-filter]')
+      .click()
+      .find('a')
+      .contains('Timed Out')
+      .click();
+    cy.get('[data-cy=workflow-list]')
+      .find('tr')
+      .eq(0)
+      .find('[data-cy=workflow-link]')
+      .click();
+  });
+
+  it('renders workflow summary', () => {
+    cy.get('[data-cy=workflow-name]').should('contain.text', 'e2e_type');
+
+    const dateTimeRegex = /\w+\s\w+\s[\d\w]+,\s(\d{1,2}:?){3}\s(am|pm)/;
+    cy.get('[data-cy=started-at]').contains(dateTimeView);
+    cy.get('[data-cy=closed-at]').contains(dateTimeView);
+
+    cy.get('[data-cy=workflow-status]').should('contain.text', 'timedout');
+
+    cy.get('[data-cy=workflow-result]')
+      .should('contain.text', 'retryState')
+      .should('contain.text', 'Timeout');
+
+    cy.get('[data-cy=workflow-id]').should('contain.text', 'wf_timedout');
+
+    const uidRegex = /([\w\d]{4,12}-?){5}/
+    cy.get('[data-cy=run-id]').contains(uidRegex);
+
+    cy.get('[data-cy=parent-workflow]').should('contain.text', 'e2e_type');
+
+    cy.get('[data-cy=task-queue]').should('contain.text', 'e2eQueue');
+
+    cy.get('[data-cy=history-length]').should('contain.text', '3');
+
+    cy.get('[data-cy=workflow-input]')
+      .should('contain.text', '{Harley:Pumpkin!,Joker:Hahahah}')
+      .should('contain.text', 'to infinity and beyond')
+      .should('contain.text', '""');
+  });
+});
