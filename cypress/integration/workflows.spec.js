@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-context('Workflow', () => {
+context('Workflows', () => {
   beforeEach(() => {
     cy.visit('/namespaces/namespace-web-e2e/workflows');
   });
@@ -70,7 +70,7 @@ context('Workflow', () => {
     cy.get('[data-cy=status-filter]')
       .click()
       .find('a')
-      .contains('Closed')
+      .contains('Timed Out')
       .click();
     cy.get('[data-cy=workflow-list]')
       .find('tr')

@@ -2,7 +2,15 @@
 
 context('Workflow Summary', () => {
   beforeEach(() => {
-    cy.visit('/namespaces/namespace-web-e2e/workflows?range=last-5-days&status=WORKFLOW_EXECUTION_STATUS_TIMED_OUT');
+    cy.visit('/namespaces/namespace-web-e2e/workflows');
+
+    cy.get('[data-cy=status-filter]')
+      .click()
+      .find('a')
+      .contains('Timed Out')
+      .click();
+    cy.wait(1000);
+
     cy.get('[data-cy=workflow-list]')
       .find('tr')
       .eq(0)
@@ -33,7 +41,6 @@ context('Workflow Summary', () => {
     cy.get('[data-cy=history-length]').should('contain.text', '3');
 
     cy.get('[data-cy=workflow-input]')
-      .should('contain.text', '{Harley:Pumpkin!,Joker:Hahahah}')
       .should('contain.text', 'to infinity and beyond')
       .should('contain.text', '""');
   });
