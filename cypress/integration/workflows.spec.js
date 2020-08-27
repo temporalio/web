@@ -51,12 +51,18 @@ context('Workflow', () => {
   });
 
   it('renders workflow execution details', () => {
+    cy.get('[data-cy=status-filter]')
+      .click()
+      .find('a')
+      .contains('Terminated')
+      .click();
+
     cy.get('[data-cy=workflow-list]')
       .find('tr')
-      .eq(3)
-      .should('contain.text', 'wf_open1') // workflow id
+      .eq(0)
+      .should('contain.text', 'wf_terminated') // workflow id
       .should('contain.text', 'e2e_type') // workflow type name
-      .should('contain.text', 'running'); // status
+      .should('contain.text', 'terminated'); // status
   });
 
   it('navigates to workflow details', () => {
