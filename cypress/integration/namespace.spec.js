@@ -15,8 +15,8 @@ context('Namespace', () => {
       .should('contain.text', 'description-for-web-e2e') // Description
       .should('contain.text', 'user0@test.com') // Owner
       .should('contain.text', '5 days') // Retention Period
-      .should('contain.text', 'Enabled') // History & Visibility statuses
-      .should('not.contain.text', 'Disabled')
+      .should('contain.text', 'Disabled') // History & Visibility statuses
+      .should('not.contain.text', 'Enabled')
       .should('contain.text', 'active (active)'); // Clusters
   });
 
@@ -42,8 +42,8 @@ context('Namespace', () => {
       .should('contain.text', 'description-for-web-e2e') // Description
       .should('contain.text', 'user0@test.com') // Owner
       .should('contain.text', '5 days') // Retention Period
-      .should('contain.text', 'Enabled') // History & Visibility statuses
-      .should('not.contain.text', 'Disabled')
+      .should('contain.text', 'Disabled') // History & Visibility statuses
+      .should('not.contain.text', 'Enabled')
       .should('contain.text', 'active (active)'); // Clusters
   });
 });
