@@ -66,12 +66,12 @@ context('Workflows', () => {
   });
 
   it('navigates to workflow details', () => {
-    cy.wait(1000);
     cy.get('[data-cy=status-filter]')
       .click()
       .find('a')
       .contains('Timed Out')
       .click();
+    cy.wait(1000)
     cy.get('[data-cy=workflow-list]')
       .find('tr')
       .eq(0)
