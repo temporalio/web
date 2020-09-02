@@ -1,5 +1,5 @@
 <template>
-  <section class="query" :class="{ loading }">
+  <section class="query" :class="{ loading }" data-cy="query">
     <header v-if="queries && queries.length">
       <div class="query-name">
         <v-select

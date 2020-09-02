@@ -1,5 +1,5 @@
 <template>
-  <section class="workflow-summary">
+  <section class="workflow-summary" data-cy="summary">
     <aside class="actions">
       <feature-flag name="workflow-terminate">
         <a
@@ -150,6 +150,7 @@ export default {
   data() {
     return {
       terminationReason: undefined,
+      webSettingsCache: undefined
     };
   },
   props: [
@@ -203,7 +204,7 @@ export default {
       return this.result;
     },
     showTerminate() {
-      return this.isWorkflowRunning && this.webSettingsCache.permitWriteApi;
+      return this.isWorkflowRunning && this.webSettingsCache?.permitWriteApi;
     },
   },
   methods: {

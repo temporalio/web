@@ -6,12 +6,14 @@
         icon="icon_receipt"
         label="Summary"
         :to="{ name: 'workflow/summary' }"
+        data-cy="summary-link"
       />
       <navigation-link
         id="nav-link-history"
         icon="icon_trip-history"
         label="History"
         :to="{ name: 'workflow/history' }"
+        data-cy="history-link"
       />
       <navigation-link
         id="nav-link-stack-trace"
@@ -19,6 +21,7 @@
         label="Stack Trace"
         :to="{ name: 'workflow/stack-trace' }"
         v-show="isWorkflowRunning"
+        data-cy="stack-trace-link"
       />
       <navigation-link
         id="nav-link-query"
@@ -26,6 +29,7 @@
         label="Query"
         :to="{ name: 'workflow/query' }"
         v-show="isWorkflowRunning"
+        data-cy="query-link"
       />
     </navigation-bar>
     <router-view
