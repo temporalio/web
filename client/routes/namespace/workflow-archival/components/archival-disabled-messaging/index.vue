@@ -16,17 +16,25 @@
       <p>
         {{ historyArchivalDisabledMessage }}
       </p>
-      <div v-if="historyArchivalEnableCommand">
-        <pre>{{ historyArchivalEnableCommand }}</pre>
-      </div>
+      <code lang="bash" v-if="historyArchivalEnableCommand">{{
+        historyArchivalEnableCommand
+      }}</code>
     </div>
     <div v-if="!isVisibilityArchivalEnabled" class="message-group">
       <p>
         {{ visibilityArchivalDisabledMessage }}
       </p>
-      <div v-if="visibilityArchivalEnableCommand">
-        <pre>{{ visibilityArchivalEnableCommand }}</pre>
-      </div>
+      <code lang="bash" v-if="visibilityArchivalEnableCommand">{{
+        visibilityArchivalEnableCommand
+      }}</code>
+    </div>
+    <div class="message-group">
+      <p class="docs">
+        For more details please check out
+        <a href="https://docs.temporal.io/docs/learn-archival/" target="_blank"
+          >Archival Docs</a
+        >
+      </p>
     </div>
   </div>
 </template>
@@ -86,20 +94,21 @@ export default {
 
   .message-group {
     margin: 20px 0;
-  }
 
-  a {
-    font-size: 20px;
-    line-height: 36px;
-  }
+    p {
+      font-size: 20px;
+      line-height: 36px;
+      margin-bottom: 5px;
+      &.docs {
+        font-size: 18px;
+      }
+    }
 
-  p {
-    font-size: 20px;
-    line-height: 36px;
-  }
-
-  pre {
-    display: inline-block;
+    code {
+      border: 1px black;
+      border-style: solid;
+      padding: 4px;
+    }
   }
 }
 </style>
