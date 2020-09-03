@@ -5,7 +5,10 @@
       <a href="#" class="refresh" @click="getStackTrace">Refresh</a>
     </header>
 
-    <pre v-if="stackTrace && stackTrace.results">{{ stackTrace }}</pre>
+    <pre v-if="stackTrace && stackTrace.payloads" class="stack-trace-view">{{
+      stackTrace.payloads
+    }}</pre>
+
     <span class="error" v-if="stackTrace && stackTrace.error">
       {{ stackTrace.error }}
     </span>
@@ -14,6 +17,7 @@
 
 <script>
 import moment from 'moment';
+import { getQueryResult } from './helpers/get-query-result';
 
 export default {
   data() {
@@ -34,7 +38,7 @@ export default {
       return this.$http
         .post(`${this.baseAPIURL}/query/__stack_trace`)
         .then(({ queryResult }) => {
-          this.stackTrace = queryResult;
+          this.stackTrace = getQueryResult(queryResult);
           this.stackTraceTimestamp = moment();
         })
         .catch((e) => {
@@ -63,4 +67,7 @@ section.stack-trace
     margin 0 1em
     action-button()
     icon-refresh()
+
+section .stack-trace-view
+  white-space pre-wrap
 </style>

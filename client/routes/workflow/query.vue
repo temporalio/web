@@ -18,7 +18,7 @@
         Run
       </a>
     </header>
-    <pre v-if="queryResult">{{ queryResult }}</pre>
+    <pre v-if="queryResult && queryResult.payloads">{{ queryResult.payloads }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
     <span class="no-queries" v-if="queries && queries.length === 0">
       No queries registered
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { getQueryResult } from './helpers/get-query-result'
+
 export default {
   data() {
     return {
@@ -70,8 +72,8 @@ export default {
       this.$http
         .post(`${this.baseAPIURL}/query/${this.queryName}`)
         .then(
-          (r) => {
-            this.queryResult = r.queryResult;
+          ({queryResult}) => {
+            this.queryResult = getQueryResult(queryResult);
           },
           (e) => {
             this.error = (e.json && e.json.message) || e.status || e.message;
