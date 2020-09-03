@@ -116,14 +116,14 @@ function uiTransform(item) {
       if (subkey === _payloads) {
         let values = [];
         Object.entries(subvalue).forEach(([subkey, payload]) => {
+          const encoding = Buffer.from(payload.metadata.encoding || '').toString();
           if (
-            ['json/plain', 'protobuf-json'].includes(payload.metadata.encoding) &&
+            ['json/plain', 'json/protobuf'].includes(encoding) &&
             payload.data
           ) {
-            values = [...values, payload.data.toString('utf8')];
-          }
-          else if (typeof payload.data === 'string'){
-            values = [...values, payload.data.slice(0, 20)];
+            values = [...values, Buffer.from(payload.data || '').toString()];
+          } else {
+            values = [...values, Buffer.from(payload.data || '').toString().slice(0, 20)];
           }
         });
         item[_payloads] = values;
@@ -149,12 +149,6 @@ function uiTransform(item) {
             values = [...values, subvalue.data.toString('utf8')];
           });
           item[subkey] = values;
-        } else if (subkey === _queryResult) {
-          let values = [];
-          Object.entries(subvalue.payloads).forEach(([subkey, subvalue]) => {
-            values = [...values, subvalue.data.toString('utf8')];
-          });
-          item[subkey] = { results: values };
         } else {
           uiTransform(subvalue);
         }
