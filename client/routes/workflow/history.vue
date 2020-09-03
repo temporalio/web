@@ -6,6 +6,7 @@
       'has-results': !!events.length,
       'split-enabled': true,
     }"
+    data-cy="history"
   >
     <header class="controls">
       <div class="view-format">
