@@ -5,12 +5,7 @@
       class="view-full-screen"
       @click.stop.prevent="viewFullScreen"
     ></a>
-    <prism v-if="highlight !== false" language="json" ref="codebox">{{
-      item.jsonStringDisplay
-    }}</prism>
-    <pre v-if="highlight === false" ref="codebox">{{
-      item.jsonStringDisplay
-    }}</pre>
+    <prism language="json" ref="codebox">{{ dataPreview }}</prism>
   </div>
 </template>
 
@@ -33,22 +28,33 @@ export default {
         return;
       }
 
-      const action =
+      const hasMoreJson =
+        this.item.jsonStringFull.length > this.item.jsonStringDisplay.length;
+
+      const overflowed =
         el.scrollWidth > el.offsetWidth + 2 ||
-        el.scrollHeight > el.offsetHeight + 2
-          ? 'add'
-          : 'remove';
+        el.scrollHeight > el.offsetHeight + 2;
+
+      const action = hasMoreJson || overflowed ? 'add' : 'remove';
 
       this.$el.classList[action]('overflow');
     };
     window.addEventListener('resize', this.checkOverflow);
-    ['item', 'highlight', 'compact'].forEach(e =>
+    ['item', 'highlight', 'compact'].forEach((e) =>
       this.$watch(e, this.checkOverflow)
     );
     this.$watch(() => this.$route, this.checkOverflow);
   },
   mounted() {
     this.checkOverflow();
+  },
+  computed: {
+    dataPreview() {
+      return this.item.jsonStringDisplay;
+    },
+    dataFullview() {
+      return JSON.tryParse(this.item.jsonStringFull);
+    },
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.checkOverflow);
@@ -71,7 +77,7 @@ export default {
           `,
         },
         {
-          code: this.item.jsonStringFull,
+          code: this.dataFullview,
           title: this.title,
         },
         {

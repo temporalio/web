@@ -1,4 +1,4 @@
-export const jsonKeys = ['result', 'input', 'details', 'data', 'Error'];
+export const jsonKeys = ['result', 'input', 'details', 'data', 'failure'];
 export const preKeys = jsonKeys.concat(['stackTrace', 'details.stackTrace']);
 
 export const ENVIRONMENT_LIST = [
@@ -24,9 +24,9 @@ export const ENVIRONMENT_LIST = [
   // },
 ];
 
-export const MAXIMUM_JSON_CHARACTER_LIMIT = 5000;
+export const MAXIMUM_JSON_CHARACTER_LIMIT = 100;
 export const MAXIMUM_JSON_MESSAGE =
-  '\n ... to see more open full screen mode from top right arrow.';
+  '\n * to see more open full screen mode from top right arrow.';
 
 export const NOTIFICATION_TYPE_ERROR = 'error';
 export const NOTIFICATION_TYPE_ERROR_MESSAGE_DEFAULT =

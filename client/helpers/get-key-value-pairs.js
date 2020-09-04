@@ -73,6 +73,19 @@ const getKeyValuePairs = (event) => {
           },
           value,
         });
+      } else if (key === 'failure') {
+        let node = { ...value };
+        let failure = '';
+        let isRoot = true;
+        while (node) {
+          const { message, stackTrace, source } = node;
+          failure += isRoot
+            ? `${source} ${message}\n${stackTrace}`
+            : `\nCaused By: ${source} ${message}\n${stackTrace}`;
+          node = node.cause;
+          isRoot = false;
+        }
+        kvps.push({ key, value: getJsonStringObject(failure) });
       } else if (preKeys.includes(k)) {
         kvps.push({
           key,

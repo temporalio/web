@@ -117,6 +117,12 @@ const summaryExtractors = {
   WorkflowExecutionFailed: (d) => {
     return { message: d.failure.message };
   },
+  WorkflowTaskFailed: (d) => {
+    return { message: d.failure.message };
+  },
+  ChildWorkflowExecutionFailed: (d) => {
+    return { message: d.failure.message };
+  },
 };
 
 const isKnownEventType = (eventType) => {
