@@ -1,8 +1,8 @@
 <template>
   <div class="archival-disabled-messaging">
     <div class="message-group">
-      <p v-for="(message, index) in archivalDisabledMessage" :key="index">
-        {{ message }}
+      <p>
+        This namespace is currently not enabled for archival.
       </p>
       <div v-if="historyArchivalLinks">
         <div v-for="(link, index) in historyArchivalLinks" :key="index">
@@ -14,7 +14,7 @@
     </div>
     <div v-if="!isHistoryArchivalEnabled" class="message-group">
       <p>
-        {{ historyArchivalDisabledMessage }}
+        Run this command to enable Archival for Event Histories:
       </p>
       <code lang="bash" v-if="historyArchivalEnableCommand">{{
         historyArchivalEnableCommand
@@ -22,7 +22,7 @@
     </div>
     <div v-if="!isVisibilityArchivalEnabled" class="message-group">
       <p>
-        {{ visibilityArchivalDisabledMessage }}
+        To enable Visibility Archival:
       </p>
       <code lang="bash" v-if="visibilityArchivalEnableCommand">{{
         visibilityArchivalEnableCommand
@@ -46,11 +46,8 @@ import {
   replaceNamespace,
 } from '../../helpers';
 import {
-  archivalDisabledMessage,
-  historyArchivalDisabledMessage,
   historyArchivalEnableCommand,
   historyArchivalLinks,
-  visibilityArchivalDisabledMessage,
   visibilityArchivalEnableCommand,
 } from './constants';
 
@@ -59,10 +56,7 @@ export default {
   props: ['namespaceSettings'],
   data() {
     return {
-      archivalDisabledMessage,
-      historyArchivalDisabledMessage,
       historyArchivalLinks,
-      visibilityArchivalDisabledMessage,
     };
   },
   computed: {
