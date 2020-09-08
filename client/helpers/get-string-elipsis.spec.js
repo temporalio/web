@@ -15,7 +15,20 @@ describe('getStringElipsis', () => {
       const input = ''.padEnd(MAXIMUM_JSON_CHARACTER_LIMIT, '_');
       const output = getStringElipsis(input);
 
-      expect(output).toEqual(input + MAXIMUM_JSON_MESSAGE);
+      expect(output).toEqual(input);
+    });
+  });
+
+  describe('when passed a string that has a length greater than MAXIMUM_JSON_CHARACTER_LIMIT', () => {
+    it('should return a substring of the original string up until the limit and display a message.', () => {
+      const input = ''.padEnd(MAXIMUM_JSON_CHARACTER_LIMIT + 1, '_');
+      const output = getStringElipsis(input);
+
+      const expected =
+        ''.padEnd(MAXIMUM_JSON_CHARACTER_LIMIT, '_') +
+        '... ' +
+        MAXIMUM_JSON_MESSAGE;
+      expect(output).toEqual(expected);
     });
   });
 });
