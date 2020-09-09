@@ -178,7 +178,7 @@ router.get(
       ctx.body = ((e.message || '').match(
         /(KnownQueryTypes|knownTypes)=\[(.*)\]/
       ) || [null, null, ''])[2]
-        .replace(',', '')
+        .replace(/,/g, '')
         .split(' ')
         .filter((q) => q);
     }
