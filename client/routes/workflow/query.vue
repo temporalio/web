@@ -18,16 +18,30 @@
         Run
       </a>
     </header>
-    <pre v-if="queryResult && queryResult.payloads">{{ queryResult.payloads }}</pre>
+    <pre v-if="queryResult && queryResult.payloads">{{
+      queryResult.payloads
+    }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
-    <span class="no-queries" v-if="queries && queries.length === 0">
+    <span v-if="!isWorkerRunning">
+      No worker is running for the task queue 
+      <router-link
+        :to="{
+          name: 'task-queue',
+          params: {
+            taskQueue: taskQueueName,
+          },
+        }"
+        >task queue {{ taskQueueName }}
+      </router-link>
+    </span>
+    <span class="no-queries" v-else-if="queries && queries.length === 0">
       No queries registered
     </span>
   </section>
 </template>
 
 <script>
-import { getQueryResult } from './helpers/get-query-result'
+import { getQueryResult } from './helpers/get-query-result';
 
 export default {
   data() {
@@ -36,30 +50,17 @@ export default {
       loading: false,
       queryName: undefined,
       queryInput: undefined,
-      queries: undefined,
+      queries: [],
       queryResult: undefined,
       running: false,
     };
   },
-  props: ['baseAPIURL'],
+  props: ['baseAPIURL', 'taskQueueName', 'isWorkerRunning'],
   created() {
-    this.loading = true;
-    this.$http(`${this.baseAPIURL}/query`)
-      .then(
-        (queries) => {
-          this.queries = queries.filter((query) => query !== '__stack_trace');
-
-          if (!this.queryName) {
-            [this.queryName] = this.queries;
-          }
-        },
-        (e) => {
-          this.error = (e.json && e.json.message) || e.status || e.message;
-        }
-      )
-      .finally(() => {
-        this.loading = false;
-      });
+    if (!this.isWorkerRunning) {
+      return;
+    }
+    this.fetchQueries();
   },
   methods: {
     setQuery(queryName) {
@@ -72,7 +73,7 @@ export default {
       this.$http
         .post(`${this.baseAPIURL}/query/${this.queryName}`)
         .then(
-          ({queryResult}) => {
+          ({ queryResult }) => {
             this.queryResult = getQueryResult(queryResult);
           },
           (e) => {
@@ -82,6 +83,34 @@ export default {
         .finally(() => {
           this.running = false;
         });
+    },
+    fetchQueries() {
+      this.loading = true;
+      return this.$http(`${this.baseAPIURL}/query`)
+        .then(
+          (queries) => {
+            this.queries = queries.filter((query) => query !== '__stack_trace');
+
+            if (!this.queryName) {
+              [this.queryName] = this.queries;
+            }
+          },
+          (e) => {
+            this.error = (e.json && e.json.message) || e.status || e.message;
+          }
+        )
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+  },
+  watch: {
+    isWorkerRunning: function(newVal, oldVal) {
+      if (newVal == false) {
+        this.queries = [];
+        return;
+      }
+      this.fetchQueries();
     },
   },
 };

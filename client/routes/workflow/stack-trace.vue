@@ -12,6 +12,18 @@
     <span class="error" v-if="stackTrace && stackTrace.error">
       {{ stackTrace.error }}
     </span>
+    <span v-if="!isWorkerRunning">
+      No worker is running for the task queue 
+      <router-link
+        :to="{
+          name: 'task-queue',
+          params: {
+            taskQueue: taskQueueName,
+          },
+        }"
+        >{{ taskQueueName }}
+      </router-link>
+    </span>
   </section>
 </template>
 
@@ -27,8 +39,11 @@ export default {
       stackTraceTimestamp: undefined,
     };
   },
-  props: ['baseAPIURL'],
+  props: ['baseAPIURL', 'taskQueueName', 'isWorkerRunning'],
   created() {
+    if (!this.isWorkerRunning) {
+      return;
+    }
     this.getStackTrace();
   },
   methods: {
@@ -51,6 +66,15 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+  },
+  watch: {
+    isWorkerRunning: function(newVal, oldVal) {
+      if (newVal == false) {
+        this.queries = [];
+        return;
+      }
+      this.getStackTrace();
     },
   },
 };
