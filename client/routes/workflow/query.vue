@@ -112,6 +112,9 @@ export default {
       }
       this.fetchQueries();
     },
+    queryName: function(newVal, oldVal) {
+      this.run();
+    },
   },
 };
 </script>
