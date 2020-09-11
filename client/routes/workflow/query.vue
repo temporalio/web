@@ -23,7 +23,7 @@
     }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
     <span v-if="!isWorkerRunning" class="no-queries">
-      There is no Worker currently listening to the Task Queue 
+      There are no Workers currently listening to the Task Queue: 
       <router-link
         :to="{
           name: 'task-queue',
