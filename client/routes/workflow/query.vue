@@ -22,8 +22,8 @@
       queryResult.payloads
     }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
-    <span v-if="!isWorkerRunning">
-      No worker is running for the task queue 
+    <span v-if="!isWorkerRunning" class="no-queries">
+      There is no Worker currently listening to the Task Queue 
       <router-link
         :to="{
           name: 'task-queue',
@@ -31,7 +31,7 @@
             taskQueue: taskQueueName,
           },
         }"
-        >task queue {{ taskQueueName }}
+        >{{ taskQueueName }}
       </router-link>
     </span>
     <span class="no-queries" v-else-if="queries && queries.length === 0">
@@ -159,7 +159,7 @@ section.query {
     display: block;
     width: 100%;
     text-align: center;
-    font-size: 16px;
+    font-size: 20px;
     color: uber-black-60;
   }
 }

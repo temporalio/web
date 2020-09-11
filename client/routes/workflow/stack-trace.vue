@@ -12,8 +12,8 @@
     <span class="error" v-if="stackTrace && stackTrace.error">
       {{ stackTrace.error }}
     </span>
-    <span v-if="!isWorkerRunning">
-      No worker is running for the task queue 
+    <span v-if="!isWorkerRunning" class="no-queries">
+      There is no Worker currently listening to the Task Queue
       <router-link
         :to="{
           name: 'task-queue',
@@ -94,4 +94,12 @@ section.stack-trace
 
 section .stack-trace-view
   white-space pre-wrap
+
+span.no-queries {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  color: uber-black-60;
+}
 </style>
