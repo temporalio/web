@@ -126,6 +126,8 @@
             <DynamicScroller
               key-field="eventId"
               :items="filteredEvents"
+              emit-update
+              @update="onEventsScroll"
               :min-item-size="38"
               ref="scrollerGrid"
               style="height: 0px;"
@@ -186,6 +188,8 @@
               class="scroller-compact"
               key-field="id"
               :items="timelineEvents"
+              emit-update
+              @update="onTimelineEventsScroll"
               :item-size="70"
               ref="scrollerCompact"
               style="height: 0px;"
@@ -506,6 +510,20 @@ export default {
           query: { ...this.$route.query, showGraph: true },
         });
       }
+    },
+    onEventsScroll(startIndex, endIndex) {
+      if (endIndex < this.filteredEvents.length) {
+        return;
+      }
+
+      this.$emit('onEventsScroll', startIndex, endIndex);
+    },
+    onTimelineEventsScroll(startIndex, endIndex) {
+      if (endIndex < this.timelineEvents.length) {
+        return;
+      }
+
+      this.$emit('onEventsScroll', startIndex, endIndex);
     },
   },
   watch: {
