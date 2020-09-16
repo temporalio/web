@@ -50,6 +50,7 @@
       :loading="history.loading"
       :timelineEvents="history.timelineEvents"
       @onNotification="onNotification"
+      @onEventsScroll="onEventsScroll"
     />
     <router-view
       name="stacktrace"
@@ -112,6 +113,9 @@ export default {
   },
   props: ['namespace', 'runId', 'workflowId'],
   created() {
+    this.onBaseApiUrlChange(this.baseAPIURL)
+      .then(() => this.fetchHistoryPage(this.historyUrl))
+      .then(this.fetchTaskQueue);
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
     );
@@ -171,11 +175,6 @@ export default {
         this.unwatch.pop()();
       }
     },
-    clearHistoryUrlWatch() {
-      while (this.unwatch.length > 1) {
-        this.unwatch.pop()();
-      }
-    },
     fetchHistoryPage(pagedHistoryUrl) {
       if (
         !pagedHistoryUrl ||
@@ -187,24 +186,11 @@ export default {
       }
 
       this.history.loading = true;
-      this.pqu = pagedHistoryUrl;
       return this.$http(pagedHistoryUrl)
         .then((res) => {
-          // eslint-disable-next-line no-underscore-dangle
-          if (this._isDestroyed || this.pqu !== pagedHistoryUrl) {
-            return null;
-          }
-
-          if (res.nextPageToken && this.npt === res.nextPageToken) {
-            // nothing happened, and same query is still valid, so let's long pool again
-            return this.fetch(pagedHistoryUrl);
-          }
-
-          if (res.nextPageToken) {
-            setTimeout(() => {
-              this.nextPageToken = res.nextPageToken;
-            });
-          }
+          setTimeout(() => {
+            this.nextPageToken = res.nextPageToken;
+          });
 
           const shouldHighlightEventId =
             this.$route.query.eventId &&
@@ -237,11 +223,6 @@ export default {
           // eslint-disable-next-line no-console
           console.error(error);
 
-          // eslint-disable-next-line no-underscore-dangle
-          if (this._isDestroyed || this.pqu !== pagedHistoryUrl) {
-            return;
-          }
-
           this.$emit('onNotification', {
             message: getErrorMessage(error),
             type: NOTIFICATION_TYPE_ERROR,
@@ -254,10 +235,7 @@ export default {
           );
         })
         .finally(() => {
-          // eslint-disable-next-line no-underscore-dangle
-          if (this._isDestroyed || this.pqu !== pagedHistoryUrl) {
-            this.history.loading = false;
-          }
+          this.history.loading = false;
         });
     },
     onBaseApiUrlChange(baseAPIURL) {
@@ -265,7 +243,6 @@ export default {
         return;
       }
 
-      this.clearHistoryUrlWatch();
       this.clearState();
       this.wfLoading = true;
 
@@ -274,7 +251,6 @@ export default {
           (wf) => {
             this.workflow = wf;
             this.isWorkflowRunning = !wf.workflowExecutionInfo.closeTime;
-            this.setupHistoryUrlWatch();
             this.baseApiUrlRetryCount = 0;
           },
           (error) => {
@@ -293,17 +269,15 @@ export default {
           this.wfLoading = false;
         });
     },
-    onHistoryUrlChange(historyUrl) {
-      this.fetchHistoryPage(historyUrl).then(this.fetchTaskQueue);
-    },
     onNotification(event) {
       this.$emit('onNotification', event);
     },
-    setupHistoryUrlWatch() {
-      this.clearHistoryUrlWatch();
-      this.unwatch.push(
-        this.$watch('historyUrl', this.onHistoryUrlChange, { immediate: true })
-      );
+    onEventsScroll(startIndex, endIndex) {
+      if (this.history.loading || !this.nextPageToken) {
+        return;
+      }
+
+      return this.fetchHistoryPage(this.historyUrl);
     },
     fetchTaskQueue() {
       if (!this.workflow || !this.workflow.executionConfig) {
