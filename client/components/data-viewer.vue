@@ -5,7 +5,7 @@
       class="view-full-screen"
       @click.stop.prevent="viewFullScreen"
     ></a>
-    <prism language="json" ref="codebox">{{ dataPreview }}</prism>
+    <prism language="json" ref="codebox">{{ preview }}</prism>
   </div>
 </template>
 
@@ -13,6 +13,7 @@
 import 'prismjs';
 import 'prismjs/components/prism-json';
 import Prism from 'vue-prism-component';
+import getStringElipsis from '~helpers/get-string-elipsis';
 
 export default {
   name: 'data-viewer',
@@ -28,8 +29,7 @@ export default {
         return;
       }
 
-      const hasMoreJson =
-        this.item.jsonStringFull.length > this.item.jsonStringDisplay.length;
+      const hasMoreJson = this.fullview.length > this.preview.length;
 
       const overflowed =
         el.scrollWidth > el.offsetWidth + 2 ||
@@ -49,11 +49,11 @@ export default {
     this.checkOverflow();
   },
   computed: {
-    dataPreview() {
-      return this.item.jsonStringDisplay;
+    fullview() {
+      return this.item ? JSON.stringify(this.item, null, 2) : '';
     },
-    dataFullview() {
-      return JSON.tryParse(this.item.jsonStringFull);
+    preview() {
+      return this.item ? getStringElipsis(this.fullview) : '';
     },
   },
   beforeDestroy() {
@@ -77,7 +77,7 @@ export default {
           `,
         },
         {
-          code: this.dataFullview,
+          code: this.item,
           title: this.title,
         },
         {

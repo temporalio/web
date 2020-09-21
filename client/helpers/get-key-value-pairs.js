@@ -1,5 +1,4 @@
 import moment from 'moment';
-import getJsonStringObject from './get-json-string-object';
 import { jsonKeys, preKeys } from '~constants';
 
 const getKeyValuePairs = (event) => {
@@ -85,11 +84,11 @@ const getKeyValuePairs = (event) => {
           node = node.cause;
           isRoot = false;
         }
-        kvps.push({ key, value: getJsonStringObject(failure) });
+        kvps.push({ key, value: failure });
       } else if (preKeys.includes(k)) {
         kvps.push({
           key,
-          value: getJsonStringObject(value),
+          value: value?.payloads ?? value,
         });
       } else {
         kvps.push({

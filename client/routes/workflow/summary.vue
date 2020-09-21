@@ -150,7 +150,7 @@ export default {
   data() {
     return {
       terminationReason: undefined,
-      webSettingsCache: undefined
+      webSettingsCache: undefined,
     };
   },
   props: [
@@ -188,20 +188,7 @@ export default {
       );
     },
     resultView() {
-      if (!this.result || !this.result.jsonStringFull) {
-        return this.result;
-      }
-
-      const res = JSON.parse(this.result.jsonStringFull);
-
-      if (res.failure) {
-        return {
-          jsonStringDisplay: { message: res.failure.message },
-          jsonStringFull: res,
-        };
-      }
-
-      return this.result;
+      return this.result?.failure ? this.result?.failure : this.result;
     },
     showTerminate() {
       return this.isWorkflowRunning && this.webSettingsCache?.permitWriteApi;
