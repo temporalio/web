@@ -1,4 +1,4 @@
-export const jsonKeys = ['result', 'input', 'details', 'data', 'failure'];
+export const jsonKeys = ['result', 'input', 'details', 'data', 'failure', 'payloads'];
 export const preKeys = jsonKeys.concat(['stackTrace', 'details.stackTrace']);
 
 export const ENVIRONMENT_LIST = [
