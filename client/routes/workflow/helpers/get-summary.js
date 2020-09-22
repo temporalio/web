@@ -47,7 +47,8 @@ const getSummary = ({ events, isWorkflowRunning, workflow }) => {
       : undefined;
 
   const result = workflowCompletedEvent
-    ? workflowCompletedEvent.details.result?.payloads
+    ? workflowCompletedEvent.details.result?.payloads ??
+      workflowCompletedEvent.details
     : undefined;
 
   const wfStatus = getSummaryWorkflowStatus({
