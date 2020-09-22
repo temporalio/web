@@ -116,14 +116,18 @@ function uiTransform(item) {
       if (subkey === _payloads) {
         let values = [];
         Object.entries(subvalue).forEach(([subkey, payload]) => {
-          const encoding = Buffer.from(payload.metadata.encoding || '').toString();
+          const encoding = Buffer.from(
+            payload.metadata.encoding || ''
+          ).toString();
           if (
             ['json/plain', 'json/protobuf'].includes(encoding) &&
             payload.data
           ) {
             values = [...values, Buffer.from(payload.data || '').toString()];
           } else {
-            values = [...values, Buffer.from(payload.data || '').toString().slice(0, 20)];
+            let data = Buffer.from(payload.data || '').toString('base64');
+            data = data.length > 20 ? `${data.slice(0, 20)}..` : data;
+            values = [...values, data];
           }
         });
         item[_payloads] = values;

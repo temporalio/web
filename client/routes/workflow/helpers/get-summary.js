@@ -1,19 +1,17 @@
 import getSummaryWorkflowStatus from './get-summary-workflow-status';
 import parentWorkflowLink from './parent-workflow-link';
-import {
-  getJsonStringObject,
-  getKeyValuePairs,
-  timestampToDate,
-} from '~helpers';
+import { getKeyValuePairs, timestampToDate } from '~helpers';
 
 const getSummary = ({ events, isWorkflowRunning, workflow }) => {
   const formattedWorkflow = workflow.pendingActivities
     ? {
         ...workflow,
-        pendingActivities: workflow.pendingActivities.map(pendingActivity => ({
-          ...pendingActivity,
-          kvps: getKeyValuePairs(pendingActivity),
-        })),
+        pendingActivities: workflow.pendingActivities.map(
+          (pendingActivity) => ({
+            ...pendingActivity,
+            kvps: getKeyValuePairs(pendingActivity),
+          })
+        ),
       }
     : workflow;
 
@@ -41,7 +39,7 @@ const getSummary = ({ events, isWorkflowRunning, workflow }) => {
   const firstEvent = events[0];
   const lastEvent = events.length > 1 && events[events.length - 1];
 
-  const input = getJsonStringObject(firstEvent.details.input);
+  const input = firstEvent.details.input?.payloads;
 
   const workflowCompletedEvent =
     lastEvent && lastEvent.eventType.startsWith('WorkflowExecution')
@@ -49,9 +47,7 @@ const getSummary = ({ events, isWorkflowRunning, workflow }) => {
       : undefined;
 
   const result = workflowCompletedEvent
-    ? getJsonStringObject(
-        workflowCompletedEvent.details.result || workflowCompletedEvent.details
-      )
+    ? workflowCompletedEvent.details.result?.payloads
     : undefined;
 
   const wfStatus = getSummaryWorkflowStatus({
