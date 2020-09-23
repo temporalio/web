@@ -1,5 +1,17 @@
-export const jsonKeys = ['result', 'input', 'details', 'data', 'failure', 'payloads'];
-export const preKeys = jsonKeys.concat(['stackTrace', 'details.stackTrace']);
+export const failureKeys = ['failure', 'lastFailure'];
+export const jsonKeys = [
+  'result',
+  'input',
+  'details',
+  'data',
+  'payloads',
+];
+export const preKeys = [
+  'stackTrace',
+  'details.stackTrace',
+  ...jsonKeys,
+  ...failureKeys,
+];
 
 export const ENVIRONMENT_LIST = [
   // Make sure to enable "environment-select" in feature-flags.json to enable environment select.
