@@ -3,6 +3,7 @@ export const jsonKeys = [
   'result',
   'input',
   'details',
+  'heartbeatDetails',
   'data',
   'payloads',
 ];
