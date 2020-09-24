@@ -4,7 +4,7 @@ import { preKeys } from '~constants';
 
 export default {
   name: 'detail-list',
-  props: ['compact', 'highlight', 'item', 'title'],
+  props: ['item', 'title'],
   components: {
     'data-viewer': DataViewer,
   },
@@ -17,7 +17,7 @@ export default {
     },
   },
   render(h) {
-    const { highlight, compact, title } = this;
+    const { title } = this;
 
     function dd(kvp) {
       if (kvp.routeLink) {
@@ -29,9 +29,8 @@ export default {
             h('data-viewer', {
               props: {
                 item: kvp.value,
-                compact,
-                highlight,
                 title: `${title} - ${kvp.key}`,
+                maxLines: 3,
               },
             }),
           ]
@@ -41,7 +40,7 @@ export default {
     return h(
       'dl',
       { class: 'details' },
-      this.item.kvps.map(kvp =>
+      this.item.kvps.map((kvp) =>
         h('div', { attrs: { 'data-prop': kvp.key } }, [
           h('dt', null, kvp.key),
           h('dd', null, dd(kvp)),

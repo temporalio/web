@@ -36,10 +36,6 @@ export const ENVIRONMENT_LIST = [
   // },
 ];
 
-export const MAXIMUM_JSON_CHARACTER_LIMIT = 100;
-export const MAXIMUM_JSON_MESSAGE =
-  '\n * to see more open full screen mode from top right arrow.';
-
 export const NOTIFICATION_TYPE_ERROR = 'error';
 export const NOTIFICATION_TYPE_ERROR_MESSAGE_DEFAULT =
   'An unexpected error has occurred. Please try again. If problems persist contact temporal-support.';
