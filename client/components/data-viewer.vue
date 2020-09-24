@@ -1,11 +1,10 @@
 <template>
   <div class="data-viewer">
-    <a
-      href="#"
-      class="view-full-screen"
-      @click.stop.prevent="viewFullScreen"
-    ></a>
-    <prism language="json" ref="codebox">{{ preview }}</prism>
+    <prism language="json" ref="codebox" class="code" :style="maxLinesStl">{{
+      fullview
+    }}</prism>
+    <a href="#" class="view-full-screen" @click.stop.prevent="viewFullScreen">
+    </a>
   </div>
 </template>
 
@@ -13,51 +12,26 @@
 import 'prismjs';
 import 'prismjs/components/prism-json';
 import Prism from 'vue-prism-component';
-import getStringElipsis from '~helpers/get-string-elipsis';
 
 export default {
   name: 'data-viewer',
-  props: ['compact', 'highlight', 'item', 'title'],
+  props: {
+    item: [Object, Array, String, Number],
+    title: String,
+    maxLines: { type: Number, default: 3 },
+  },
   data() {
     return {};
-  },
-  created() {
-    this.checkOverflow = () => {
-      const el = this.$refs.codebox;
-
-      if (!el) {
-        return;
-      }
-
-      const hasMoreJson = this.fullview.length > this.preview.length;
-
-      const overflowed =
-        el.scrollWidth > el.offsetWidth + 2 ||
-        el.scrollHeight > el.offsetHeight + 2;
-
-      const action = hasMoreJson || overflowed ? 'add' : 'remove';
-
-      this.$el.classList[action]('overflow');
-    };
-    window.addEventListener('resize', this.checkOverflow);
-    ['item', 'highlight', 'compact'].forEach((e) =>
-      this.$watch(e, this.checkOverflow)
-    );
-    this.$watch(() => this.$route, this.checkOverflow);
-  },
-  mounted() {
-    this.checkOverflow();
   },
   computed: {
     fullview() {
       return this.item ? JSON.stringify(this.item, null, 2) : '';
     },
-    preview() {
-      return this.item ? getStringElipsis(this.fullview) : '';
+    maxLinesStl() {
+      return {
+        'max-height': `${0.8 + this.maxLines}rem`,
+      };
     },
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.checkOverflow);
   },
   methods: {
     viewFullScreen() {
@@ -97,7 +71,13 @@ export default {
 
 .data-viewer
   position relative
-  &:not(.overflow) a.view-full-screen
+  display flex
+  max-width: 40vw;
+  .code
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  &:not(:hover) a.view-full-screen
     display none
   a.view-full-screen
     position absolute

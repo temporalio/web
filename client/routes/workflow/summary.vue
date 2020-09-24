@@ -73,7 +73,12 @@
       <div class="workflow-result" v-if="resultView" data-cy="workflow-result">
         <dt>Result</dt>
         <dd>
-          <data-viewer :item="resultView" :title="workflowId + ' Result'" />
+          <data-viewer
+            :item="resultView"
+            :title="workflowId + ' Result'"
+            :truncateFrom="200"
+            :maxLines="10"
+          />
         </dd>
       </div>
       <div class="workflow-id" data-cy="workflow-id">
@@ -122,6 +127,7 @@
             v-if="input !== undefined"
             :item="input"
             :title="workflowId + ' Input'"
+            :maxLines="10"
           />
         </dd>
       </div>
