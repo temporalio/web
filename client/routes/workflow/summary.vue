@@ -76,7 +76,6 @@
           <data-viewer
             :item="resultView"
             :title="workflowId + ' Result'"
-            :truncateFrom="200"
             :maxLines="10"
           />
         </dd>
