@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { jsonKeys, preKeys } from '~constants';
+import { failureKeys, jsonKeys, preKeys } from '~constants';
 
 const getKeyValuePairs = (event) => {
   const kvps = [];
@@ -22,6 +22,8 @@ const getKeyValuePairs = (event) => {
           key,
           value: moment.duration(value.duration, 'seconds').format(),
         });
+      } else if (failureKeys.includes(k)) {
+        kvps.push({ key, value: failureToString(value) });
       } else if (typeof value === 'object' && !jsonKeys.includes(key)) {
         flatten(key, value, root);
       } else if (key === 'newExecutionRunId') {
@@ -72,19 +74,6 @@ const getKeyValuePairs = (event) => {
           },
           value,
         });
-      } else if (key === 'failure') {
-        let node = { ...value };
-        let failure = '';
-        let isRoot = true;
-        while (node) {
-          const { message, stackTrace, source } = node;
-          failure += isRoot
-            ? `${source} ${message}\n${stackTrace}`
-            : `\nCaused By: ${source} ${message}\n${stackTrace}`;
-          node = node.cause;
-          isRoot = false;
-        }
-        kvps.push({ key, value: failure });
       } else if (preKeys.includes(k)) {
         kvps.push({
           key,
@@ -103,5 +92,23 @@ const getKeyValuePairs = (event) => {
 
   return kvps;
 };
+
+function failureToString(failure) {
+  let res = '';
+  let node = { ...failure };
+  let isRoot = true;
+  while (node) {
+    const { message, stackTrace, applicationFailureInfo } = node;
+    const type = applicationFailureInfo?.type
+      ? `${applicationFailureInfo.type}: `
+      : '';
+    const trace = stackTrace ? ` \n${stackTrace}` : ``;
+    const err = `${type}${message}${trace}`;
+    res += isRoot ? err : `\nCaused By: ${err}`;
+    node = node.cause;
+    isRoot = false;
+  }
+  return res;
+}
 
 export default getKeyValuePairs;
