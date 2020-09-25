@@ -4,6 +4,7 @@
       fullview
     }}</prism>
     <a href="#" class="view-full-screen" @click.stop.prevent="viewFullScreen">
+      OPEN
     </a>
   </div>
 </template>
@@ -81,13 +82,12 @@ export default {
     display none
   a.view-full-screen
     position absolute
-    top 1px
+    top 3px
     right 0
+    padding: 4px
     margin-right 10px
-    width 28px
     height calc(100% - 6px)
-    max-height 28px
-    // background-color white
+    max-height 24px
     // border 1px solid uber-black-80
     // border-radius 4px
     background-color alpha(uber-white-20, 70%)
