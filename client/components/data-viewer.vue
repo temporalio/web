@@ -1,8 +1,12 @@
 <template>
   <div class="data-viewer">
-    <prism language="json" ref="codebox" class="code" :style="maxLinesStl">{{
-      fullview
-    }}</prism>
+    <prism
+      language="json"
+      ref="codebox"
+      class="code-preview"
+      :style="maxLinesStl"
+      >{{ fullview }}</prism
+    >
     <a href="#" class="view-full-screen" @click.stop.prevent="viewFullScreen">
       OPEN
     </a>
@@ -47,7 +51,7 @@ export default {
                 <copy :text="code" />
                 <a class="close" href="#" @click="$emit('close')"></a>
               </header>
-              <prism language="json">{{code}}</prism>
+              <prism language="json" class="code-fullscreen">{{code}}</prism>
             </div>
           `,
         },
@@ -74,7 +78,7 @@ export default {
   position relative
   display flex
   max-width: 40vw;
-  .code
+  .code-preview
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
@@ -108,6 +112,7 @@ export default {
     pre
       flex 1
       overflow auto
+      white-space : pre-wrap
     header
       padding-right 30px
       h3

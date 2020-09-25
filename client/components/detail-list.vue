@@ -30,7 +30,7 @@ export default {
               props: {
                 item: kvp.value,
                 title: `${title} - ${kvp.key}`,
-                maxLines: 3,
+                maxLines: 8,
               },
             }),
           ]
