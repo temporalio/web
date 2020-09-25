@@ -23,7 +23,7 @@ const summaryExtractors = {
     identity: d.identity,
     requestId: d.requestId,
   }),
-  ActivityTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
+  ActivityTaskTimedOut: (d) => ({ message: d.failure?.cause?.message }),
   ChildWorkflowExecutionCompleted: (d) => ({
     result: d.result,
     Workflow: workflowLink(d, true),
@@ -114,15 +114,9 @@ const summaryExtractors = {
 
     return summary;
   },
-  WorkflowExecutionFailed: (d) => {
-    return { message: d.failure.message };
-  },
-  WorkflowTaskFailed: (d) => {
-    return { message: d.failure.message };
-  },
-  ChildWorkflowExecutionFailed: (d) => {
-    return { message: d.failure.message };
-  },
+  WorkflowExecutionFailed: (d) => ({ message: d.failure?.message }),
+  WorkflowTaskFailed: (d) => ({ message: d.failure?.message }),
+  ChildWorkflowExecutionFailed: (d) => ({ message: d.failure?.message }),
 };
 
 const isKnownEventType = (eventType) => {
