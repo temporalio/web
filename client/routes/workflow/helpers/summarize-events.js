@@ -23,7 +23,9 @@ const summaryExtractors = {
     identity: d.identity,
     requestId: d.requestId,
   }),
-  ActivityTaskTimedOut: (d) => ({ message: d.failure?.cause?.message }),
+  ActivityTaskTimedOut: (d) => ({
+    'Timeout Type': d.failure?.timeoutFailureInfo?.timeoutType,
+  }),
   ChildWorkflowExecutionCompleted: (d) => ({
     result: d.result,
     Workflow: workflowLink(d, true),
