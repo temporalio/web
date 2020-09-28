@@ -113,7 +113,6 @@ export default {
   },
   props: ['namespace', 'runId', 'workflowId'],
   created() {
-    this.onBaseApiUrlChange(this.baseAPIURL);
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
     );
