@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     version() {
-      return `v${version}`;
+      return `v${version} web`;
     },
   },
 };
