@@ -70,6 +70,25 @@
           </router-link>
         </dd>
       </div>
+      <div class="workflow-id" data-cy="workflow-id">
+        <dt>Workflow Id</dt>
+        <dd>{{ workflowId }}</dd>
+      </div>
+      <div class="run-id" data-cy="run-id">
+        <dt>Run Id</dt>
+        <dd>{{ runId }}</dd>
+      </div>
+      <div class="workflow-input" data-cy="workflow-input">
+        <dt>Input</dt>
+        <dd>
+          <data-viewer
+            v-if="input !== undefined"
+            :item="input"
+            :title="workflowId + ' Input'"
+            :maxLines="10"
+          />
+        </dd>
+      </div>
       <div class="workflow-result" v-if="resultView" data-cy="workflow-result">
         <dt>Result</dt>
         <dd>
@@ -79,14 +98,6 @@
             :maxLines="10"
           />
         </dd>
-      </div>
-      <div class="workflow-id" data-cy="workflow-id">
-        <dt>Workflow Id</dt>
-        <dd>{{ workflowId }}</dd>
-      </div>
-      <div class="run-id" data-cy="run-id">
-        <dt>Run Id</dt>
-        <dd>{{ runId }}</dd>
       </div>
       <div
         class="parent-workflow"
@@ -118,17 +129,6 @@
       <div class="history-length" data-cy="history-length">
         <dt>History Events</dt>
         <dd>{{ workflow.workflowExecutionInfo.historyLength }}</dd>
-      </div>
-      <div class="workflow-input" data-cy="workflow-input">
-        <dt>Input</dt>
-        <dd>
-          <data-viewer
-            v-if="input !== undefined"
-            :item="input"
-            :title="workflowId + ' Input'"
-            :maxLines="10"
-          />
-        </dd>
       </div>
       <div
         class="pending-activities"
