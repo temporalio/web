@@ -113,9 +113,7 @@ export default {
   },
   props: ['namespace', 'runId', 'workflowId'],
   created() {
-    this.onBaseApiUrlChange(this.baseAPIURL)
-      .then(() => this.fetchHistoryPage(this.historyUrl))
-      .then(this.fetchTaskQueue);
+    this.onBaseApiUrlChange(this.baseAPIURL);
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
     );
@@ -175,7 +173,7 @@ export default {
         this.unwatch.pop()();
       }
     },
-    fetchHistoryPage(pagedHistoryUrl) {
+    async fetchHistoryPage(pagedHistoryUrl) {
       if (
         !pagedHistoryUrl ||
         this.fetchHistoryPageRetryCount >= RETRY_COUNT_MAX
@@ -238,7 +236,7 @@ export default {
           this.history.loading = false;
         });
     },
-    onBaseApiUrlChange(baseAPIURL) {
+    async onBaseApiUrlChange(baseAPIURL) {
       if (this.baseApiUrlRetryCount >= RETRY_COUNT_MAX) {
         return;
       }
@@ -246,7 +244,7 @@ export default {
       this.clearState();
       this.wfLoading = true;
 
-      return this.$http(baseAPIURL)
+      await this.$http(baseAPIURL)
         .then(
           (wf) => {
             this.workflow = wf;
@@ -268,6 +266,9 @@ export default {
         .finally(() => {
           this.wfLoading = false;
         });
+
+      await this.fetchHistoryPage(this.historyUrl)
+      await this.fetchTaskQueue()
     },
     onNotification(event) {
       this.$emit('onNotification', event);
@@ -279,7 +280,7 @@ export default {
 
       return this.fetchHistoryPage(this.historyUrl);
     },
-    fetchTaskQueue() {
+    async fetchTaskQueue() {
       if (!this.workflow || !this.workflow.executionConfig) {
         return Promise.reject('task queue name is required');
       }
