@@ -1,4 +1,4 @@
-export const failureKeys = ['failure', 'lastFailure'];
+export const failureKeys = ['failure', 'lastFailure', 'continuedFailure'];
 export const jsonKeys = [
   'result',
   'input',
