@@ -3,6 +3,7 @@
     <header class="filters">
       <template v-if="filterMode === 'advanced'">
         <div class="field query-string">
+          <query-builder :searchAttributes="searchAttributes" />
           <input
             type="search"
             class="query-string"
@@ -116,6 +117,7 @@ import debounce from 'lodash-es/debounce';
 import orderBy from 'lodash-es/orderBy';
 import pagedGrid from '~components/paged-grid';
 import { DateRangePicker } from '~components';
+import { QueryBuilder } from '~components';
 import {
   getEndTimeIsoString,
   getStartTimeIsoString,
@@ -128,6 +130,7 @@ export default pagedGrid({
     return {
       loading: true,
       results: [],
+      searchAttributes: [],
       error: undefined,
       nextPageToken: undefined,
       statuses: [
@@ -178,6 +181,7 @@ export default pagedGrid({
   },
   components: {
     'date-range-picker': DateRangePicker,
+    'query-builder': QueryBuilder,
   },
   computed: {
     fetchUrl() {
@@ -446,6 +450,14 @@ export default pagedGrid({
       } else {
         this.filterMode = 'advanced';
       }
+    },
+    fetchSearchAttributes() {
+      return this.$http(`/api/cluster/search-attributes`);
+    },
+  },
+  watch: {
+    async filterMode() {
+      this.searchAttributes = await this.fetchSearchAttributes();
     },
   },
 });

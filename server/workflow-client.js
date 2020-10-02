@@ -173,6 +173,7 @@ function enumTransform(item) {
     'timeout_type',
     'archival_state',
     'retry_state',
+    'indexed_value_type'
   ];
 
   const itemL = item.toLowerCase();
@@ -477,6 +478,12 @@ WorkflowClient.prototype.describeTaskQueue = async function({
 }) {
   const req = { namespace, taskQueue, taskQueueType };
   const res = await this.client.describeTaskQueueAsync(req);
+
+  return uiTransform(res);
+};
+
+WorkflowClient.prototype.getSearchAttributes = async function() {
+  const res = await this.client.getSearchAttributesAsync({});
 
   return uiTransform(res);
 };

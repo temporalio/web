@@ -349,4 +349,8 @@ router.get('/api/web-settings', (ctx) => {
   };
 });
 
+router.get('/api/cluster/search-attributes', async function(ctx) {
+  ctx.body = await wfClient.getSearchAttributes();
+});
+
 module.exports = router;
