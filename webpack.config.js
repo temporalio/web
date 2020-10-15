@@ -38,7 +38,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Temporal',
       filename: 'index.html',
-      favicon: 'favicon.svg',
+      favicon: 'favicon.ico',
       inject: false,
       template: require('html-webpack-template'),
       lang: 'en-US',
