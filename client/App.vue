@@ -1,7 +1,7 @@
 <script>
 import { version } from '../package.json';
 import logo from './assets/logo.svg';
-import { FeatureFlag, NotificationBar } from '~components';
+import { FeatureFlag, NotificationBar, AnnouncementBar } from '~components';
 import {
   ENVIRONMENT_LIST,
   NOTIFICATION_TIMEOUT,
@@ -17,6 +17,7 @@ export default {
   components: {
     'feature-flag': FeatureFlag,
     'notification-bar': NotificationBar,
+    'announcement-bar': AnnouncementBar,
   },
   data() {
     const { origin } = window.location;
@@ -39,6 +40,11 @@ export default {
         show: false,
         type: '',
         timeout: undefined,
+      },
+      announcement: {
+        message: '🪐 newer version is avaialable',
+        show: false,
+        link: ''
       },
     };
   },
@@ -84,6 +90,9 @@ export default {
     onNotificationClose() {
       this.notification.show = false;
     },
+    onAnnouncementClose() {
+      this.announcement.show = false;
+    },
   },
   watch: {
     'notification.show'(value) {
@@ -112,6 +121,12 @@ export default {
       :onClose="onNotificationClose"
       :show="notification.show"
       :type="notification.type"
+    />
+    <announcement-bar
+      :message="announcement.message"
+      :onClose="onAnnouncementClose"
+      :show="announcement.show"
+      :link="announcement.link"
     />
     <header class="top-bar">
       <a href="/namespaces" class="logo">

@@ -16,3 +16,4 @@ export { default as NavigationLink } from './navigation-link';
 export { default as NoResults } from './no-results';
 export { default as NotificationBar } from './notification-bar';
 export { default as TextInput } from './text-input';
+export { default as AnnouncementBar } from './announcement-bar';
