@@ -35,7 +35,7 @@ export default {
 
   .message {
     &:hover {
-      tailwind-blue;
+      color: tailwind-blue;
     }
   }
 
