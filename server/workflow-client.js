@@ -481,4 +481,10 @@ WorkflowClient.prototype.describeTaskQueue = async function({
   return uiTransform(res);
 };
 
+WorkflowClient.prototype.getVersionInfo = async function() {
+  const res = await this.client.getClusterInfoAsync({});
+
+  return uiTransform(res.versionInfo);
+};
+
 module.exports = WorkflowClient;
