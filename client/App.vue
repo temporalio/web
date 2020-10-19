@@ -13,6 +13,11 @@ import {
   getEnvironmentLocation,
 } from '~helpers';
 
+import {
+  discardVersionAnnouncement,
+  getNewVersionAnnouncement,
+} from '~features/version-info';
+
 export default {
   components: {
     'feature-flag': FeatureFlag,
@@ -42,14 +47,26 @@ export default {
         timeout: undefined,
       },
       announcement: {
-        message: '🪐 newer version is avaialable',
+        message: '',
         show: false,
-        link: ''
+        link: '',
       },
+      onVersionAnnouncementClose: () => {},
     };
   },
   beforeDestroy() {
     clearTimeout(this.notification.timeout);
+  },
+  async created() {
+    const { show, message, link, version } = await getNewVersionAnnouncement(
+      this.$http,
+      this.onNotification
+    );
+    this.announcement = { show, message, link };
+    if (version) {
+      this.onVersionAnnouncementClose = () =>
+        discardVersionAnnouncement(version);
+    }
   },
   methods: {
     globalClick(e) {
@@ -92,6 +109,7 @@ export default {
     },
     onAnnouncementClose() {
       this.announcement.show = false;
+      this.onVersionAnnouncementClose();
     },
   },
   watch: {

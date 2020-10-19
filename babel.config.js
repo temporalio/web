@@ -6,7 +6,8 @@ module.exports = {
         "alias": {
           "~constants": "./client/constants",
           "~components": "./client/components",
-          "~helpers": "./client/helpers"
+          "~helpers": "./client/helpers",
+          "~features": "./client/features"
         }
       }
     ],
