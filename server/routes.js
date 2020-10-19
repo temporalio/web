@@ -349,4 +349,9 @@ router.get('/api/web-settings', (ctx) => {
   };
 });
 
+router.get('/api/cluster/version-info', async (ctx) => {
+  const res = await wfClient.getVersionInfo();
+  ctx.body = res;
+});
+
 module.exports = router;
