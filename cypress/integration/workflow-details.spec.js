@@ -2,12 +2,11 @@
 
 context('Workflow Details', () => {
   beforeEach(() => {
-    cy.visit('/namespaces/namespace-web-e2e/workflows?range=last-5-days&status=OPEN');
+    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows?status=OPEN`);
 
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
-      .eq(0)
       .find('[data-cy=workflow-link]')
+      .eq(0)
       .click();
     cy.url().should('include', '/summary');
   });
