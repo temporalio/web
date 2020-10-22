@@ -2,7 +2,7 @@
 
 context('Workflow Summary', () => {
   beforeEach(() => {
-    cy.visit('/namespaces/namespace-web-e2e/workflows?range=last-5-days&status=WORKFLOW_EXECUTION_STATUS_TIMED_OUT');
+    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows?range=last-5-days&status=WORKFLOW_EXECUTION_STATUS_TIMED_OUT`);
 
     cy.get('[data-cy=workflow-list]')
       .find('tr')

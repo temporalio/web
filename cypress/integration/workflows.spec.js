@@ -2,7 +2,7 @@
 
 context('Workflows', () => {
   beforeEach(() => {
-    cy.visit('/namespaces/namespace-web-e2e/workflows');
+    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows`);
   });
 
   it('navigates to open workflows as default', () => {
@@ -78,7 +78,7 @@ context('Workflows', () => {
       .find('[data-cy=workflow-link]')
       .click();
 
-      cy.url().should('include', '/namespaces/namespace-web-e2e/workflows/wf_timedout/');
+      cy.url().should('include', `/namespaces/${Cypress.env('namespace_id')}/workflows/wf_timedout/`);
       cy.url().should('include', '/summary');
   });
 });
