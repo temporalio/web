@@ -349,6 +349,10 @@ router.get('/api/web-settings', (ctx) => {
   };
 });
 
+router.get('/api/cluster/search-attributes', async function(ctx) {
+  ctx.body = await wfClient.getSearchAttributes();
+});
+
 router.get('/api/cluster/version-info', async (ctx) => {
   const res = await wfClient.getVersionInfo();
   ctx.body = res;

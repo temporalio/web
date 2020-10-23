@@ -3,16 +3,10 @@
     <header class="filters">
       <template v-if="filterMode === 'advanced'">
         <div class="field query-string">
-          <input
-            type="search"
-            class="query-string"
-            placeholder=" "
-            key="sql-query"
-            name="queryString"
-            v-bind:value="$route.query.queryString"
-            @input="setWorkflowFilter"
+          <workflow-filter-autocomplete
+            :searchAttributes="searchAttributes"
+            @filterChanged="setQueryString"
           />
-          <label for="queryString">Query</label>
         </div>
       </template>
       <template v-else>
@@ -115,7 +109,7 @@ import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import orderBy from 'lodash-es/orderBy';
 import pagedGrid from '~components/paged-grid';
-import { DateRangePicker } from '~components';
+import { DateRangePicker, WorkflowFilterAutocomplete } from '~components';
 import {
   getEndTimeIsoString,
   getStartTimeIsoString,
@@ -145,28 +139,12 @@ export default pagedGrid({
       ],
       maxRetentionDays: 30,
       filterMode: 'basic',
+      searchAttributes: [],
     };
   },
   created() {
-    this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
-      this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
-        ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
-        : 30;
-
-      if (!this.isRouteRangeValid(this.minStartDate)) {
-        const prevRange = localStorage.getItem(
-          `${this.namespace}:workflows-time-range`
-        );
-
-        if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
-          this.setRange(prevRange);
-        } else {
-          this.setRange(`last-${Math.min(30, this.maxRetentionDays)}-days`);
-        }
-      }
-    });
-
-    this.$watch('queryOnChange', () => {}, { immediate: true });
+    this.fetchNamespace();
+    this.fetchWorkflows();
   },
   mounted() {
     this.interval = setInterval(() => {
@@ -178,6 +156,7 @@ export default pagedGrid({
   },
   components: {
     'date-range-picker': DateRangePicker,
+    'workflow-filter-autocomplete': WorkflowFilterAutocomplete,
   },
   computed: {
     fetchUrl() {
@@ -266,16 +245,6 @@ export default pagedGrid({
 
       return criteria;
     },
-    queryOnChange() {
-      if (!this.criteria) {
-        return;
-      }
-
-      const { fetchUrl, nextPageToken } = this;
-      const query = { ...this.criteria, nextPageToken };
-
-      this.fetch(fetchUrl, query);
-    },
     queryString() {
       return this.$route.query.queryString;
     },
@@ -357,6 +326,10 @@ export default pagedGrid({
         target.getAttribute('name'),
         target.value.trim()
       );
+    },
+    setQueryString(value) {
+      this.$route.query.queryString = value;
+      this.$router.replaceQueryParam('queryString', encodeURI(value.trim()));
     },
     setStatus(status) {
       if (status) {
@@ -446,6 +419,49 @@ export default pagedGrid({
       } else {
         this.filterMode = 'advanced';
       }
+    },
+    fetchSearchAttributes() {
+      return this.$http(`/api/cluster/search-attributes`);
+    },
+    fetchNamespace() {
+      return this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
+        this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
+          ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
+          : 30;
+
+        if (!this.isRouteRangeValid(this.minStartDate)) {
+          const prevRange = localStorage.getItem(
+            `${this.namespace}:workflows-time-range`
+          );
+
+          if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
+            this.setRange(prevRange);
+          } else {
+            this.setRange(`last-${Math.min(30, this.maxRetentionDays)}-days`);
+          }
+        }
+      });
+    },
+    fetchWorkflows() {
+      if (!this.criteria) {
+        return;
+      }
+
+      const { fetchUrl, nextPageToken } = this;
+      const query = { ...this.criteria, nextPageToken };
+
+      if (query.queryString) {
+        query.queryString = decodeURI(query.queryString);
+      }
+      return this.fetch(fetchUrl, query);
+    },
+  },
+  watch: {
+    async filterMode() {
+      this.searchAttributes = await this.fetchSearchAttributes();
+    },
+    criteria(newCriteria) {
+      this.fetchWorkflows();
     },
   },
 });
