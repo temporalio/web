@@ -68,45 +68,12 @@
       }}</a>
     </header>
     <span class="error" v-if="error">{{ error }}</span>
-    <span class="no-results" v-if="showNoResults">No Results</span>
-    <section
-      class="results"
-      v-infinite-scroll="nextPage"
-      infinite-scroll-disabled="disableInfiniteScroll"
-      infinite-scroll-distance="20"
-      infinite-scroll-immediate-check="false"
-      data-cy="workflow-list"
-    >
-      <table v-show="showTable">
-        <thead>
-          <th>Workflow ID</th>
-          <th>Run ID</th>
-          <th>Name</th>
-          <th>Status</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-        </thead>
-        <tbody>
-          <tr v-for="wf in results" :key="wf.runId">
-            <td>{{ wf.workflowId }}</td>
-            <td>
-              <router-link
-                :to="{
-                  name: 'workflow/summary',
-                  params: { runId: wf.runId, workflowId: wf.workflowId },
-                }"
-                data-cy="workflow-link"
-                >{{ wf.runId }}</router-link
-              >
-            </td>
-            <td>{{ wf.workflowName }}</td>
-            <td :class="wf.status">{{ wf.status }}</td>
-            <td>{{ wf.startTime }}</td>
-            <td>{{ wf.endTime }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <workflows-grid
+      :workflows="results"
+      :loading="loading"
+      @onWorkflowsScroll="onWorkflowsScroll"
+      v-if="!error"
+    />
   </section>
 </template>
 
@@ -115,7 +82,7 @@ import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import orderBy from 'lodash-es/orderBy';
 import pagedGrid from '~components/paged-grid';
-import { DateRangePicker } from '~components';
+import { DateRangePicker, WorkflowsGrid } from '~components';
 import {
   getEndTimeIsoString,
   getStartTimeIsoString,
@@ -126,7 +93,7 @@ export default pagedGrid({
   props: ['namespace'],
   data() {
     return {
-      loading: true,
+      loading: false,
       results: [],
       error: undefined,
       nextPageToken: undefined,
@@ -148,25 +115,8 @@ export default pagedGrid({
     };
   },
   created() {
-    this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
-      this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
-        ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
-        : 30;
-
-      if (!this.isRouteRangeValid(this.minStartDate)) {
-        const prevRange = localStorage.getItem(
-          `${this.namespace}:workflows-time-range`
-        );
-
-        if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
-          this.setRange(prevRange);
-        } else {
-          this.setRange(`last-${Math.min(30, this.maxRetentionDays)}-days`);
-        }
-      }
-    });
-
-    this.$watch('queryOnChange', () => {}, { immediate: true });
+    this.fetchNamespace();
+    this.fetchWorkflows();
   },
   mounted() {
     this.interval = setInterval(() => {
@@ -178,6 +128,7 @@ export default pagedGrid({
   },
   components: {
     'date-range-picker': DateRangePicker,
+    'workflows-grid': WorkflowsGrid,
   },
   computed: {
     fetchUrl() {
@@ -266,16 +217,6 @@ export default pagedGrid({
 
       return criteria;
     },
-    queryOnChange() {
-      if (!this.criteria) {
-        return;
-      }
-
-      const { fetchUrl, nextPageToken } = this;
-      const query = { ...this.criteria, nextPageToken };
-
-      this.fetch(fetchUrl, query);
-    },
     queryString() {
       return this.$route.query.queryString;
     },
@@ -350,6 +291,34 @@ export default pagedGrid({
       typeof Mocha === 'undefined' ? 200 : 60,
       { maxWait: 1000 }
     ),
+    fetchNamespace() {
+      return this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
+        this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
+          ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
+          : 30;
+        if (!this.isRouteRangeValid(this.minStartDate)) {
+          const prevRange = localStorage.getItem(
+            `${this.namespace}:workflows-time-range`
+          );
+          if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
+            this.setRange(prevRange);
+          } else {
+            this.setRange(`last-${Math.min(30, this.maxRetentionDays)}-days`);
+          }
+        }
+      });
+    },
+    fetchWorkflows() {
+      if (!this.criteria || this.loading) {
+        return;
+      }
+      const { fetchUrl, npt: nextPageToken } = this;
+      const query = { ...this.criteria, nextPageToken };
+      if (query.queryString) {
+        query.queryString = decodeURI(query.queryString);
+      }
+      return this.fetch(fetchUrl, query);
+    },
     setWorkflowFilter(e) {
       const target = e.target || e.testTarget; // test hook since Event.target is readOnly and unsettable
 
@@ -447,6 +416,19 @@ export default pagedGrid({
         this.filterMode = 'advanced';
       }
     },
+    onWorkflowsScroll(startIndex, endIndex) {
+      if (this.loading || !this.npt) {
+        return;
+      }
+
+      return this.fetchWorkflows();
+    },
+  },
+  watch: {
+    criteria(newCriteria) {
+      this.results = []
+      this.fetchWorkflows();
+    },
   },
 });
 </script>
@@ -485,24 +467,6 @@ section.workflow-list
     a.toggle-filter
       action-button()
 
-  paged-grid()
-
-  section.results {
-    flex: auto;
-  }
-
   &.loading section.results table
     opacity 0.7
-
-  table
-    td:nth-child(4)
-      text-transform capitalize
-      &.completed
-        color uber-green
-      &.failed
-        color uber-orange
-      &.open
-        color uber-blue-120
-    td:nth-child(5), td:nth-child(6)
-      one-liner-ellipsis()
 </style>
