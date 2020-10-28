@@ -198,8 +198,6 @@ export default pagedGrid({
         workflowName,
       } = this;
 
-      this.nextPageToken = undefined;
-
       if (!startTime || !endTime) {
         return null;
       }
@@ -242,21 +240,57 @@ export default pagedGrid({
     },
   },
   methods: {
-    fetch: debounce(
+    refreshWorkflows: debounce(
+      function refreshWorkflows() {
+        this.results = [];
+        this.npt = undefined;
+        this.fetchWorkflows();
+      },
+      typeof Mocha === 'undefined' ? 200 : 60,
+      { maxWait: 1000 }
+    ),
+    async fetch(url, query) {
+      this.loading = true;
+      this.error = undefined;
+
+      let workflows = [];
+      let nextPageToken;
+
+      try {
+        let res = await this.$http(url, { query });
+
+        res.executions = res.executions.map((data) => ({
+          ...data,
+          startTime: timestampToDate(data.startTime),
+          closeTime: timestampToDate(data.closeTime),
+        }));
+
+        const orderField = this.state === 'open' ? 'startTime' : 'closeTime';
+        const executions = orderBy(res.executions, orderField, ['desc']);
+
+        workflows = executions.map((data) => ({
+          workflowId: data.execution.workflowId,
+          runId: data.execution.runId,
+          workflowName: data.type.name,
+          startTime: data.startTime.format('lll'),
+          endTime: data.closeTime ? data.closeTime.format('lll') : '',
+          status: (data.status || 'open').toLowerCase(),
+        }));
+
+        nextPageToken = res.nextPageToken;
+      } catch (e) {
+        this.error = (e.json && e.json.message) || e.status || e.message;
+      }
+
+      this.loading = false;
+      return { workflows, nextPageToken };
+    },
+    fetch2: debounce(
       function fetch(url, query) {
         this.loading = true;
         this.error = undefined;
 
         return this.$http(url, { query })
-          .then((res) => {
-            res.executions = res.executions.map((data) => ({
-              ...data,
-              startTime: timestampToDate(data.startTime),
-              closeTime: timestampToDate(data.closeTime),
-            }));
-
-            return res;
-          })
           .then((res) => {
             this.npt = res.nextPageToken;
             this.loading = false;
@@ -308,16 +342,24 @@ export default pagedGrid({
         }
       });
     },
-    fetchWorkflows() {
+    async fetchWorkflows() {
       if (!this.criteria || this.loading) {
         return;
       }
-      const { fetchUrl, npt: nextPageToken } = this;
-      const query = { ...this.criteria, nextPageToken };
+      const query = { ...this.criteria, nextPageToken: this.npt };
       if (query.queryString) {
         query.queryString = decodeURI(query.queryString);
       }
-      return this.fetch(fetchUrl, query);
+
+      const { workflows, nextPageToken } = await this.fetch(
+        this.fetchUrl,
+        query
+      );
+
+      this.results = query.nextPageToken
+        ? this.results.concat(workflows)
+        : workflows;
+      this.npt = nextPageToken;
     },
     setWorkflowFilter(e) {
       const target = e.target || e.testTarget; // test hook since Event.target is readOnly and unsettable
@@ -426,8 +468,7 @@ export default pagedGrid({
   },
   watch: {
     criteria(newCriteria) {
-      this.results = []
-      this.fetchWorkflows();
+      this.refreshWorkflows();
     },
   },
 });

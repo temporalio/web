@@ -9,7 +9,7 @@
       <div class="col col-end">End Time</div>
     </div>
     <div class="spacer" />
-    <span class="no-results" v-if="!anyWorkflows">No Results</span>
+    <no-results :results="workflows" />
     <RecycleScroller
       key-field="runId"
       :items="workflows"
@@ -48,9 +48,11 @@
 import moment from 'moment';
 import orderBy from 'lodash-es/orderBy';
 import { RecycleScroller } from 'vue-virtual-scroller';
+import { NoResults } from '~components';
 
 export default {
-  name: 'workflows-grid',  props: ['workflows', 'onWorkflowsScroll', 'loading'],
+  name: 'workflows-grid',
+  props: ['workflows', 'onWorkflowsScroll', 'loading'],
   data() {
     return {
       nextPageToken: undefined,
@@ -72,6 +74,7 @@ export default {
   },
   components: {
     RecycleScroller,
+    'no-results': NoResults,
   },
 };
 </script>
