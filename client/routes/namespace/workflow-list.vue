@@ -68,45 +68,12 @@
       }}</a>
     </header>
     <span class="error" v-if="error">{{ error }}</span>
-    <span class="no-results" v-if="showNoResults">No Results</span>
-    <section
-      class="results"
-      v-infinite-scroll="nextPage"
-      infinite-scroll-disabled="disableInfiniteScroll"
-      infinite-scroll-distance="20"
-      infinite-scroll-immediate-check="false"
-      data-cy="workflow-list"
-    >
-      <table v-show="showTable">
-        <thead>
-          <th>Workflow ID</th>
-          <th>Run ID</th>
-          <th>Name</th>
-          <th>Status</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-        </thead>
-        <tbody>
-          <tr v-for="wf in results" :key="wf.runId">
-            <td>{{ wf.workflowId }}</td>
-            <td>
-              <router-link
-                :to="{
-                  name: 'workflow/summary',
-                  params: { runId: wf.runId, workflowId: wf.workflowId },
-                }"
-                data-cy="workflow-link"
-                >{{ wf.runId }}</router-link
-              >
-            </td>
-            <td>{{ wf.workflowName }}</td>
-            <td :class="wf.status">{{ wf.status }}</td>
-            <td>{{ wf.startTime }}</td>
-            <td>{{ wf.endTime }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <workflows-grid
+      :workflows="results"
+      :loading="loading"
+      @onWorkflowsScroll="onWorkflowsScroll"
+      v-if="!error"
+    />
   </section>
 </template>
 
@@ -115,7 +82,7 @@ import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import orderBy from 'lodash-es/orderBy';
 import pagedGrid from '~components/paged-grid';
-import { DateRangePicker } from '~components';
+import { DateRangePicker, WorkflowsGrid } from '~components';
 import {
   getEndTimeIsoString,
   getStartTimeIsoString,
@@ -126,7 +93,7 @@ export default pagedGrid({
   props: ['namespace'],
   data() {
     return {
-      loading: true,
+      loading: false,
       results: [],
       error: undefined,
       nextPageToken: undefined,
@@ -148,25 +115,8 @@ export default pagedGrid({
     };
   },
   created() {
-    this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
-      this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
-        ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
-        : 30;
-
-      if (!this.isRouteRangeValid(this.minStartDate)) {
-        const prevRange = localStorage.getItem(
-          `${this.namespace}:workflows-time-range`
-        );
-
-        if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
-          this.setRange(prevRange);
-        } else {
-          this.setRange(`last-${Math.min(30, this.maxRetentionDays)}-days`);
-        }
-      }
-    });
-
-    this.$watch('queryOnChange', () => {}, { immediate: true });
+    this.fetchNamespace();
+    this.fetchWorkflows();
   },
   mounted() {
     this.interval = setInterval(() => {
@@ -178,6 +128,7 @@ export default pagedGrid({
   },
   components: {
     'date-range-picker': DateRangePicker,
+    'workflows-grid': WorkflowsGrid,
   },
   computed: {
     fetchUrl() {
@@ -247,8 +198,6 @@ export default pagedGrid({
         workflowName,
       } = this;
 
-      this.nextPageToken = undefined;
-
       if (!startTime || !endTime) {
         return null;
       }
@@ -265,16 +214,6 @@ export default pagedGrid({
       };
 
       return criteria;
-    },
-    queryOnChange() {
-      if (!this.criteria) {
-        return;
-      }
-
-      const { fetchUrl, nextPageToken } = this;
-      const query = { ...this.criteria, nextPageToken };
-
-      this.fetch(fetchUrl, query);
     },
     queryString() {
       return this.$route.query.queryString;
@@ -301,21 +240,57 @@ export default pagedGrid({
     },
   },
   methods: {
-    fetch: debounce(
+    refreshWorkflows: debounce(
+      function refreshWorkflows() {
+        this.results = [];
+        this.npt = undefined;
+        this.fetchWorkflows();
+      },
+      typeof Mocha === 'undefined' ? 200 : 60,
+      { maxWait: 1000 }
+    ),
+    async fetch(url, query) {
+      this.loading = true;
+      this.error = undefined;
+
+      let workflows = [];
+      let nextPageToken;
+
+      try {
+        let res = await this.$http(url, { query });
+
+        res.executions = res.executions.map((data) => ({
+          ...data,
+          startTime: timestampToDate(data.startTime),
+          closeTime: timestampToDate(data.closeTime),
+        }));
+
+        const orderField = this.state === 'open' ? 'startTime' : 'closeTime';
+        const executions = orderBy(res.executions, orderField, ['desc']);
+
+        workflows = executions.map((data) => ({
+          workflowId: data.execution.workflowId,
+          runId: data.execution.runId,
+          workflowName: data.type.name,
+          startTime: data.startTime.format('lll'),
+          endTime: data.closeTime ? data.closeTime.format('lll') : '',
+          status: (data.status || 'open').toLowerCase(),
+        }));
+
+        nextPageToken = res.nextPageToken;
+      } catch (e) {
+        this.error = (e.json && e.json.message) || e.status || e.message;
+      }
+
+      this.loading = false;
+      return { workflows, nextPageToken };
+    },
+    fetch2: debounce(
       function fetch(url, query) {
         this.loading = true;
         this.error = undefined;
 
         return this.$http(url, { query })
-          .then((res) => {
-            res.executions = res.executions.map((data) => ({
-              ...data,
-              startTime: timestampToDate(data.startTime),
-              closeTime: timestampToDate(data.closeTime),
-            }));
-
-            return res;
-          })
           .then((res) => {
             this.npt = res.nextPageToken;
             this.loading = false;
@@ -350,6 +325,42 @@ export default pagedGrid({
       typeof Mocha === 'undefined' ? 200 : 60,
       { maxWait: 1000 }
     ),
+    fetchNamespace() {
+      return this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
+        this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
+          ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
+          : 30;
+        if (!this.isRouteRangeValid(this.minStartDate)) {
+          const prevRange = localStorage.getItem(
+            `${this.namespace}:workflows-time-range`
+          );
+          if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
+            this.setRange(prevRange);
+          } else {
+            this.setRange(`last-${Math.min(30, this.maxRetentionDays)}-days`);
+          }
+        }
+      });
+    },
+    async fetchWorkflows() {
+      if (!this.criteria || this.loading) {
+        return;
+      }
+      const query = { ...this.criteria, nextPageToken: this.npt };
+      if (query.queryString) {
+        query.queryString = decodeURI(query.queryString);
+      }
+
+      const { workflows, nextPageToken } = await this.fetch(
+        this.fetchUrl,
+        query
+      );
+
+      this.results = query.nextPageToken
+        ? this.results.concat(workflows)
+        : workflows;
+      this.npt = nextPageToken;
+    },
     setWorkflowFilter(e) {
       const target = e.target || e.testTarget; // test hook since Event.target is readOnly and unsettable
 
@@ -447,6 +458,18 @@ export default pagedGrid({
         this.filterMode = 'advanced';
       }
     },
+    onWorkflowsScroll(startIndex, endIndex) {
+      if (this.loading || !this.npt) {
+        return;
+      }
+
+      return this.fetchWorkflows();
+    },
+  },
+  watch: {
+    criteria(newCriteria) {
+      this.refreshWorkflows();
+    },
   },
 });
 </script>
@@ -485,24 +508,6 @@ section.workflow-list
     a.toggle-filter
       action-button()
 
-  paged-grid()
-
-  section.results {
-    flex: auto;
-  }
-
   &.loading section.results table
     opacity 0.7
-
-  table
-    td:nth-child(4)
-      text-transform capitalize
-      &.completed
-        color uber-green
-      &.failed
-        color uber-orange
-      &.open
-        color uber-blue-120
-    td:nth-child(5), td:nth-child(6)
-      one-liner-ellipsis()
 </style>
