@@ -16,7 +16,7 @@ context('Workflows', () => {
       .contains('Open')
       .click();
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
+      .find('[data-cy=workflow-row]')
       .should('have.length', 4); // 3 open + 1 requested to be canceled
 
     cy.wait(1000);
@@ -25,8 +25,9 @@ context('Workflows', () => {
       .find('a')
       .contains('Closed')
       .click();
+    cy.wait(1000);
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
+      .find('[data-cy=workflow-row]')
       .should('have.length', 2); // 1 timed out + 1 terminated
 
     cy.wait(1000);
@@ -35,8 +36,9 @@ context('Workflows', () => {
       .find('a')
       .contains('Terminated')
       .click();
+    cy.wait(1000);
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
+      .find('[data-cy=workflow-row]')
       .should('have.length', 1);
 
     cy.wait(1000);
@@ -45,8 +47,9 @@ context('Workflows', () => {
       .find('a')
       .contains('Timed Out')
       .click();
+    cy.wait(1000);
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
+      .find('[data-cy=workflow-row]')
       .should('have.length', 1);
   });
 
@@ -57,8 +60,9 @@ context('Workflows', () => {
       .contains('Terminated')
       .click();
 
+    cy.wait(1000);
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
+      .find('[data-cy=workflow-row]')
       .eq(0)
       .should('contain.text', 'wf_terminated') // workflow id
       .should('contain.text', 'e2e_type') // workflow type name
@@ -71,14 +75,17 @@ context('Workflows', () => {
       .find('a')
       .contains('Timed Out')
       .click();
-    cy.wait(1000)
+    cy.wait(1000);
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
+      .find('[data-cy=workflow-row]')
       .eq(0)
       .find('[data-cy=workflow-link]')
       .click();
 
-      cy.url().should('include', `/namespaces/${Cypress.env('namespace_id')}/workflows/wf_timedout/`);
-      cy.url().should('include', '/summary');
+    cy.url().should(
+      'include',
+      `/namespaces/${Cypress.env('namespace_id')}/workflows/wf_timedout/`
+    );
+    cy.url().should('include', '/summary');
   });
 });
