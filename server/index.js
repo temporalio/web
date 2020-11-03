@@ -4,7 +4,10 @@ const Koa = require('koa'),
   path = require('path'),
   staticRoot = path.join(__dirname, '../dist'),
   app = new Koa(),
-  router = require('./routes');
+  router = require('./routes'),
+  session = require('koa-session'),
+  passport = require('passport'),
+  auth = require('./auth');
 
 app.webpackConfig = require('../webpack.config');
 
@@ -25,6 +28,7 @@ app.init = function(options) {
   const hotReloadTestPort =
     Number(process.env.TEMPORAL_HOT_RELOAD_TEST_PORT) || 8082;
 
+  app.keys = ['some secret hurr']; // todo change this
   app
     .use(async (ctx, next) => {
       try {
@@ -57,6 +61,10 @@ app.init = function(options) {
           })
         : require('koa-static')(staticRoot)
     )
+    .use(session({}, app))
+    .use(auth.initialize)
+    .use(passport.initialize())
+    .use(passport.session())
     .use(router.routes())
     .use(router.allowedMethods())
     .use(async function(ctx, next) {

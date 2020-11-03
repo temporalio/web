@@ -5,9 +5,12 @@ const Router = require('koa-router'),
   losslessJSON = require('lossless-json'),
   momentToLong = (m) => Long.fromValue(m.unix()).mul(1000000000),
   WorkflowClient = require('./workflow-client'),
-  utils = require('./utils');
+  utils = require('./utils'),
+  authRoutes = require('./routes-auth');
 
 const wfClient = new WorkflowClient();
+
+router.use('/auth', authRoutes);
 
 router.get('/api/namespaces', async function(ctx) {
   ctx.body = await wfClient.listNamespaces({
