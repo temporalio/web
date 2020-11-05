@@ -6,7 +6,8 @@ const Router = require('koa-router'),
   momentToLong = (m) => Long.fromValue(m.unix()).mul(1000000000),
   WorkflowClient = require('./workflow-client'),
   utils = require('./utils'),
-  authRoutes = require('./routes-auth');
+  { isAuthEnabled } = require('./config');
+authRoutes = require('./routes-auth');
 
 const wfClient = new WorkflowClient();
 
@@ -349,6 +350,13 @@ router.get('/api/web-settings', (ctx) => {
   ctx.body = {
     health: 'OK',
     permitWriteApi: utils.isWriteApiPermitted(),
+  };
+});
+
+router.get('/api/me', (ctx) => {
+  ctx.body = {
+    isAuthEnabled: isAuthEnabled(),
+    user: ctx.state.user,
   };
 });
 
