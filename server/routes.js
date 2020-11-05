@@ -353,9 +353,9 @@ router.get('/api/web-settings', (ctx) => {
   };
 });
 
-router.get('/api/me', (ctx) => {
+router.get('/api/me', async (ctx) => {
   ctx.body = {
-    isAuthEnabled: isAuthEnabled(),
+    isAuthEnabled: await isAuthEnabled(),
     user: ctx.state.user,
   };
 });
