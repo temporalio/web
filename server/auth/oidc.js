@@ -27,7 +27,12 @@ const getStrategy = async (
     clientSecret,
     callbackUriBase
   );
-  return new Strategy({ client }, verify);
+  const params = {
+    scope: 'openid profile email',
+    response: ['userinfo'],
+  };
+
+  return new Strategy({ client, params }, verify);
 };
 
 module.exports = { getStrategy };
