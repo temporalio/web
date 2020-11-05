@@ -30,7 +30,7 @@ auth:
   - label: 'googleoidc'
     type: oidc
     issuer: https://accounts.google.com
-    client_id: xxxxxxxxxx-58gs7ps0tsksremutquoea45ug79pdam.apps.googleusercontent.com
+    client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
     client_secret: xxxxxxxxxxxxxxxxxxxxxxx
     callback_base_uri: http://localhost:8088
 ```
