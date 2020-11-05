@@ -45,8 +45,7 @@ const authenticate = (ctx, next, options, callback) => {
 };
 
 /**
- * Authenticated routes middleware
- * usage: router.get('/requires-auth', verifyAuth(), (ctx, next) => {}
+ * Authenticated routes middleware.
  */
 const verifyAuth = () => {
   return (ctx, next) => {
