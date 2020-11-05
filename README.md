@@ -43,7 +43,7 @@ Common Oauth Providers and their docs:
 - Auth0: tbc
 - Okta: tbc
 
-If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`.
+If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
 
 
 ### Running locally
