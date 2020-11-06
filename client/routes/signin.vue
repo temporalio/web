@@ -27,7 +27,7 @@
           @click="logout"
           v-if="currentUser"
         >
-          Sing Out
+          Sign Out
         </button>
         <button class="close icon icon_key" @click="oidc" v-else>
           Continue to SSO
