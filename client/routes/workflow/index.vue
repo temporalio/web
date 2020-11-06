@@ -20,7 +20,6 @@
         icon="icon_trips"
         label="Stack Trace"
         :to="{ name: 'workflow/stack-trace' }"
-        v-show="isWorkflowRunning"
         data-cy="stack-trace-link"
       />
       <navigation-link
@@ -28,7 +27,6 @@
         icon="icon_lost"
         label="Query"
         :to="{ name: 'workflow/query' }"
-        v-show="isWorkflowRunning"
         data-cy="query-link"
       />
     </navigation-bar>
