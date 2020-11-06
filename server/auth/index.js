@@ -5,14 +5,13 @@ const { STRATEGY_NAMES } = require('./constants');
 const { getAuthConfig } = require('../config');
 
 const initialize = async (ctx, next) => {
+  const auth = await getAuthConfig();
+  if (!auth.enabled) {
+    await next();
+    return;
+  }
+
   if (!passport._strategies[STRATEGY_NAMES.oidc]) {
-    const enabled = (await getAuthConfig()).enabled;
-    if (!enabled) {
-      throw Error('No authentication configuration found');
-    }
-
-    const auth = await getAuthConfig();
-
     if (!auth || !auth.providers?.length === 0) {
       throw Error('No authentication configuration found');
     }
