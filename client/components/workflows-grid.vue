@@ -22,7 +22,7 @@
       v-if="anyWorkflows"
       v-slot="{ item, index }"
     >
-      <div class="row" :class="{ odd: index % 2 === 1 }">
+      <div class="row" :class="{ odd: index % 2 === 1 }" data-cy="workflow-row">
         <div class="col col-id">{{ item.workflowId }}</div>
         <div class="col col-link">
           <router-link

@@ -2,12 +2,15 @@
 
 context('Workflow Summary', () => {
   beforeEach(() => {
-    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows?range=last-5-days&status=WORKFLOW_EXECUTION_STATUS_TIMED_OUT`);
+    cy.visit(
+      `/namespaces/${Cypress.env(
+        'namespace_id'
+      )}/workflows?range=last-5-days&status=WORKFLOW_EXECUTION_STATUS_TIMED_OUT`
+    );
 
     cy.get('[data-cy=workflow-list]')
-      .find('tr')
-      .eq(0)
       .find('[data-cy=workflow-link]')
+      .eq(0)
       .click();
     cy.url().should('include', '/summary');
   });
@@ -27,7 +30,7 @@ context('Workflow Summary', () => {
 
     cy.get('[data-cy=workflow-id]').should('contain.text', 'wf_timedout');
 
-    const uidRegex = /([\w\d]{4,12}-?){5}/
+    const uidRegex = /([\w\d]{4,12}-?){5}/;
     cy.get('[data-cy=run-id]').contains(uidRegex);
 
     cy.get('[data-cy=task-queue]').should('contain.text', 'e2eQueue');
