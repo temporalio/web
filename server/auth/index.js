@@ -2,22 +2,26 @@ const passport = require('koa-passport');
 
 const oidc = require('./oidc');
 const { STRATEGY_NAMES } = require('./constants');
-const { isAuthEnabled, getAuthConfig } = require('../config');
+const { getAuthConfig } = require('../config');
 
 const initialize = async (ctx, next) => {
+  const auth = await getAuthConfig();
+  if (!auth.enabled) {
+    await next();
+    return;
+  }
+
   if (!passport._strategies[STRATEGY_NAMES.oidc]) {
-    const enabled = await isAuthEnabled();
-    if (!enabled) {
+    if (!auth || !auth.providers?.length === 0) {
       throw Error('No authentication configuration found');
     }
 
-    const auth = await getAuthConfig();
     const {
       issuer,
       client_id: clientId,
       client_secret: clientSecret,
       callback_base_uri: callbackUri,
-    } = auth[0]; // we currently support single auth config
+    } = auth.providers[0]; // we currently support single auth config
     const strategy = await oidc.getStrategy(
       issuer,
       clientId,

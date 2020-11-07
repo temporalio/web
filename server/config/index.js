@@ -13,17 +13,11 @@ const readConfig = async () => {
 const getAuthConfig = async () => {
   let { auth } = await readConfig();
   if (!auth) {
-    return [];
+    return { enabled: false };
   }
   return auth;
 };
 
-const isAuthEnabled = async () => {
-  const auth = await getAuthConfig();
-  return auth.length > 0;
-};
-
 module.exports = {
-  isAuthEnabled,
   getAuthConfig,
 };
