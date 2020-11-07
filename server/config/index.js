@@ -2,11 +2,15 @@ const { promisify } = require('util');
 const { readFile } = require('fs');
 const yaml = require('js-yaml');
 
+let config = undefined;
+
 const readConfig = async () => {
-  const cfgContents = await promisify(readFile)('./server/config.yml', {
-    encoding: 'utf8',
-  });
-  const config = yaml.safeLoad(cfgContents);
+  if (!config) {
+    const cfgContents = await promisify(readFile)('./server/config.yml', {
+      encoding: 'utf8',
+    });
+    config = yaml.safeLoad(cfgContents);
+  }
   return config;
 };
 
