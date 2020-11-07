@@ -190,7 +190,7 @@ export default {
       <div class="detail-view task-queue" v-if="$route.params.taskQueue">
         <span>{{ $route.params.taskQueue }}</span>
       </div>
-      <div v-if="currentUser" class="user">
+      <a v-if="currentUser" class="user" href="/signin">
         <img
           :src="currentUser.picture"
           width="200"
@@ -198,7 +198,7 @@ export default {
           class="avatar"
         />
         <span class="name">{{ currentUser.name }}</span>
-      </div>
+      </a>
     </header>
     <router-view @onNotification="onNotification"></router-view>
     <modals-container />
@@ -248,6 +248,7 @@ header.top-bar
     display flex
     margin-left auto
     align-items center
+    color: white
     .avatar
       display inline-block
       width 2rem

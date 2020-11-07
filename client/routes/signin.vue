@@ -2,11 +2,7 @@
   <section class="signin">
     <div class="signin-form">
       <img
-        :src="
-          currentUser
-            ? currentUser.picture
-            : 'https://seeklogo.com/images/S/snapchat-logo-47531E7AE8-seeklogo.com.png'
-        "
+        :src="currentUser ? currentUser.picture : temporalLogo"
         alt="user pic"
         class="avatar"
       />
@@ -38,14 +34,15 @@
 </template>
 
 <script>
+import temporalLogo from '../assets/logo-rounded.png';
 import { NavigationLink } from '~components';
 
 export default {
   name: 'signin',
   data() {
-    return { currentUser: false };
+    return { currentUser: false, temporalLogo };
   },
-  async mounted() {
+  async created() {
     const me = await this.$http('/api/me');
     this.currentUser = me.user;
   },
@@ -75,7 +72,7 @@ export default {
   align-items: center
 
   .user-details {
-    dd { 
+    dd {
       width: 100%;
       text-align: center;
     }
