@@ -29,12 +29,12 @@ Since v1.2, Temporal Web offers optional Oauth SSO authentication. You can enabl
 auth:
   enabled: false
   providers:
-	  - label: 'googleoidc'
-	    type: oidc
-	    issuer: https://accounts.google.com
-	    client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-	    client_secret: xxxxxxxxxxxxxxxxxxxxxxx
-	    callback_base_uri: http://localhost:8088
+      - label: 'googleoidc'
+        type: oidc
+        issuer: https://accounts.google.com
+        client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+        client_secret: xxxxxxxxxxxxxxxxxxxxxxx
+        callback_base_uri: http://localhost:8088
 ```
 
 In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `auth` key above.
