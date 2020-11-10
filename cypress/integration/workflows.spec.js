@@ -2,11 +2,14 @@
 
 context('Workflows', () => {
   beforeEach(() => {
-    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows`);
+    cy.visit(
+      `/namespaces/${Cypress.env('namespace_id')}/workflows?status=OPEN`
+    );
   });
 
-  it('navigates to open workflows as default', () => {
-    cy.url().should('include', '&status=OPEN');
+  it('navigates to ALL workflows as default', () => {
+    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows`);
+    cy.url().should('include', '&status=ALL');
   });
 
   it('filters workflows by status', () => {
