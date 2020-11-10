@@ -12,6 +12,8 @@ async function getClient(issuerUrl, clientId, clientSecret, callbackUriBase) {
 }
 
 const verify = (tokenSet, userinfo, done) => {
+  // Attach tokens to the stored userinfo.
+  userinfo.tokenSet = tokenSet;
   return done(null, userinfo);
 };
 
