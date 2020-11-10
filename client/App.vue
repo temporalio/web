@@ -52,6 +52,7 @@ export default {
         link: '',
       },
       onVersionAnnouncementClose: () => {},
+      currentUser: undefined,
     };
   },
   beforeDestroy() {
@@ -66,6 +67,14 @@ export default {
     if (version) {
       this.onVersionAnnouncementClose = () =>
         discardVersionAnnouncement(version);
+    }
+    const me = await this.$http('/api/me');
+    if (me.isAuthEnabled) {
+      if (!me.user) {
+        this.$router.push('/signin');
+      } else {
+        this.currentUser = me.user;
+      }
     }
   },
   methods: {
@@ -181,6 +190,15 @@ export default {
       <div class="detail-view task-queue" v-if="$route.params.taskQueue">
         <span>{{ $route.params.taskQueue }}</span>
       </div>
+      <a v-if="currentUser" class="user" href="/signin">
+        <img
+          :src="currentUser.picture"
+          width="200"
+          alt="user pic"
+          class="avatar"
+        />
+        <span class="name">{{ currentUser.name }}</span>
+      </a>
     </header>
     <router-view @onNotification="onNotification"></router-view>
     <modals-container />
@@ -226,6 +244,17 @@ header.top-bar
       margin-right: layout-spacing-medium;
       position: relative;
     }
+  .user
+    display flex
+    margin-left auto
+    align-items center
+    color: white
+    .avatar
+      display inline-block
+      width 2rem
+      height 2rem
+      border-radius 500rem
+      margin: 0.5rem
 
   svg
     display inline-block
@@ -234,8 +263,6 @@ header.top-bar
   spacing = 1.3em
   nav-label-color = uber-white-40
   nav-label-font-size = 11px
-  & > div
-    margin-right spacing
   div.namespace
     flex 0 0 auto
     &::before

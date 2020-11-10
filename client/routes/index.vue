@@ -14,6 +14,7 @@
         >Docs</a
       >
     </navigation-bar>
+    <router-view name="signin" />
     <router-view name="namespace-list" />
     <router-view name="help" />
   </section>

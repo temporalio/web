@@ -1,0 +1,10 @@
+auth:
+  enabled: false
+  providers:
+      # # example provider
+      # - label: 'googleoidc'
+      #   type: oidc
+      #   issuer: https://accounts.google.com
+      #   client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+      #   client_secret: xxxxxxxxxxxxxxxxxxxxxxx
+      #   callback_base_uri: http://localhost:8088

@@ -13,6 +13,7 @@ import copyButton from './components/copy';
 import snapscroll from './directives/snapscroll';
 
 import App from './App';
+import Signin from './routes/signin.vue';
 import Namespace from './routes/namespace/index.vue';
 import NamespaceList from './routes/namespace-list.vue';
 import NamespaceSettings from './routes/namespace/namespace-settings.vue';
@@ -46,6 +47,11 @@ const routeOpts = {
           },
         },
       ],
+    },
+    {
+      name: 'signin',
+      path: '/signin',
+      component: Signin,
     },
     {
       name: 'namespace',

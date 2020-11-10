@@ -5,21 +5,31 @@ const Router = require('koa-router'),
   losslessJSON = require('lossless-json'),
   momentToLong = (m) => Long.fromValue(m.unix()).mul(1000000000),
   WorkflowClient = require('./workflow-client'),
-  utils = require('./utils');
+  { isWriteApiPermitted, extractAccessToken } = require('./utils'),
+  { getAuthConfig } = require('./config');
+authRoutes = require('./routes-auth');
 
 const wfClient = new WorkflowClient();
 
+router.use('/auth', authRoutes);
+
 router.get('/api/namespaces', async function(ctx) {
-  ctx.body = await wfClient.listNamespaces({
-    pageSize: 50,
-    nextPageToken: ctx.query.nextPageToken
-      ? Buffer.from(ctx.query.nextPageToken, 'base64')
-      : undefined,
-  });
+  ctx.body = await wfClient.listNamespaces(
+    {
+      pageSize: 50,
+      nextPageToken: ctx.query.nextPageToken
+        ? Buffer.from(ctx.query.nextPageToken, 'base64')
+        : undefined,
+    },
+    { accessToken: extractAccessToken(ctx) }
+  );
 });
 
 router.get('/api/namespaces/:namespace', async function(ctx) {
-  ctx.body = await wfClient.describeNamespace({ name: ctx.params.namespace });
+  ctx.body = await wfClient.describeNamespace(
+    { name: ctx.params.namespace },
+    { accessToken: extractAccessToken(ctx) }
+  );
 });
 
 async function listWorkflows(state, ctx) {
@@ -31,17 +41,20 @@ async function listWorkflows(state, ctx) {
 
   const { namespace } = ctx.params;
 
-  ctx.body = await wfClient[state + 'Workflows']({
-    namespace,
-    startTime,
-    endTime,
-    typeFilter: q.workflowName ? { name: q.workflowName } : undefined,
-    executionFilter: q.workflowId ? { workflowId: q.workflowId } : undefined,
-    status: q.status || undefined,
-    nextPageToken: q.nextPageToken
-      ? Buffer.from(q.nextPageToken, 'base64')
-      : undefined,
-  });
+  ctx.body = await wfClient[state + 'Workflows'](
+    {
+      namespace,
+      startTime,
+      endTime,
+      typeFilter: q.workflowName ? { name: q.workflowName } : undefined,
+      executionFilter: q.workflowId ? { workflowId: q.workflowId } : undefined,
+      status: q.status || undefined,
+      nextPageToken: q.nextPageToken
+        ? Buffer.from(q.nextPageToken, 'base64')
+        : undefined,
+    },
+    { accessToken: extractAccessToken(ctx) }
+  );
 }
 
 router.get(
@@ -58,13 +71,16 @@ router.get('/api/namespaces/:namespace/workflows/list', async function(ctx) {
 
   const { namespace } = ctx.params;
 
-  ctx.body = await wfClient.listWorkflows({
-    namespace,
-    query: q.queryString || undefined,
-    nextPageToken: q.nextPageToken
-      ? Buffer.from(q.nextPageToken, 'base64')
-      : undefined,
-  });
+  ctx.body = await wfClient.listWorkflows(
+    {
+      namespace,
+      query: q.queryString || undefined,
+      nextPageToken: q.nextPageToken
+        ? Buffer.from(q.nextPageToken, 'base64')
+        : undefined,
+    },
+    { accessToken: extractAccessToken(ctx) }
+  );
 });
 
 router.get(
@@ -74,14 +90,17 @@ router.get(
 
     const { namespace, workflowId, runId } = ctx.params;
 
-    ctx.body = await wfClient.getHistory({
-      namespace,
-      execution: { workflowId, runId },
-      nextPageToken: q.nextPageToken
-        ? Buffer.from(q.nextPageToken, 'base64')
-        : undefined,
-      waitForNewEvent: 'waitForNewEvent' in q ? true : undefined,
-    });
+    ctx.body = await wfClient.getHistory(
+      {
+        namespace,
+        execution: { workflowId, runId },
+        nextPageToken: q.nextPageToken
+          ? Buffer.from(q.nextPageToken, 'base64')
+          : undefined,
+        waitForNewEvent: 'waitForNewEvent' in q ? true : undefined,
+      },
+      { accessToken: extractAccessToken(ctx) }
+    );
   }
 );
 
@@ -118,13 +137,16 @@ router.get('/api/namespaces/:namespace/workflows/archived', async function(
     queryString = buildQueryString(startTime, endTime, query);
   }
 
-  ctx.body = await wfClient.archivedWorkflows({
-    namespace,
-    nextPageToken: nextPageToken
-      ? Buffer.from(nextPageToken, 'base64')
-      : undefined,
-    query: queryString,
-  });
+  ctx.body = await wfClient.archivedWorkflows(
+    {
+      namespace,
+      nextPageToken: nextPageToken
+        ? Buffer.from(nextPageToken, 'base64')
+        : undefined,
+      query: queryString,
+    },
+    { accessToken: extractAccessToken(ctx) }
+  );
 });
 
 router.get(
@@ -135,11 +157,14 @@ router.get(
     const { namespace, workflowId, runId } = ctx.params;
 
     do {
-      const page = await wfClient.exportHistory({
-        namespace,
-        nextPageToken,
-        execution: { workflowId, runId },
-      });
+      const page = await wfClient.exportHistory(
+        {
+          namespace,
+          nextPageToken,
+          execution: { workflowId, runId },
+        },
+        { accessToken: extractAccessToken(ctx) }
+      );
 
       if (!nextPageToken) {
         ctx.status = 200;
@@ -165,13 +190,16 @@ router.get(
     try {
       const { namespace, workflowId, runId } = ctx.params;
 
-      await wfClient.queryWorkflow({
-        namespace,
-        execution: { workflowId, runId },
-        query: {
-          queryType: '__cadence_web_list',
+      await wfClient.queryWorkflow(
+        {
+          namespace,
+          execution: { workflowId, runId },
+          query: {
+            queryType: '__cadence_web_list',
+          },
         },
-      });
+        { accessToken: extractAccessToken(ctx) }
+      );
 
       ctx.throw(500);
     } catch (e) {
@@ -190,13 +218,16 @@ router.post(
   async function(ctx) {
     const { namespace, workflowId, runId } = ctx.params;
 
-    ctx.body = await wfClient.queryWorkflow({
-      namespace,
-      execution: { workflowId, runId },
-      query: {
-        queryType: ctx.params.queryType,
+    ctx.body = await wfClient.queryWorkflow(
+      {
+        namespace,
+        execution: { workflowId, runId },
+        query: {
+          queryType: ctx.params.queryType,
+        },
       },
-    });
+      { accessToken: extractAccessToken(ctx) }
+    );
   }
 );
 
@@ -205,11 +236,14 @@ router.post(
   async function(ctx) {
     const { namespace, workflowId, runId } = ctx.params;
 
-    ctx.body = await wfClient.terminateWorkflow({
-      namespace,
-      execution: { workflowId, runId },
-      reason: ctx.request.body && ctx.request.body.reason,
-    });
+    ctx.body = await wfClient.terminateWorkflow(
+      {
+        namespace,
+        execution: { workflowId, runId },
+        reason: ctx.request.body && ctx.request.body.reason,
+      },
+      { accessToken: extractAccessToken(ctx) }
+    );
   }
 );
 
@@ -218,11 +252,14 @@ router.post(
   async function(ctx) {
     const { namespace, workflowId, runId, signal } = ctx.params;
 
-    ctx.body = await wfClient.signalWorkflow({
-      namespace,
-      execution: { workflowId, runId },
-      signalName: signal,
-    });
+    ctx.body = await wfClient.signalWorkflow(
+      {
+        namespace,
+        execution: { workflowId, runId },
+        signalName: signal,
+      },
+      { accessToken: extractAccessToken(ctx) }
+    );
   }
 );
 
@@ -232,10 +269,13 @@ router.get(
     const { namespace, workflowId, runId } = ctx.params;
 
     try {
-      ctx.body = await wfClient.describeWorkflow({
-        namespace,
-        execution: { workflowId, runId },
-      });
+      ctx.body = await wfClient.describeWorkflow(
+        {
+          namespace,
+          execution: { workflowId, runId },
+        },
+        { accessToken: extractAccessToken(ctx) }
+      );
     } catch (error) {
       if (error.name !== 'NotFoundError') {
         throw error;
@@ -290,11 +330,14 @@ router.get(
     const { namespace, taskQueue } = ctx.params;
     const descTaskQueue = async (taskQueueType) =>
       (
-        await wfClient.describeTaskQueue({
-          namespace,
-          taskQueue: { name: taskQueue },
-          taskQueueType,
-        })
+        await wfClient.describeTaskQueue(
+          {
+            namespace,
+            taskQueue: { name: taskQueue },
+            taskQueueType,
+          },
+          { accessToken: extractAccessToken(ctx) }
+        )
       ).pollers || [];
 
     const r = (type) => (o, poller) => {
@@ -328,11 +371,14 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
 ) {
   const { namespace, taskQueue } = ctx.params;
   const descTaskQueue = async (taskQueueType) =>
-    await wfClient.describeTaskQueue({
-      namespace,
-      taskQueue: { name: taskQueue },
-      taskQueueType,
-    });
+    await wfClient.describeTaskQueue(
+      {
+        namespace,
+        taskQueue: { name: taskQueue },
+        taskQueueType,
+      },
+      { accessToken: extractAccessToken(ctx) }
+    );
 
   const activityQ = await descTaskQueue('TASK_QUEUE_TYPE_ACTIVITY');
   const workflowQ = await descTaskQueue('TASK_QUEUE_TYPE_WORKFLOW');
@@ -345,12 +391,22 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
 router.get('/api/web-settings', (ctx) => {
   ctx.body = {
     health: 'OK',
-    permitWriteApi: utils.isWriteApiPermitted(),
+    permitWriteApi: isWriteApiPermitted(),
+  };
+});
+
+router.get('/api/me', async (ctx) => {
+  const auth = await getAuthConfig();
+  ctx.body = {
+    isAuthEnabled: auth.enabled,
+    user: ctx.state.user,
   };
 });
 
 router.get('/api/cluster/version-info', async (ctx) => {
-  const res = await wfClient.getVersionInfo();
+  const res = await wfClient.getVersionInfo({
+    accessToken: extractAccessToken(ctx),
+  });
   ctx.body = res;
 });
 
