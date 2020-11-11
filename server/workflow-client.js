@@ -266,10 +266,10 @@ function WorkflowClient() {
 }
 
 WorkflowClient.prototype.describeNamespace = async function(
-  { name },
+  { namespace },
   metadata
 ) {
-  const req = { name };
+  const req = { namespace };
 
   const res = await this.client.describeNamespaceAsync(
     req,

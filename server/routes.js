@@ -27,7 +27,7 @@ router.get('/api/namespaces', async function(ctx) {
 
 router.get('/api/namespaces/:namespace', async function(ctx) {
   ctx.body = await wfClient.describeNamespace(
-    { name: ctx.params.namespace },
+    { namespace: ctx.params.namespace },
     { accessToken: extractAccessToken(ctx) }
   );
 });
