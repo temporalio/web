@@ -60,6 +60,7 @@ Start the docker image, providing the path to your config.yml file using externa
 
 ```bash
 docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml temporalio/web:latest
+```
 
 </details>
 ### Running locally
