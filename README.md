@@ -37,20 +37,9 @@ auth:
         callback_base_uri: http://localhost:8088
 ```
 
-In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `auth` key above.
-
-Common Oauth Providers and their docs:
-
-- Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
-- Auth0: tbc
-- Okta: tbc
-
-If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
-
-
 <details>
 <summary>
-Providing config.yml to Docker image
+Providing <code>config.yml</code> to Docker image
 </summary>
 
 
@@ -63,6 +52,18 @@ docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml tem
 ```
 
 </details>
+
+In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `auth` key above.
+
+Common Oauth Providers and their docs:
+
+- Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
+- Auth0: https://auth0.com/docs/protocols/configure-okta-as-oauth2-identity-provider
+- Okta: https://developer.okta.com/docs/concepts/oauth-openid/
+- please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
+
+If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
+
 
 ### Running locally
 
