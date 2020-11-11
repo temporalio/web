@@ -47,6 +47,14 @@ Common Oauth Providers and their docs:
 
 If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
 
+#### Providing config.yml to docker image
+If you are running Temporal Web from the docker image, you can provide your external config.yml to docker to override the internal config. 
+Create config.yml file on your machine, for example at `~/Desktop/config.yml`. 
+Start the docker image, providing the path to your config.yml file using external volume flag (-v). Leave the path after the semicolon as is: 
+
+```bash
+docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml temporalio/web:latest
+```
 
 ### Running locally
 
