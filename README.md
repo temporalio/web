@@ -12,14 +12,15 @@ This web UI is used to view workflows from [Temporalio][temporal], see what's ru
 
 Set these environment variables if you need to change their defaults
 
-| Variable                      | Description                                                       | Default        |
-| ----------------------------- | ----------------------------------------------------------------- | -------------- |
-| TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint                          | 127.0.0.1:7233 |
-| TEMPORAL_WEB_PORT             | HTTP port to serve on                                             | 8088           |
-| TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | true           |
-| TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development                    | 8081           |
-| TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082           |
-| TEMPORAL_EXTERNAL_SCRIPTS     | Addtional JavaScript tags to serve in the UI                      |                |
+| Variable                      | Description                                                       | Default                     |
+| ----------------------------- | ----------------------------------------------------------------- | --------------------------- |
+| TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint                          | 127.0.0.1:7233              |
+| TEMPORAL_WEB_PORT             | HTTP port to serve on                                             | 8088                        |
+| TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | true                        |
+| TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development                    | 8081                        |
+| TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082                        |
+| TEMPORAL_SESSION_SECRET       | Secret used to hash the session with HMAC                         | "ensure secret in production" |
+| TEMPORAL_EXTERNAL_SCRIPTS     | Addtional JavaScript tags to serve in the UI                      |                             |
 
 ### Configuring Authentication (optional)
 
@@ -65,7 +66,6 @@ Common Oauth Providers and their docs:
 - please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
 
 If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
-
 
 ### Running locally
 

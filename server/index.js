@@ -28,7 +28,10 @@ app.init = function(options) {
   const hotReloadTestPort =
     Number(process.env.TEMPORAL_HOT_RELOAD_TEST_PORT) || 8082;
 
-  app.keys = ['some secret hurr']; // todo change this
+  const secret =
+    process.env.TEMPORAL_SESSION_SECRET ?? 'ensure secret in production';
+  app.keys = [secret];
+
   app
     .use(async (ctx, next) => {
       try {
