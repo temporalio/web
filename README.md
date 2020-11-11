@@ -65,7 +65,7 @@ Common Oauth Providers and their docs:
 - Okta: https://developer.okta.com/docs/concepts/oauth-openid/
 - please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
 
-If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
+If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/sso_callback`. This is configured by `callback_base_uri` in the settings.
 
 ### Running locally
 
