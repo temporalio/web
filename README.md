@@ -23,11 +23,13 @@ Set these environment variables if you need to change their defaults
 
 ### Configuring Authentication (optional)
 
+> ⚠️ This is currently a beta feature, [please report any and all issues to us!](https://github.com/temporalio/web/issues/new)
+
 Since v1.2, Temporal Web offers optional Oauth SSO authentication. You can enable it by changing the `server/config.yml` file:
 
 ```yaml
 auth:
-  enabled: false
+  enabled: true # Temporal Web checks this first before reading your provider config
   providers:
       - label: 'googleoidc'
         type: oidc
@@ -37,13 +39,30 @@ auth:
         callback_base_uri: http://localhost:8088
 ```
 
-In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `auth` key above.
+<details>
+<summary>
+Providing <code>config.yml</code> to Docker image
+</summary>
+
+
+If you are running Temporal Web from the docker image, you can provide your external config.yml to docker to override the internal config. 
+Create config.yml file on your machine, for example at `~/Desktop/config.yml`. 
+Start the docker image, providing the path to your config.yml file using external volume flag (-v). Leave the path after the semicolon as is: 
+
+```bash
+docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml temporalio/web:latest
+```
+
+</details>
+
+In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `providers` key above.
 
 Common Oauth Providers and their docs:
 
 - Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
-- Auth0: tbc
-- Okta: tbc
+- Auth0: https://auth0.com/docs/protocols/configure-okta-as-oauth2-identity-provider
+- Okta: https://developer.okta.com/docs/concepts/oauth-openid/
+- please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
 
 If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/callback`. This is configured by `callback_base_uri` in the settings.
 
