@@ -50,7 +50,7 @@ If you are hosting Temporal Web at `http://localhost:8088`, then you will need t
 
 <details>
 <summary>
-Providing config.yml to docker image
+Providing config.yml to Docker image
 </summary>
 
 
@@ -61,6 +61,7 @@ Start the docker image, providing the path to your config.yml file using externa
 ```bash
 docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml temporalio/web:latest
 
+</details>
 ### Running locally
 
 `temporal-web` uses all the standard [npm scripts](https://docs.npmjs.com/misc/scripts) to install dependencies, run the server, and run tests. Additionally to run locally with webpack hot reloading and other conveniences, use
