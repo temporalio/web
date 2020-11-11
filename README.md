@@ -26,7 +26,7 @@ Set these environment variables if you need to change their defaults
 
 > ⚠️ This is currently a beta feature, [please report any and all issues to us!](https://github.com/temporalio/web/issues/new)
 
-Since v1.2, Temporal Web offers optional Oauth SSO authentication. You can enable it by changing the `server/config.yml` file:
+Since v1.3, Temporal Web offers optional Oauth SSO authentication. You can enable it by changing the `server/config.yml` file:
 
 ```yaml
 auth:
