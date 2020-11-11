@@ -63,6 +63,7 @@ docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml tem
 ```
 
 </details>
+
 ### Running locally
 
 `temporal-web` uses all the standard [npm scripts](https://docs.npmjs.com/misc/scripts) to install dependencies, run the server, and run tests. Additionally to run locally with webpack hot reloading and other conveniences, use
