@@ -27,7 +27,7 @@ Since v1.2, Temporal Web offers optional Oauth SSO authentication. You can enabl
 
 ```yaml
 auth:
-  enabled: false
+  enabled: true # Temporal Web checks this first before reading your provider config
   providers:
       - label: 'googleoidc'
         type: oidc
@@ -53,7 +53,7 @@ docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml tem
 
 </details>
 
-In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `auth` key above.
+In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `providers` key above.
 
 Common Oauth Providers and their docs:
 
