@@ -7,4 +7,5 @@ auth:
       #   issuer: https://accounts.google.com
       #   client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
       #   client_secret: xxxxxxxxxxxxxxxxxxxxxxx
+      #   scope: openid profile email
       #   callback_base_uri: http://localhost:8088

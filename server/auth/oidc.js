@@ -21,6 +21,7 @@ const getStrategy = async (
   issuerUrl,
   clientId,
   clientSecret,
+  scope,
   callbackUriBase
 ) => {
   const client = await getClient(
@@ -30,7 +31,7 @@ const getStrategy = async (
     callbackUriBase
   );
   const params = {
-    scope: 'openid profile email',
+    scope,
     response: ['userinfo'],
   };
 
