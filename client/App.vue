@@ -1,7 +1,7 @@
 <script>
 import { version } from '../package.json';
 import logo from './assets/logo.svg';
-import { FeatureFlag, NotificationBar, AnnouncementBar } from '~components';
+import { FeatureFlag, NotificationBar, AnnouncementBar , Avatar} from '~components';
 import {
   ENVIRONMENT_LIST,
   NOTIFICATION_TIMEOUT,
@@ -23,6 +23,7 @@ export default {
     'feature-flag': FeatureFlag,
     'notification-bar': NotificationBar,
     'announcement-bar': AnnouncementBar,
+    'avatar': Avatar,
   },
   data() {
     const { origin } = window.location;
@@ -191,13 +192,7 @@ export default {
         <span>{{ $route.params.taskQueue }}</span>
       </div>
       <a v-if="currentUser" class="user" href="/signin">
-        <img
-          :src="currentUser.picture"
-          width="200"
-          alt="user pic"
-          class="avatar"
-        />
-        <span class="name">{{ currentUser.name }}</span>
+        <avatar :label="currentUser.name" :picture="currentUser.picture" />
       </a>
     </header>
     <router-view @onNotification="onNotification"></router-view>
@@ -245,16 +240,8 @@ header.top-bar
       position: relative;
     }
   .user
-    display flex
     margin-left auto
-    align-items center
     color: white
-    .avatar
-      display inline-block
-      width 2rem
-      height 2rem
-      border-radius 500rem
-      margin: 0.5rem
 
   svg
     display inline-block
