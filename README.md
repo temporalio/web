@@ -64,7 +64,7 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
 
     - Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
     - Auth0: https://auth0.com/docs/protocols/configure-okta-as-oauth2-identity-provider
-    - Okta: https://developer.okta.com/docs/concepts/oauth-openid/
+    - Okta: https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard_OIDC.htm
     - please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
 
 2. You will need to provide a redirect URL to your Oauth Provider. If you are hosting Temporal Web at `http://localhost:8088` (this is configured by `callback_base_uri` in `server/config.yml`), then it is `http://localhost:8088/auth/sso_callback`. 
