@@ -18,3 +18,4 @@ export { default as NotificationBar } from './notification-bar';
 export { default as TextInput } from './text-input';
 export { default as WorkflowsGrid } from './workflows-grid';
 export { default as AnnouncementBar } from './announcement-bar';
+export { default as Avatar } from './avatar';

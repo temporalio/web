@@ -1,10 +1,13 @@
 <template>
   <section class="signin">
     <div class="signin-form">
-      <img
-        :src="currentUser ? currentUser.picture : temporalLogo"
-        alt="user pic"
-        class="avatar"
+      <avatar
+        :picture="
+          currentUser && currentUser.picture
+            ? currentUser.picture
+            : temporalLogo
+        "
+        pictureSize="6rem"
       />
       <div>
         <dl v-if="currentUser" class="user-details">
@@ -35,9 +38,12 @@
 
 <script>
 import temporalLogo from '../assets/logo-rounded.png';
-import { NavigationLink } from '~components';
+import { NavigationLink, Avatar } from '~components';
 
 export default {
+  components: {
+    avatar: Avatar,
+  },
   name: 'signin',
   data() {
     return { currentUser: false, temporalLogo };
@@ -95,9 +101,6 @@ export default {
     }
 
     .avatar {
-        width: 6rem
-        height : 6rem
-        border-radius : 500rem
         padding: 1rem
     }
 
