@@ -26,46 +26,53 @@ Set these environment variables if you need to change their defaults
 
 > ⚠️ This is currently a beta feature, [please report any and all issues to us!](https://github.com/temporalio/web/issues/new)
 
-Since v1.2, Temporal Web offers optional Oauth SSO authentication. You can enable it by changing the `server/config.yml` file:
+Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enable it in 2 steps:
 
-```yaml
-auth:
-  enabled: true # Temporal Web checks this first before reading your provider config
-  providers:
-      - label: 'googleoidc'
-        type: oidc
-        issuer: https://accounts.google.com
-        client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-        client_secret: xxxxxxxxxxxxxxxxxxxxxxx
-        callback_base_uri: http://localhost:8088
-```
+1. Edit the `server/config.yml` file:
 
-<details>
-<summary>
-Providing <code>config.yml</code> to Docker image
-</summary>
+    ```yaml
+    auth:
+      enabled: true # Temporal Web checks this first before reading your provider config
+      providers:
+          - label: 'googleoidc'
+            type: oidc
+            issuer: https://accounts.google.com
+            client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
+            client_secret: xxxxxxxxxxxxxxxxxxxxxxx
+            callback_base_uri: http://localhost:8088
+    ```
+
+    <details>
+    <summary>
+    Providing <code>config.yml</code> to Docker image
+    </summary>
 
 
-If you are running Temporal Web from the docker image, you can provide your external config.yml to docker to override the internal config. 
-Create config.yml file on your machine, for example at `~/Desktop/config.yml`. 
-Start the docker image, providing the path to your config.yml file using external volume flag (-v). Leave the path after the semicolon as is: 
+    If you are running Temporal Web from the docker image, you can provide your external config.yml to docker to override the internal config. 
+    Create config.yml file on your machine, for example at `~/Desktop/config.yml`. 
+    Start the docker image, providing the path to your config.yml file using external volume flag (-v). Leave the path after the semicolon as is: 
 
-```bash
-docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml temporalio/web:latest
-```
+    ```bash
+    docker run --network host -v ~/Desktop/config.yml:/usr/app/server/config.yml temporalio/web:latest
+    ```
 
-</details>
+    </details>
 
-In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `providers` key above.
+    In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `providers` key above.
 
-Common Oauth Providers and their docs:
+    Common Oauth Providers and their docs:
 
-- Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
-- Auth0: https://auth0.com/docs/protocols/configure-okta-as-oauth2-identity-provider
-- Okta: https://developer.okta.com/docs/concepts/oauth-openid/
-- please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
+    - Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
+    - Auth0: https://auth0.com/docs/protocols/configure-okta-as-oauth2-identity-provider
+    - Okta: https://developer.okta.com/docs/concepts/oauth-openid/
+    - please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
 
-If you are hosting Temporal Web at `http://localhost:8088`, then you will need to tell your Oauth provider to redirect to `http://localhost:8088/auth/sso_callback`. This is configured by `callback_base_uri` in the settings.
+2. You will need to provide a redirect URL to your Oauth Provider. If you are hosting Temporal Web at `http://localhost:8088` (this is configured by `callback_base_uri` in `server/config.yml`), then it is `http://localhost:8088/auth/sso_callback`. 
+
+    - By default, Temporal Web asks for 3 scopes, make sure your provider recognizes these or you may see scope-related errors:
+      - `openid` required by some OIDC providers like [auth0](https://auth0.com/docs/scopes/openid-connect-scopes)
+      - `profile` for name
+      - `email` for email
 
 ### Running locally
 
