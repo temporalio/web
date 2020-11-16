@@ -69,7 +69,7 @@ Since v1.2, Temporal Web offers optional Oauth SSO authentication. You can enabl
 
 2. You will need to provide a redirect URL to your Oauth Provider. If you are hosting Temporal Web at `http://localhost:8088` (this is configured by `callback_base_uri` in `server/config.yml`), then it is `http://localhost:8088/auth/sso_callback`. 
 
-    - Temporal Web will be asking for 3 scopes, make sure your provider recognizes these or you may see scope-related errors:
+    - By default, Temporal Web asks for 3 scopes, make sure your provider recognizes these or you may see scope-related errors:
       - `openid` required by some OIDC providers like [auth0](https://auth0.com/docs/scopes/openid-connect-scopes)
       - `profile` for name
       - `email` for email
