@@ -34,7 +34,7 @@ function getCredentials() {
   if (verifyHost) {
     checkServerIdentity = (receivedName, cert) => {
       if (receivedName !== serverName) {
-        return new Error(
+        throw new Error(
           `Server name verification error: ${serverName} but received hostname ${receivedName}`
         );
       }
