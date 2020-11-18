@@ -23,7 +23,7 @@
         "TEMPORAL_TLS_CA_PATH": "../certs/ca.cert",
         "TEMPORAL_TLS_CERT_PATH": "../certs/client.pem",
         "TEMPORAL_TLS_KEY_PATH": "../certs/client.key",
-        "TEMPORAL_TLS_ENABLE_HOST_VERIFICATION": "false",
+        "TEMPORAL_TLS_ENABLE_HOST_VERIFICATION": "true",
         "TEMPORAL_TLS_SERVER_NAME": "tls-sample"
       }
     }

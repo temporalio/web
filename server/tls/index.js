@@ -1,8 +1,16 @@
 const grpc = require('grpc');
 const { readFileSync } = require('fs');
 
+const caPath = process.env.TEMPORAL_TLS_CA_PATH;
+const keyPath = process.env.TEMPORAL_TLS_KEY_PATH;
+const certPath = process.env.TEMPORAL_TLS_CERT_PATH;
+const serverName = process.env.TEMPORAL_TLS_SERVER_NAME;
+const verifyHost = ![false, 'false'].includes(
+  process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
+);
+
 function getCredentials() {
-  if (process.env.TEMPORAL_TLS_KEY_PATH === undefined) {
+  if (keyPath === undefined) {
     console.log('establishing insecure connection...');
     return { credentials: grpc.credentials.createInsecure(), options: {} };
   }
@@ -10,44 +18,36 @@ function getCredentials() {
   console.log('establishing secure connection using TLS...');
 
   let credentials;
-  if (process.env.TEMPORAL_TLS_CERT_PATH === undefined) {
+  if (certPath === undefined) {
     throw Error('TLS certificate is not provided');
   }
 
-  const pk = readFileSync(process.env.TEMPORAL_TLS_KEY_PATH);
-  const cert = readFileSync(process.env.TEMPORAL_TLS_CERT_PATH);
+  const pk = readFileSync(keyPath);
+  const cert = readFileSync(certPath);
 
   let ca;
-  if (process.env.TEMPORAL_TLS_CA_PATH) {
-    ca = process.env.TEMPORAL_TLS_CA_PATH;
-    caContent = readFileSync(ca);
+  if (caPath) {
+    ca = readFileSync(caPath);
   }
 
-  const verifyHost = [true, 'true'].includes(
-    process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
-  );
   let checkServerIdentity;
   if (verifyHost) {
-    checkServerIdentity = (hostname, cert) => {
-      if (hostname !== process.env.TEMPORAL_TLS_SERVER_NAME) {
-        return new Error('Server name verification error');
+    checkServerIdentity = (receivedName, cert) => {
+      if (receivedName !== serverName) {
+        return new Error(
+          `Server name verification error: ${serverName} but received hostname ${receivedName}`
+        );
       }
     };
   }
 
-  credentials = grpc.credentials.createSsl(
-    ca ? caContent : undefined,
-    pk,
-    cert,
-    {
-      checkServerIdentity: verifyHost ? checkServerIdentity : undefined,
-    }
-  );
+  credentials = grpc.credentials.createSsl(caPath ? ca : undefined, pk, cert, {
+    checkServerIdentity: verifyHost ? checkServerIdentity : undefined,
+  });
 
   const options = {};
-  if (process.env.TEMPORAL_TLS_SERVER_NAME) {
-    options['grpc.ssl_target_name_override'] =
-      process.env.TEMPORAL_TLS_SERVER_NAME;
+  if (serverName) {
+    options['grpc.ssl_target_name_override'] = serverName;
   }
 
   return { credentials, options };
