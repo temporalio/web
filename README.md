@@ -53,8 +53,8 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
     auth:
       enabled: true # Temporal Web checks this first before reading your provider config
       providers:
-          - label: 'google oidc'
-            type: oidc
+          - label: 'google oidc'                        # for internal use; in future may expose as button text
+            type: oidc                                  # for futureproofing; only oidc is supported today
             issuer: https://accounts.google.com
             client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
             client_secret: xxxxxxxxxxxxxxxxxxxxxxx
