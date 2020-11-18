@@ -17,8 +17,9 @@ Set these environment variables if you need to change their defaults
 | ----------------------------- | ----------------------------------------------------------------- | ----------------------------- |
 | TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint                          | 127.0.0.1:7233                |
 | TEMPORAL_WEB_PORT             | HTTP port to serve on                                             | 8088                          |
-| TEMPORAL_CONFIG_PATH          | Path to config file, see [configurations](#configuring-authentication-optional) | ./server/config.yml   
+| TEMPORAL_CONFIG_PATH          | Path to config file, see [configurations](#configuring-authentication-optional) | ./server/config.yml |
 | TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | true                          |
+| TEMPORAL_WEB_ROOT_PATH        | The root path to serve the app under                              | /                             |
 | TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development                    | 8081                          |
 | TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082                          |
 | TEMPORAL_SESSION_SECRET       | Secret used to hash the session with HMAC                         | "ensure secret in production" |

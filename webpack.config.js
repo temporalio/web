@@ -13,6 +13,8 @@ if (!development) {
   envKeys['NODE_ENV'] = '"production"';
 }
 
+const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
+
 module.exports = {
   devtool: 'source-map',
   entry: [
@@ -25,7 +27,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'temporal.[hash].js',
-    publicPath: '/',
+    publicPath: PUBLIC_PATH,
   },
   plugins: [
     new webpack.DefinePlugin({
