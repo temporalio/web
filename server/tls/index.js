@@ -7,7 +7,7 @@ function getCredentials() {
     return { credentials: grpc.credentials.createInsecure(), options: {} };
   }
 
-  console.log('establishing secure connection using...');
+  console.log('establishing secure connection using TLS...');
 
   let credentials;
   if (process.env.TEMPORAL_TLS_CERT_PATH === undefined) {
@@ -23,7 +23,7 @@ function getCredentials() {
     caContent = readFileSync(ca);
   }
 
-  let verifyHost = [true, 'true'].includes(
+  const verifyHost = [true, 'true'].includes(
     process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
   );
   let checkServerIdentity;
