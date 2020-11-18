@@ -35,7 +35,9 @@ Optional TLS configuration variables:
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      | true    |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |         |
 
-To enable TLS, you need to specify `TEMPORAL_TLS_CA_PATH`, `TEMPORAL_TLS_KEY_PATH`, and `TEMPORAL_TLS_CERT_PATH`. You can also opt to have your hostname verified, by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `true` and then specifying `TEMPORAL_TLS_SERVER_NAME`.
+To enable TLS, you need to specify `TEMPORAL_TLS_CA_PATH`, `TEMPORAL_TLS_KEY_PATH`, and `TEMPORAL_TLS_CERT_PATH`. 
+
+By default we will also verify your server `hostname`, matching it to `TEMPORAL_TLS_SERVER_NAME`. You can turn this off by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `false`.
 
 </details>
 
