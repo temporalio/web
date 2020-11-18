@@ -12,6 +12,7 @@ This web UI is used to view workflows from [Temporalio][temporal], see what's ru
 
 Set these environment variables if you need to change their defaults
 
+
 | Variable                              | Description                                                       | Default                       |
 | ------------------------------------- | ----------------------------------------------------------------- | ----------------------------- |
 | TEMPORAL_GRPC_ENDPOINT                | String representing server gRPC endpoint                          | 127.0.0.1:7233                |
@@ -20,12 +21,29 @@ Set these environment variables if you need to change their defaults
 | TEMPORAL_HOT_RELOAD_PORT              | HTTP port used by hot reloading in development                    | 8081                          |
 | TEMPORAL_HOT_RELOAD_TEST_PORT         | HTTP port used by hot reloading in tests                          | 8082                          |
 | TEMPORAL_SESSION_SECRET               | Secret used to hash the session with HMAC                         | "ensure secret in production" |
+| TEMPORAL_EXTERNAL_SCRIPTS             | Additional JavaScript tags to serve in the UI                      |                               |
+
+
+<details>
+<summary>
+Optional TLS configuration variables:
+</summary>
+
+
+| Variable                              | Description                                                       | Default                       |
+| ------------------------------------- | ----------------------------------------------------------------- | ----------------------------- |
 | TEMPORAL_TLS_CA_PATH                  | Certificate authority (CA) certificate for the validation of server |                |
 | TEMPORAL_TLS_KEY_PATH                 | Private key for secure communication with the server                |                |
 | TEMPORAL_TLS_CERT_PATH                | Certificate for the server to validate the client (web) identity    |                |
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      |                |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |                |
-| TEMPORAL_EXTERNAL_SCRIPTS             | Addtional JavaScript tags to serve in the UI                      |                               |
+
+
+To enable TLS, you need to specify `TEMPORAL_TLS_CA_PATH`, `TEMPORAL_TLS_KEY_PATH`, and `TEMPORAL_TLS_CERT_PATH`. You can also opt to have your hostname verified, by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `true` and then specifying `TEMPORAL_TLS_SERVER_NAME`. 
+
+</details>
+
+
 
 ### Configuring Authentication (optional)
 
