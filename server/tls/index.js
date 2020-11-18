@@ -5,7 +5,7 @@ const caPath = process.env.TEMPORAL_TLS_CA_PATH;
 const keyPath = process.env.TEMPORAL_TLS_KEY_PATH;
 const certPath = process.env.TEMPORAL_TLS_CERT_PATH;
 const serverName = process.env.TEMPORAL_TLS_SERVER_NAME;
-const verifyHost = ![false, 'false'].includes(
+const verifyHost = [true, 'true', undefined].includes(
   process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
 );
 
