@@ -7,7 +7,7 @@ function getCredentials() {
     return { credentials: grpc.credentials.createInsecure(), options: {} };
   }
 
-  console.log('establishing secure connection using...');
+  console.log('establishing secure connection using TLS...');
 
   let credentials;
   if (process.env.TEMPORAL_TLS_CERT_PATH === undefined) {
