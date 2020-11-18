@@ -23,9 +23,11 @@ function getCredentials() {
     caContent = readFileSync(ca);
   }
 
-  let verifyHost = false;
+  let verifyHost = [true, 'true'].includes(
+    process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
+  );
   let checkServerIdentity;
-  if (process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION in [true, 'true']) {
+  if (verifyHost) {
     checkServerIdentity = (hostname, cert) => {
       if (hostname !== process.env.TEMPORAL_TLS_SERVER_NAME) {
         return new Error('Server name verification error');
