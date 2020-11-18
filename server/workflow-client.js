@@ -5,6 +5,7 @@ const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
 const utils = require('./utils');
+const { getCredentials } = require('./tls');
 
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
@@ -256,9 +257,12 @@ function WorkflowClient() {
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
   const service = grpc.loadPackageDefinition(packageDefinition);
 
+  const { credentials: tlsCreds, options: tlsOpts } = getCredentials();
+
   let client = new service.temporal.api.workflowservice.v1.WorkflowService(
     process.env.TEMPORAL_GRPC_ENDPOINT || '127.0.0.1:7233',
-    grpc.credentials.createInsecure()
+    tlsCreds,
+    tlsOpts
   );
 
   client = bluebird.promisifyAll(client);

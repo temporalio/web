@@ -5,12 +5,27 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch via NPM",
+      "name": "Debug",
       "request": "launch",
       "runtimeArgs": ["run-script", "dev"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node"
+    },
+    {
+      "name": "Debug with mTLS",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "dev"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "pwa-node",
+      "env": {
+        "TEMPORAL_TLS_CA_PATH": "../certs/ca.cert",
+        "TEMPORAL_TLS_CERT_PATH": "../certs/client.pem",
+        "TEMPORAL_TLS_KEY_PATH": "../certs/client.key",
+        "TEMPORAL_TLS_ENABLE_HOST_VERIFICATION": "false",
+        "TEMPORAL_TLS_SERVER_NAME": "tls-sample"
+      }
     }
   ]
 }
