@@ -2,8 +2,8 @@ auth:
   enabled: false
   providers:
       # # example provider
-      # - label: 'googleoidc'
-      #   type: oidc
+      # - label: 'google oidc'                        # for internal use; in future may expose as button text
+      #   type: oidc                                  # for futureproofing; only oidc is supported today
       #   issuer: https://accounts.google.com
       #   client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
       #   client_secret: xxxxxxxxxxxxxxxxxxxxxxx
