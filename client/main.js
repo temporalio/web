@@ -31,7 +31,10 @@ import WorkflowTabs from './routes/workflow';
 
 import { http, injectMomentDurationFormat, jsonTryParse } from '~helpers';
 
+const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
+
 const routeOpts = {
+  base: PUBLIC_PATH,
   mode: 'history',
   routes: [
     {

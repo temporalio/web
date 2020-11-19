@@ -113,5 +113,6 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     overlay: true,
+    publicPath: PUBLIC_PATH,
   },
 };
