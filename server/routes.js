@@ -397,9 +397,16 @@ router.get('/api/web-settings', (ctx) => {
 
 router.get('/api/me', async (ctx) => {
   const auth = await getAuthConfig();
+
+  let user;
+  if (ctx.isAuthenticated() && !!ctx.state.user) {
+    const { email, name, picture } = ctx.state.user;
+    user = { email, name, picture };
+  }
+
   ctx.body = {
     isAuthEnabled: auth.enabled,
-    user: ctx.state.user,
+    user,
   };
 });
 

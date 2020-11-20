@@ -12,9 +12,11 @@ async function getClient(issuerUrl, clientId, clientSecret, callbackUriBase) {
 }
 
 const verify = (tokenSet, userinfo, done) => {
-  // Attach tokens to the stored userinfo.
-  userinfo.tokenSet = tokenSet;
-  return done(null, userinfo);
+  const { access_token: accessToken } = tokenSet;
+  const { email, name, picture } = userinfo;
+
+  const user = { email, name, picture, accessToken };
+  return done(null, user);
 };
 
 const getStrategy = async (
