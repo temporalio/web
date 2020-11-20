@@ -4,7 +4,7 @@ const isWriteApiPermitted = () => {
 
 const extractAccessToken = (ctx) => {
   if (ctx.isAuthenticated()) {
-    return ctx.state.user.tokenSet.access_token;
+    return ctx.state.user.accessToken;
   }
   return undefined;
 };
