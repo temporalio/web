@@ -399,7 +399,7 @@ router.get('/api/me', async (ctx) => {
   const auth = await getAuthConfig();
 
   let user;
-  if (ctx.isAuthenticated()) {
+  if (ctx.isAuthenticated() && !!ctx.state.user) {
     const { email, name, picture } = ctx.state.user;
     user = { email, name, picture };
   }
