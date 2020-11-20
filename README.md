@@ -59,6 +59,7 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
             client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
             client_secret: xxxxxxxxxxxxxxxxxxxxxxx
             scope: openid profile email
+            audience: temporal # identifier of the audience for an issued token (optional)
             callback_base_uri: http://localhost:8088
     ```
 

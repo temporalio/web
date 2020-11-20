@@ -21,6 +21,7 @@ const initialize = async (ctx, next) => {
       client_id: clientId,
       client_secret: clientSecret,
       scope,
+      audience,
       callback_base_uri: callbackUri,
     } = auth.providers[0]; // we currently support single auth config
     const strategy = await oidc.getStrategy(
@@ -28,6 +29,7 @@ const initialize = async (ctx, next) => {
       clientId,
       clientSecret,
       scope || 'openid profile email',
+      audience,
       callbackUri
     );
     passport.use(STRATEGY_NAMES.oidc, strategy);

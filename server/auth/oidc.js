@@ -24,6 +24,7 @@ const getStrategy = async (
   clientId,
   clientSecret,
   scope,
+  audience,
   callbackUriBase
 ) => {
   const client = await getClient(
@@ -34,6 +35,7 @@ const getStrategy = async (
   );
   const params = {
     scope,
+    audience,
     response: ['userinfo'],
   };
 
