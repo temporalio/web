@@ -12,6 +12,19 @@ context('Workflows', () => {
     cy.url().should('include', '&status=ALL');
   });
 
+  it('renders both open and closed workflows in ALL view', () => {
+    cy.visit(`/namespaces/${Cypress.env('namespace_id')}/workflows?status=ALL`);
+    cy.get('[data-cy=workflow-list]')
+      .find('[data-cy=workflow-row]')
+      .should('have.length', 6)
+      .should('contain.text', 'wf_canceled')
+      .should('contain.text', 'wf_open1')
+      .should('contain.text', 'wf_open2')
+      .should('contain.text', 'wf_open3')
+      .should('contain.text', 'wf_terminated')
+      .should('contain.text', 'wf_timedout');
+  });
+
   it('filters workflows by status', () => {
     cy.get('[data-cy=status-filter]')
       .click()
