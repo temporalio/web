@@ -19,7 +19,7 @@
     "temporal",
     "asynchronous"
   ],
-  "author": "Nathan Black <nathanbl@uber.com>",
+  "author": "Temporal <hello@temporal.io>",
   "engines": {
     "node": "^14",
     "npm": "^6"
