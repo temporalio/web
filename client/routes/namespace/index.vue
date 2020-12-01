@@ -17,6 +17,14 @@
         icon="icon_trip-history"
         :to="{ name: 'workflow-archival' }"
       />
+      <span class="bugreport">
+        <a
+          target="_blank"
+          href="https://github.com/temporalio/web/issues/new/choose"
+        >
+          Report Bug/Give Feedback
+        </a>
+      </span>
     </navigation-bar>
     <router-view name="workflow-list" :namespace="namespace" />
     <router-view name="namespace-settings" :namespace="namespace" />
@@ -42,5 +50,11 @@ section.namespace {
   flex-direction: column;
   flex: 1 1 auto;
   overflow-y: auto;
+  position: relative
+}
+.bugreport {
+  position: absolute;
+  right: 1em;
+  top: 0.75em;
 }
 </style>
