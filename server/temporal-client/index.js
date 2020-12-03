@@ -1,2 +1,3 @@
 const { TemporalClient } = require('./temporal-client');
-module.exports = { TemporalClient };
+const { WithErrorConverter } = require('./with-error-converter');
+module.exports = { TemporalClient, WithErrorConverter };

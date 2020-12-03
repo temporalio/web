@@ -2,12 +2,12 @@ const Router = require('koa-router'),
   router = new Router(),
   moment = require('moment'),
   losslessJSON = require('lossless-json'),
-  { TemporalClient } = require('./temporal-client'),
+  { TemporalClient, WithErrorConverter } = require('./temporal-client'),
   { isWriteApiPermitted, extractAccessToken } = require('./utils'),
   { getAuthConfig } = require('./config');
 authRoutes = require('./routes-auth');
 
-const tClient = new TemporalClient();
+const tClient = WithErrorConverter(new TemporalClient());
 
 router.use('/auth', authRoutes);
 
