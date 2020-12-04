@@ -93,15 +93,15 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
           </summary>
           Some providers like Okta, have a race condition that may cause logins to occasionally fail. You can get around this by providing the full URL to the `openid-configuration` path as part of the `issuer` parameter:
 
-              ```yaml
-              auth:
-                enabled: true
-                providers:
-                    - label: 'okta dev'
-                      type: oidc
-                      issuer: https://dev-xxxxxxx.okta.com/.well-known/openid-configuration
-                      ...
-            ```
+        ```yaml
+          auth:
+            enabled: true
+            providers:
+                - label: 'okta dev'
+                  type: oidc
+                  issuer: https://dev-xxxxxxx.okta.com/.well-known/openid-configuration
+                  ...
+        ```
       </details>
     - Keycloak: https://www.keycloak.org/getting-started/getting-started-docker
     - please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
