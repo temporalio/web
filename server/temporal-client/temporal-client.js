@@ -56,34 +56,29 @@ function TemporalClient() {
 }
 
 TemporalClient.prototype.describeNamespace = async function(
-  { namespace },
-  metadata
+  ctx,
+  { namespace }
 ) {
   const req = { namespace };
 
-  const res = await this.client.describeNamespaceAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.describeNamespaceAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.listNamespaces = async function(
-  { pageSize, nextPageToken },
-  metadata
+  ctx,
+  { pageSize, nextPageToken }
 ) {
   const req = { pageSize, nextPageToken };
 
-  const res = await this.client.listNamespacesAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.listNamespacesAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.openWorkflows = async function(
+  ctx,
   {
     namespace,
     startTime,
@@ -92,8 +87,7 @@ TemporalClient.prototype.openWorkflows = async function(
     typeFilter,
     nextPageToken,
     maximumPageSize = 100,
-  },
-  metadata
+  }
 ) {
   const startTimeFilter = {
     earliestTime: momentToProtoTime(startTime),
@@ -107,15 +101,13 @@ TemporalClient.prototype.openWorkflows = async function(
     typeFilter,
     executionFilter,
   };
-  const res = await this.client.listOpenWorkflowExecutionsAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.listOpenWorkflowExecutionsAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.closedWorkflows = async function(
+  ctx,
   {
     namespace,
     startTime,
@@ -125,8 +117,7 @@ TemporalClient.prototype.closedWorkflows = async function(
     status,
     nextPageToken,
     maximumPageSize = 100,
-  },
-  metadata
+  }
 ) {
   const startTimeFilter = {
     earliestTime: momentToProtoTime(startTime),
@@ -142,17 +133,14 @@ TemporalClient.prototype.closedWorkflows = async function(
     statusFilter: status ? { status } : undefined,
   };
 
-  const res = await this.client.listClosedWorkflowExecutionsAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.listClosedWorkflowExecutionsAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.listWorkflows = async function(
-  { namespace, query, nextPageToken, pageSize = 20, maximumPageSize = 100 },
-  metadata
+  ctx,
+  { namespace, query, nextPageToken, pageSize = 20, maximumPageSize = 100 }
 ) {
   const req = {
     namespace,
@@ -162,23 +150,20 @@ TemporalClient.prototype.listWorkflows = async function(
     maximumPageSize,
   };
 
-  const res = await this.client.listWorkflowExecutionsAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.listWorkflowExecutionsAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.getHistory = async function(
+  ctx,
   {
     namespace,
     nextPageToken,
     execution,
     waitForNewEvent,
     maximumPageSize = 100,
-  },
-  metadata
+  }
 ) {
   const req = {
     namespace,
@@ -188,10 +173,7 @@ TemporalClient.prototype.getHistory = async function(
     maximumPageSize,
   };
 
-  const res = await this.client.getWorkflowExecutionHistoryAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
 
   if (res.history && res.history.events) {
     res.history = buildHistory(res);
@@ -201,8 +183,8 @@ TemporalClient.prototype.getHistory = async function(
 };
 
 TemporalClient.prototype.archivedWorkflows = async function(
-  { namespace, nextPageToken, query, pageSize = 100 },
-  metadata
+  ctx,
+  { namespace, nextPageToken, query, pageSize = 100 }
 ) {
   const req = {
     namespace,
@@ -211,17 +193,14 @@ TemporalClient.prototype.archivedWorkflows = async function(
     pageSize,
   };
 
-  const res = await this.client.listArchivedWorkflowExecutionsAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.listArchivedWorkflowExecutionsAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.exportHistory = async function(
-  { namespace, execution, nextPageToken },
-  metadata
+  ctx,
+  { namespace, execution, nextPageToken }
 ) {
   const req = {
     namespace,
@@ -229,34 +208,28 @@ TemporalClient.prototype.exportHistory = async function(
     nextPageToken,
   };
 
-  const res = await this.client.getWorkflowExecutionHistoryAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
 
   return cliTransform(res);
 };
 
 TemporalClient.prototype.queryWorkflow = async function(
-  { namespace, execution, query },
-  metadata
+  ctx,
+  { namespace, execution, query }
 ) {
   const req = {
     namespace,
     execution: buildWorkflowExecutionRequest(execution),
     query,
   };
-  const res = await this.client.queryWorkflowAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.queryWorkflowAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.terminateWorkflow = async function(
-  { namespace, execution, reason },
-  metadata
+  ctx,
+  { namespace, execution, reason }
 ) {
   if (!utils.isWriteApiPermitted()) {
     throw Error('Terminate method is disabled');
@@ -268,17 +241,14 @@ TemporalClient.prototype.terminateWorkflow = async function(
     reason,
   };
 
-  const res = await this.client.terminateWorkflowExecutionAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.terminateWorkflowExecutionAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.signalWorkflow = async function(
-  { namespace, execution, signal },
-  metadata
+  ctx,
+  { namespace, execution, signal }
 ) {
   const req = {
     namespace,
@@ -286,49 +256,37 @@ TemporalClient.prototype.signalWorkflow = async function(
     signal,
   };
 
-  const res = await this.client.signalWorkflowExecutionAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.signalWorkflowExecutionAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.describeWorkflow = async function(
-  { namespace, execution },
-  metadata
+  ctx,
+  { namespace, execution }
 ) {
   const req = {
     namespace,
     execution: buildWorkflowExecutionRequest(execution),
   };
 
-  const res = await this.client.describeWorkflowExecutionAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.describeWorkflowExecutionAsync(ctx, req);
 
   return uiTransform(res);
 };
 
 TemporalClient.prototype.describeTaskQueue = async function(
-  { namespace, taskQueue, taskQueueType },
-  metadata
+  ctx,
+  { namespace, taskQueue, taskQueueType }
 ) {
   const req = { namespace, taskQueue, taskQueueType };
-  const res = await this.client.describeTaskQueueAsync(
-    req,
-    buildGrpcMetadata(metadata)
-  );
+  const res = await this.client.describeTaskQueueAsync(ctx, req);
 
   return uiTransform(res);
 };
 
-TemporalClient.prototype.getVersionInfo = async function(metadata) {
-  const res = await this.client.getClusterInfoAsync(
-    {},
-    buildGrpcMetadata(metadata)
-  );
+TemporalClient.prototype.getVersionInfo = async function(ctx) {
+  const res = await this.client.getClusterInfoAsync(ctx, {});
 
   return uiTransform(res.versionInfo);
 };

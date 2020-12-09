@@ -57,11 +57,17 @@ function buildWorkflowExecutionRequest(execution) {
   return req;
 }
 
-function buildGrpcMetadata(data) {
+const extractAccessToken = (ctx) => {
+  if (ctx.isAuthenticated()) {
+    return ctx.state.user.accessToken;
+  }
+  return undefined;
+};
+
+function buildGrpcMetadata(ctx) {
   const metadata = new grpc.Metadata();
 
-  const { accessToken } = data;
-
+  const accessToken = extractAccessToken(ctx);
   if (accessToken) {
     metadata.add('authorization', `Bearer ${accessToken}`);
   }
