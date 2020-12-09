@@ -8,7 +8,7 @@ const Router = require('koa-router'),
     WithErrorConverter,
   } = require('./temporal-client'),
   { isWriteApiPermitted } = require('./utils'),
-  { getAuthConfig } = require('./config');
+  { getAuthConfig, getRoutingConfig } = require('./config');
 authRoutes = require('./routes-auth');
 
 const tClient = WithErrorConverter(WithAuthMetadata(new TemporalClient()));
@@ -350,9 +350,12 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
   ctx.body = tq;
 });
 
-router.get('/api/web-settings', (ctx) => {
+router.get('/api/web-settings', async (ctx) => {
+  const routingConfig = await getRoutingConfig();
+
   ctx.body = {
     health: 'OK',
+    routingConfig,
     permitWriteApi: isWriteApiPermitted(),
   };
 });
