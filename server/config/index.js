@@ -22,6 +22,15 @@ const getAuthConfig = async () => {
   return auth;
 };
 
+const getRoutingConfig = async () => {
+  let { routing } = await readConfig();
+  if (!routing) {
+    return { defaultToNamespace: null };
+  }
+  return routing;
+};
+
 module.exports = {
   getAuthConfig,
+  getRoutingConfig,
 };

@@ -83,17 +83,23 @@ export default {
   components: {
     'detail-list': DetailList,
   },
-  created() {
+  async created() {
     this.namespaceDescCache = {};
 
-    this.getNamespaces().then(() => {
-      if (this.recentNamespaces.length == 1) {
-        const namespace = this.recentNamespaces[0];
-        const url = this.namespaceLink(namespace);
+    const { routingConfig } = await this.$http(`/api/web-settings`);
+    if (routingConfig?.defaultToNamespace) {
+      const url = this.namespaceLink(routingConfig.defaultToNamespace);
+      this.$router.push(url);
+      return;
+    }
 
-        this.$router.push(url);
-      }
-    });
+    await this.getNamespaces();
+    if (this.recentNamespaces.length == 1) {
+      const namespace = this.recentNamespaces[0];
+      const url = this.namespaceLink(namespace);
+
+      this.$router.push(url);
+    }
   },
   methods: {
     changeNamespace() {
