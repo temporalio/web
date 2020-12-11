@@ -66,7 +66,7 @@ export default {
     clearTimeout(this.notification.timeout);
   },
   async created() {
-    const promises = [this.validateAuth(), this.validateDefaultNamespace()];
+    const promises = [this.validateAuth(), this.validateNamespaceAccess()];
     const { show, message, link, version } = await getNewVersionAnnouncement(
       this.$http,
       this.onNotification
@@ -121,7 +121,7 @@ export default {
       this.announcement.show = false;
       this.onVersionAnnouncementClose();
     },
-    async validateDefaultNamespace() {
+    async validateNamespaceAccess() {
       if (!this.$route.params.namespace) {
         return;
       }
@@ -138,8 +138,7 @@ export default {
           message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
           type: NOTIFICATION_TYPE_ERROR,
         });
-        const url = `/namespaces/${defaultToNamespace}/workflows`;
-        this.$router.push(url);
+        this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
       }
     },
     async validateAuth() {
