@@ -3,6 +3,7 @@ const passport = require('koa-passport');
 const oidc = require('./oidc');
 const { STRATEGY_NAMES } = require('./constants');
 const { getAuthConfig } = require('../config');
+const { generators } = require('openid-client');
 
 const initialize = async (ctx, next) => {
   const auth = await getAuthConfig();
@@ -47,7 +48,7 @@ const initialize = async (ctx, next) => {
 const authenticate = (ctx, next, options, callback) => {
   return passport.authenticate(
     STRATEGY_NAMES.oidc,
-    options,
+    { nonce: generators.nonce(), ...options },
     callback
   )(ctx, next);
 };

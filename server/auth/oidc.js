@@ -8,6 +8,7 @@ async function getClient(issuerUrl, clientId, clientSecret, callbackUriBase) {
     redirect_uris: [`${callbackUriBase}/auth/sso_callback`],
     post_logout_redirect_uris: [`${callbackUriBase}/auth/logout_callback`],
     token_endpoint_auth_method: 'client_secret_post',
+    response_types: ['code'],
   });
 }
 
