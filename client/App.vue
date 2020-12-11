@@ -66,7 +66,7 @@ export default {
     clearTimeout(this.notification.timeout);
   },
   async created() {
-    const promises = [this.validateAuth(), this.validateNamespaceAccess()];
+    const promises = [this.verifyAuth(), this.verifyNamespaceAccess()];
     const { show, message, link, version } = await getNewVersionAnnouncement(
       this.$http,
       this.onNotification
@@ -121,7 +121,7 @@ export default {
       this.announcement.show = false;
       this.onVersionAnnouncementClose();
     },
-    async validateNamespaceAccess() {
+    async verifyNamespaceAccess() {
       if (!this.$route.params.namespace) {
         return;
       }
@@ -141,7 +141,7 @@ export default {
         this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
       }
     },
-    async validateAuth() {
+    async verifyAuth() {
       const me = await this.$http('/api/me');
       if (me.isAuthEnabled) {
         if (!me.user) {
