@@ -15,8 +15,9 @@ function readCredsFromYml({ configPath }) {
   const {
     key: keyBase64,
     cert: certBase64,
-    clientca: caBase64,
-    hostname,
+    ca: caBase64,
+    server_name: serverName,
+    verifyHost,
   } = config;
 
   if (!keyBase64) {
@@ -32,11 +33,11 @@ function readCredsFromYml({ configPath }) {
   const ca = caBase64 ? Buffer.from(caBase64, 'base64') : undefined;
 
   let checkServerIdentity;
-  if (hostname) {
+  if (verifyHost) {
     checkServerIdentity = (receivedName, cert) => {
-      if (receivedName !== hostname) {
+      if (receivedName !== serverName) {
         throw new Error(
-          `Server name verification error: ${hostname} but received hostname ${receivedName}`
+          `Server name verification error: ${serverName} but received hostname ${receivedName}`
         );
       }
     };
@@ -47,8 +48,8 @@ function readCredsFromYml({ configPath }) {
   });
 
   const options = {};
-  if (hostname) {
-    options['grpc.ssl_target_name_override'] = hostname;
+  if (serverName) {
+    options['grpc.ssl_target_name_override'] = serverName;
   }
 
   return { credentials, options };
