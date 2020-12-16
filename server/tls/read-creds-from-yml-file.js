@@ -1,4 +1,3 @@
-const grpc = require('grpc');
 const { readFileSync } = require('fs');
 const yaml = require('js-yaml');
 
@@ -32,27 +31,7 @@ function readCredsFromYml({ configPath }) {
   const cert = Buffer.from(certBase64, 'base64');
   const ca = caBase64 ? Buffer.from(caBase64, 'base64') : undefined;
 
-  let checkServerIdentity;
-  if (verifyHost) {
-    checkServerIdentity = (receivedName, cert) => {
-      if (receivedName !== serverName) {
-        throw new Error(
-          `Server name verification error: ${serverName} but received hostname ${receivedName}`
-        );
-      }
-    };
-  }
-
-  credentials = grpc.credentials.createSsl(ca, pk, cert, {
-    checkServerIdentity,
-  });
-
-  const options = {};
-  if (serverName) {
-    options['grpc.ssl_target_name_override'] = serverName;
-  }
-
-  return { credentials, options };
+  return { pk, cert, ca, serverName, verifyHost };
 }
 
 module.exports = { readCredsFromYml };
