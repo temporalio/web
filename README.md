@@ -30,7 +30,7 @@ Optional TLS configuration:
 
 There are two ways to configure TLS.
 
-1. First option to enable TLS is by passing both `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`
+1. First option to enable TLS is by passing both `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`:
 
 | Variable                              | Description                                                         | Default |
 | ------------------------------------- | ------------------------------------------------------------------- | ------- |
@@ -42,7 +42,7 @@ There are two ways to configure TLS.
 
 By default we will also verify your server `hostname`, matching it to `TEMPORAL_TLS_SERVER_NAME`. You can turn this off by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `false`.
 
-2. Second option to enable TLS is by passing `TEMPORAL_TLS_YML_PATH`
+2. Second option to enable TLS is by passing `TEMPORAL_TLS_YML_PATH`:
 
 | Variable                              | Description                                                         | Default |
 | ------------------------------------- | ------------------------------------------------------------------- | ------- |
