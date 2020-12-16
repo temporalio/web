@@ -9,7 +9,7 @@ const serverName = process.env.TEMPORAL_TLS_SERVER_NAME;
 const verifyHost = [true, 'true', undefined].includes(
   process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
 );
-const configPath = process.env.TEMPORAL_TLS_CONFIG_PATH;
+const configPath = process.env.TEMPORAL_TLS_YML_PATH;
 
 function getCredentials() {
   if (keyPath !== undefined) {
