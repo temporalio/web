@@ -34,8 +34,8 @@ There are two ways to configure TLS.
 
 | Variable                              | Description                                                         | Default |
 | ------------------------------------- | ------------------------------------------------------------------- | ------- |
-| TEMPORAL_TLS_KEY_PATH                 | Private key for secure communication with the server                |         |
 | TEMPORAL_TLS_CERT_PATH                | Certificate for the server to validate the client (web) identity    |         |
+| TEMPORAL_TLS_KEY_PATH                 | Private key for secure communication with the server                |         |
 | TEMPORAL_TLS_CA_PATH                  | Certificate authority (CA) certificate for the validation of server |         |
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      | true    |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |         |
@@ -51,10 +51,10 @@ By default we will also verify your server `hostname`, matching it to `TEMPORAL_
 The TLS yml file is expected to be in the following format:
 
 ```yaml
-cert: <client certificate base64 encoded>
-key: <client private key base64 encoded>
-ca:  <ca base64 encoded>
-server_name: gocanary.internal-bws.tmprl.cloud
+cert: <certificate base64-encoded>
+key: <private key base64-encoded>
+ca:  <certificate authority (CA) base64-encoded>
+server_name: my-server
 verifyHost: true
 ```
 
