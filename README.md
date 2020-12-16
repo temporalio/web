@@ -25,20 +25,38 @@ Set these environment variables if you need to change their defaults
 
 <details>
 <summary>
-Optional TLS configuration variables:
+Optional TLS configuration:
 </summary>
+
+There are two ways to configure TLS.
+
+1. First option to enable TLS is by passing both `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`
 
 | Variable                              | Description                                                         | Default |
 | ------------------------------------- | ------------------------------------------------------------------- | ------- |
-| TEMPORAL_TLS_CA_PATH                  | Certificate authority (CA) certificate for the validation of server |         |
 | TEMPORAL_TLS_KEY_PATH                 | Private key for secure communication with the server                |         |
 | TEMPORAL_TLS_CERT_PATH                | Certificate for the server to validate the client (web) identity    |         |
+| TEMPORAL_TLS_CA_PATH                  | Certificate authority (CA) certificate for the validation of server |         |
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      | true    |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |         |
 
-To enable TLS, you need to specify `TEMPORAL_TLS_CA_PATH`, `TEMPORAL_TLS_KEY_PATH`, and `TEMPORAL_TLS_CERT_PATH`. 
-
 By default we will also verify your server `hostname`, matching it to `TEMPORAL_TLS_SERVER_NAME`. You can turn this off by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `false`.
+
+2. Second option to enable TLS is by passing `TEMPORAL_TLS_YML_PATH`
+
+| Variable                              | Description                                                         | Default |
+| ------------------------------------- | ------------------------------------------------------------------- | ------- |
+| TEMPORAL_TLS_YML_PATH                  | Certificate authority (CA) certificate for the validation of server |         |
+
+The TLS yml file is expected to be in the following format:
+
+```yaml
+cert: <client certificate base64 encoded>
+key: <client private key base64 encoded>
+ca:  <ca base64 encoded>
+server_name: gocanary.internal-bws.tmprl.cloud
+verifyHost: true
+```
 
 </details>
 
