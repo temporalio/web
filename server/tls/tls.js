@@ -19,8 +19,6 @@ function getCredentials() {
       keyPath,
       certPath,
       caPath,
-      serverName,
-      verifyHost,
     });
     return createSecure(pk, cert, ca, serverName, verifyHost);
   } else if (configPath !== undefined) {
@@ -49,7 +47,7 @@ function createSecure(pk, cert, ca, serverName, verifyHost) {
     };
   }
 
-  credentials = grpc.credentials.createSsl(caPath ? ca : undefined, pk, cert, {
+  credentials = grpc.credentials.createSsl(ca, pk, cert, {
     checkServerIdentity,
   });
 
