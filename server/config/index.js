@@ -3,10 +3,11 @@ const { readFile } = require('fs');
 const yaml = require('js-yaml');
 
 let config = undefined;
+const configPath = process.env.TEMPORAL_CONFIG_PATH || './server/config.yml';
 
 const readConfig = async () => {
   if (!config) {
-    const cfgContents = await promisify(readFile)('./server/config.yml', {
+    const cfgContents = await promisify(readFile)(configPath, {
       encoding: 'utf8',
     });
     config = yaml.safeLoad(cfgContents);
