@@ -1,4 +1,3 @@
-const grpc = require('grpc');
 const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
@@ -55,24 +54,6 @@ function buildWorkflowExecutionRequest(execution) {
   }
 
   return req;
-}
-
-const extractAccessToken = (ctx) => {
-  if (ctx.isAuthenticated()) {
-    return ctx.state.user.accessToken;
-  }
-  return undefined;
-};
-
-function buildGrpcMetadata(ctx) {
-  const metadata = new grpc.Metadata();
-
-  const accessToken = extractAccessToken(ctx);
-  if (accessToken) {
-    metadata.add('authorization', `Bearer ${accessToken}`);
-  }
-
-  return metadata;
 }
 
 function momentToProtoTime(time) {
@@ -230,7 +211,6 @@ function cliTransform(item) {
 
 module.exports = {
   buildHistory,
-  buildGrpcMetadata,
   buildWorkflowExecutionRequest,
   momentToProtoTime,
   uiTransform,
