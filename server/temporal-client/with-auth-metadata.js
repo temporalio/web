@@ -1,4 +1,5 @@
-const { buildGrpcMetadata } = require('./helpers');
+const grpc = require('grpc');
+const { getAuthConfig } = require('../config');
 
 const WithAuthMetadata = (temporalClient) => {
   let tClient = Object.create(temporalClient);
@@ -15,13 +16,34 @@ const getter = (obj, property) => {
 
   if (typeof obj[property] === 'function') {
     const fn = obj[property].bind(obj);
-    return (ctx, req) => {
-      const metadata = buildGrpcMetadata(ctx);
+    return async (ctx, req) => {
+      const metadata = await buildGrpcMetadata(ctx);
       return fn(req, metadata);
     };
   }
 
   return obj[property];
+};
+
+const extractAccessToken = (ctx) => {
+  if (ctx.isAuthenticated()) {
+    return ctx.state.user.accessToken;
+  }
+  return undefined;
+};
+
+const buildGrpcMetadata = async (ctx) => {
+  const metadata = new grpc.Metadata();
+
+  const auth = await getAuthConfig();
+  if (auth.enabled) {
+    const accessToken = extractAccessToken(ctx);
+    if (!accessToken) {
+      throw Error('Request unauthorized')
+    }
+    metadata.add('authorization', `Bearer ${accessToken}`);
+  }
+  return metadata;
 };
 
 module.exports = { WithAuthMetadata };

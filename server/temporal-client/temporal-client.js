@@ -4,7 +4,6 @@ const protoLoader = require('@grpc/proto-loader');
 const utils = require('../utils');
 const { getCredentials } = require('../tls');
 const {
-  buildGrpcMetadata,
   buildHistory,
   buildWorkflowExecutionRequest,
   momentToProtoTime,
