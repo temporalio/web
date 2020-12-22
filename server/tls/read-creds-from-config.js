@@ -1,23 +1,13 @@
-const { readFileSync } = require('fs');
-const yaml = require('js-yaml');
+const { getTlsConfig } = require('../config');
 
-function readCredsFromYml({ configPath }) {
-  if (configPath === undefined) {
-    throw Error('TLS config path is not provided');
-  }
-
-  let credentials;
-
-  const configRaw = readFileSync(configPath);
-  config = yaml.safeLoad(configRaw);
-
+function readCredsFromConfig() {
   const {
     key: keyBase64,
     cert: certBase64,
     ca: caBase64,
-    server_name: serverName,
+    serverName,
     verifyHost,
-  } = config;
+  } = getTlsConfig();
 
   if (!keyBase64) {
     throw Error('TLS key is not provided');
@@ -34,4 +24,4 @@ function readCredsFromYml({ configPath }) {
   return { pk, cert, ca, serverName, verifyHost };
 }
 
-module.exports = { readCredsFromYml };
+module.exports = { readCredsFromConfig };
