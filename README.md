@@ -17,6 +17,7 @@ Set these environment variables if you need to change their defaults
 | ----------------------------- | ----------------------------------------------------------------- | ----------------------------- |
 | TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint                          | 127.0.0.1:7233                |
 | TEMPORAL_WEB_PORT             | HTTP port to serve on                                             | 8088                          |
+| TEMPORAL_CONFIG_PATH          | Path to config file, see [configurations](#configuring-authentication-optional) | ./server/config.yml   
 | TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | true                          |
 | TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development                    | 8081                          |
 | TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082                          |
@@ -53,7 +54,7 @@ The TLS yml file is expected to be in the following format:
 ```yaml
 cert: <certificate base64-encoded>
 key: <private key base64-encoded>
-ca:  <certificate authority (CA) base64-encoded>
+ca: <certificate authority (CA) base64-encoded>
 server_name: my-server
 verifyHost: true
 ```
