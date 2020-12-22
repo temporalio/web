@@ -26,12 +26,8 @@ Set these environment variables if you need to change their defaults
 
 <details>
 <summary>
-Optional TLS configuration:
+Optional TLS configuration variables:
 </summary>
-
-There are two ways to configure TLS.
-
-1. First option to enable TLS is by passing both `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`:
 
 | Variable                              | Description                                                         | Default |
 | ------------------------------------- | ------------------------------------------------------------------- | ------- |
@@ -41,23 +37,9 @@ There are two ways to configure TLS.
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      | true    |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |         |
 
+To enable TLS, you need to specify `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`. 
+
 By default we will also verify your server `hostname`, matching it to `TEMPORAL_TLS_SERVER_NAME`. You can turn this off by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `false`.
-
-2. Second option to enable TLS is by passing `TEMPORAL_TLS_YML_PATH`:
-
-| Variable                              | Description                                                         | Default |
-| ------------------------------------- | ------------------------------------------------------------------- | ------- |
-| TEMPORAL_TLS_YML_PATH                  | Certificate authority (CA) certificate for the validation of server |         |
-
-The TLS yml file is expected to be in the following format:
-
-```yaml
-cert: <certificate base64-encoded>
-key: <private key base64-encoded>
-ca: <certificate authority (CA) base64-encoded>
-server_name: my-server
-verifyHost: true
-```
 
 </details>
 
