@@ -351,18 +351,20 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
 });
 
 router.get('/api/web-settings', async (ctx) => {
-  const routingConfig = await getRoutingConfig();
+  const routing = await getRoutingConfig();
+  const { enabled } = await getAuthConfig();
+  const permitWriteApi = isWriteApiPermitted();
+
+  const auth = { enabled }; // only include non-sensitive data
 
   ctx.body = {
-    health: 'OK',
-    routingConfig,
-    permitWriteApi: isWriteApiPermitted(),
+    routing,
+    auth,
+    permitWriteApi,
   };
 });
 
 router.get('/api/me', async (ctx) => {
-  const auth = await getAuthConfig();
-
   let user;
   if (ctx.isAuthenticated() && !!ctx.state.user) {
     const { email, name, picture } = ctx.state.user;
@@ -370,7 +372,6 @@ router.get('/api/me', async (ctx) => {
   }
 
   ctx.body = {
-    isAuthEnabled: auth.enabled,
     user,
   };
 });
