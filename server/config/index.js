@@ -28,6 +28,10 @@ const getRoutingConfig = async () => {
   if (!routing) {
     return { defaultToNamespace: null };
   }
+
+  routing.defaultToNamespace =
+    routing.default_to_namespace || routing.defaultToNamespace;
+
   return routing;
 };
 

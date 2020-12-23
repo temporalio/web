@@ -12,5 +12,5 @@ auth:
 
 # for more info see docs: https://github.com/temporalio/web#configuring-authentication-optional
 
-routing: 
-  defaultToNamespace: # my_namespace
+routing:
+  default_to_namespace: # my_namespace
