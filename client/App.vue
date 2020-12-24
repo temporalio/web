@@ -130,13 +130,17 @@ export default {
       }
       if (
         routing?.defaultToNamespace &&
+        (this.$route.params.namespace ||
+          this.$route.fullPath == '/namespaces') &&
         routing.defaultToNamespace !== this.$route.params.namespace
       ) {
         const { defaultToNamespace } = routing;
-        this.onNotification({
-          message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
-          type: NOTIFICATION_TYPE_ERROR,
-        });
+        if (this.$route.params.namespace) {
+          this.onNotification({
+            message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
+            type: NOTIFICATION_TYPE_ERROR,
+          });
+        }
         this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
         return;
       }
