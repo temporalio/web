@@ -31,7 +31,8 @@ const getRoutingConfig = async () => {
 
   routing.defaultToNamespace =
     routing.default_to_namespace || routing.defaultToNamespace;
-
+  delete routing.default_to_namespace
+  
   return routing;
 };
 

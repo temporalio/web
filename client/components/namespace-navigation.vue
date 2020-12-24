@@ -86,13 +86,6 @@ export default {
   async created() {
     this.namespaceDescCache = {};
 
-    const { routingConfig } = await this.$http(`/api/web-settings`);
-    if (routingConfig?.defaultToNamespace) {
-      const url = this.namespaceLink(routingConfig.defaultToNamespace);
-      this.$router.push(url);
-      return;
-    }
-
     await this.getNamespaces();
     if (this.recentNamespaces.length == 1) {
       const namespace = this.recentNamespaces[0];

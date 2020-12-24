@@ -59,6 +59,7 @@ export default {
         link: '',
       },
       onVersionAnnouncementClose: () => {},
+      webSettings: undefined,
       currentUser: undefined,
     };
   },
@@ -66,17 +67,9 @@ export default {
     clearTimeout(this.notification.timeout);
   },
   async created() {
-    const promises = [this.verifyAuth(), this.verifyNamespaceAccess()];
-    const { show, message, link, version } = await getNewVersionAnnouncement(
-      this.$http,
-      this.onNotification
-    );
-    this.announcement = { show, message, link };
-    if (version) {
-      this.onVersionAnnouncementClose = () =>
-        discardVersionAnnouncement(version);
-    }
-    await Promise.all(promises);
+    await Promise.all([this.getCurrentUser(), this.getWebSettings()]);
+    this.redirectIfApplicable();
+    await this.announceNewVersionIfExists();
   },
   methods: {
     globalClick(e) {
@@ -121,34 +114,42 @@ export default {
       this.announcement.show = false;
       this.onVersionAnnouncementClose();
     },
-    async verifyNamespaceAccess() {
-      if (!this.$route.params.namespace) {
+    async getWebSettings() {
+      this.webSettings = await this.$http('/api/web-settings');
+    },
+    async getCurrentUser() {
+      const me = await this.$http('/api/me');
+      this.currentUser = me?.user;
+    },
+    redirectIfApplicable() {
+      const { auth, routing } = this.webSettings;
+
+      if (auth?.enabled && !this.currentUser) {
+        this.$router.push('/signin');
         return;
       }
-
-      const { routingConfig } = await this.$http(`/api/web-settings`);
-      if (!routingConfig?.defaultToNamespace) {
-        return;
-      }
-
-      const { defaultToNamespace } = routingConfig;
-
-      if (defaultToNamespace !== this.$route.params.namespace) {
+      if (
+        routing?.defaultToNamespace &&
+        routing.defaultToNamespace !== this.$route.params.namespace
+      ) {
+        const { defaultToNamespace } = routing;
         this.onNotification({
           message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
           type: NOTIFICATION_TYPE_ERROR,
         });
         this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
+        return;
       }
     },
-    async verifyAuth() {
-      const me = await this.$http('/api/me');
-      if (me.isAuthEnabled) {
-        if (!me.user) {
-          this.$router.push('/signin');
-        } else {
-          this.currentUser = me.user;
-        }
+    async announceNewVersionIfExists() {
+      const { show, message, link, version } = await getNewVersionAnnouncement(
+        this.$http,
+        this.onNotification
+      );
+      this.announcement = { show, message, link };
+      if (version) {
+        this.onVersionAnnouncementClose = () =>
+          discardVersionAnnouncement(version);
       }
     },
   },
