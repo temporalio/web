@@ -1,7 +1,8 @@
 const grpc = require('grpc');
 const { readCredsFromCertFiles } = require('./read-creds-from-cert-files');
-const { readCredsFromYml } = require('./read-creds-from-yml-file');
+const { readCredsFromConfig } = require('./read-creds-from-config');
 const { compareCaseInsensitive } = require('../utils');
+const { getTlsConfig } = require('../config');
 
 const keyPath = process.env.TEMPORAL_TLS_KEY_PATH;
 const certPath = process.env.TEMPORAL_TLS_CERT_PATH;
@@ -10,8 +11,7 @@ const serverName = process.env.TEMPORAL_TLS_SERVER_NAME;
 const verifyHost = [true, 'true', undefined].includes(
   process.env.TEMPORAL_TLS_ENABLE_HOST_VERIFICATION
 );
-const configPath = process.env.TEMPORAL_TLS_YML_PATH;
-
+const tlsConfigFile = getTlsConfig()
 function getCredentials() {
   if (keyPath !== undefined) {
     console.log('establishing secure connection using TLS cert files...');
@@ -21,13 +21,11 @@ function getCredentials() {
       caPath,
     });
     return createSecure(pk, cert, ca, serverName, verifyHost);
-  } else if (configPath !== undefined) {
+  } else if (tlsConfigFile.key) {
     console.log(
       'establishing secure connection using TLS yml configuration...'
     );
-    const { pk, cert, ca, serverName, verifyHost } = readCredsFromYml({
-      configPath,
-    });
+    const { pk, cert, ca, serverName, verifyHost } = readCredsFromConfig();
     return createSecure(pk, cert, ca, serverName, verifyHost);
   } else {
     console.log('establishing insecure connection...');
