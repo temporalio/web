@@ -115,7 +115,7 @@ export default {
       this.onVersionAnnouncementClose();
     },
     async getWebSettings() {
-      this.webSettings = await this.$http(`/api/web-settings`);
+      this.webSettings = await this.$http('/api/web-settings');
     },
     async getCurrentUser() {
       const me = await this.$http('/api/me');
@@ -124,22 +124,21 @@ export default {
     redirectIfApplicable() {
       const { auth, routing } = this.webSettings;
 
-      if (auth?.enabled) {
-        if (!this.currentUser) {
-          this.$router.push('/signin');
-          return;
-        }
+      if (auth?.enabled && !this.currentUser) {
+        this.$router.push('/signin');
+        return;
       }
-      if (routing?.defaultToNamespace) {
+      if (
+        routing?.defaultToNamespace &&
+        routing.defaultToNamespace !== this.$route.params.namespace
+      ) {
         const { defaultToNamespace } = routing;
-        if (defaultToNamespace !== this.$route.params.namespace) {
-          this.onNotification({
-            message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
-            type: NOTIFICATION_TYPE_ERROR,
-          });
-          this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
-          return;
-        }
+        this.onNotification({
+          message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
+          type: NOTIFICATION_TYPE_ERROR,
+        });
+        this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
+        return;
       }
     },
     async announceNewVersionIfExists() {
