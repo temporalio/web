@@ -1,5 +1,5 @@
 const grpc = require('grpc');
-const { readCredsFromCertFiles } = require('./read-creds-from-cert-files');
+const { readCredsFromCertFiles, readCAFromFile } = require('./read-creds-from-cert-files');
 const { readCredsFromConfig } = require('./read-creds-from-config');
 const { compareCaseInsensitive } = require('../utils');
 const { getTlsConfig } = require('../config');
@@ -21,6 +21,10 @@ function getCredentials() {
       caPath,
     });
     return createSecure(pk, cert, ca, serverName, verifyHost);
+  } else if (caPath !== undefined && certPath === undefined) {
+    console.log('establishing server-side TLS connection using only TLS CA file...');
+    const ca = readCAFromFile(caPath);
+    return createSecure(undefined, undefined, ca, serverName, verifyHost);
   } else if (tlsConfigFile.key) {
     console.log(
       'establishing secure connection using TLS yml configuration...'

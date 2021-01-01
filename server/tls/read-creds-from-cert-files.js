@@ -20,4 +20,12 @@ function readCredsFromCertFiles({ caPath, keyPath, certPath }) {
   return { pk, cert, ca };
 }
 
-module.exports = { readCredsFromCertFiles };
+function readCAFromFile(caPath) {
+  if (!caPath) {
+    throw Error('TLS CA is not provided')
+  }
+
+  return readFileSync(caPath);
+}
+
+module.exports = { readCredsFromCertFiles, readCAFromFile };
