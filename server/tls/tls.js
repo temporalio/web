@@ -13,7 +13,7 @@ const verifyHost = [true, 'true', undefined].includes(
 );
 const tlsConfigFile = getTlsConfig()
 function getCredentials() {
-  if (keyPath !== undefined) {
+  if (keyPath !== undefined && certPath !== undefined) {
     console.log('establishing secure connection using TLS cert files...');
     const { pk, cert, ca } = readCredsFromCertFiles({
       keyPath,
@@ -21,6 +21,10 @@ function getCredentials() {
       caPath,
     });
     return createSecure(pk, cert, ca, serverName, verifyHost);
+  } else if (caPath !== undefined) {
+    console.log('establishing server-side TLS connection using only TLS CA file...');
+    const { ca } = readCredsFromCertFiles({ caPath });
+    return createSecure(undefined, undefined, ca, serverName, verifyHost);
   } else if (tlsConfigFile.key) {
     console.log(
       'establishing secure connection using TLS yml configuration...'
