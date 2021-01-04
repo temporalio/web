@@ -2,7 +2,7 @@ const { readFileSync } = require('fs');
 
 function readCredsFromCertFiles({ caPath, keyPath, certPath }) {
   if (!caPath && (!keyPath || !certPath)) {
-    throw Error('must provide TLS key and cert or only CA')
+    throw Error('TLS connection error: must provide CA or key and cert paths')
   }
 
   const pk = keyPath ? readFileSync(keyPath) : undefined;
