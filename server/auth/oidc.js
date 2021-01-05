@@ -12,24 +12,32 @@ async function getClient(issuerUrl, clientId, clientSecret, callbackUriBase) {
   });
 }
 
-const verify = (tokenSet, userinfo, done) => {
-  const { access_token: accessToken } = tokenSet;
-  const { email, name, picture } = userinfo;
+const verify = ({ passIdToken }) => {
+  return (tokenSet, userinfo, done) => {
+    const { access_token: accessToken, id_token: idToken } = tokenSet;
+    const { email, name, picture } = userinfo;
 
-  const user = { email, name, picture, accessToken };
-  return done(null, user);
+    const user = { email, name, picture, accessToken };
+
+    if (passIdToken) {
+      user.idToken = idToken;
+    }
+
+    return done(null, user);
+  };
 };
 
-const getStrategy = async (
-  issuerUrl,
+const getStrategy = async ({
+  issuer,
   clientId,
   clientSecret,
   scope,
   audience,
-  callbackUriBase
-) => {
+  callbackUriBase,
+  passIdToken,
+}) => {
   const client = await getClient(
-    issuerUrl,
+    issuer,
     clientId,
     clientSecret,
     callbackUriBase
@@ -40,7 +48,7 @@ const getStrategy = async (
     response: ['userinfo'],
   };
 
-  return new Strategy({ client, params }, verify);
+  return new Strategy({ client, params }, verify({ passIdToken }));
 };
 
 module.exports = { getStrategy };

@@ -25,11 +25,12 @@ const getter = (obj, property) => {
   return obj[property];
 };
 
-const extractAccessToken = (ctx) => {
+const extractTokens = (ctx) => {
   if (ctx.isAuthenticated()) {
-    return ctx.state.user.accessToken;
+    const { accessToken, idToken } = ctx.state.user;
+    return { accessToken, idToken };
   }
-  return undefined;
+  return { accessToken: undefined, idToken: undefined };
 };
 
 const buildGrpcMetadata = async (ctx) => {
@@ -37,11 +38,14 @@ const buildGrpcMetadata = async (ctx) => {
 
   const auth = await getAuthConfig();
   if (auth.enabled) {
-    const accessToken = extractAccessToken(ctx);
+    const { accessToken, idToken } = extractTokens(ctx);
     if (!accessToken) {
-      throw Error('Request unauthorized')
+      throw Error('Request unauthorized');
     }
     metadata.add('authorization', `Bearer ${accessToken}`);
+    if (idToken) {
+      metadata.add('authorization-extras', idToken);
+    }
   }
   return metadata;
 };
