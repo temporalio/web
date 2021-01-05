@@ -64,6 +64,7 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
             scope: openid profile email
             audience: temporal # identifier of the audience for an issued token (optional)
             callback_base_uri: http://localhost:8088
+            pass_id_token: false # adds ID token as 'authorization-extras' header with every request to server
     ```
 
     <details>
