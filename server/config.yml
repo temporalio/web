@@ -9,7 +9,7 @@ auth:
       #   client_secret: xxxxxxxxxxxxxxxxxxxxxxx
       #   scope: openid profile email
       #   callback_base_uri: http://localhost:8088
-
+      #   pass_id_token: false
 # for more info see docs: https://github.com/temporalio/web#configuring-authentication-optional
 
 routing:
