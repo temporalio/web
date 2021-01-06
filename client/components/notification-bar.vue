@@ -28,26 +28,26 @@ UberOrange = #ED6E33;
 DefaultColor = UberGreen;
 
 .close {
-  cursor: pointer;
-  line-height: 60px;
-  padding: 0 13px;
-  position: absolute;
-  right: 6px;
-  top: 0;
-}
-
-.notification-bar {
-  background-color: DefaultColor;
-  color: #fff;
-  font-size: 18px;
-  height: 60px;
-  left: 0;
-  line-height: 60px;
-  overflow: hidden;
-  padding: 0 50px 0 24px;
   position: absolute;
   right: 0;
   top: 0;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.notification-bar {
+  position: absolute;
+  width: 600px
+  max-width: calc(100% - 64px);
+  max-height : 180px;
+  right: 32px;
+  bottom: 32px;
+  padding: 16px 44px 16px 24px;
+  font-size: 18px;
+  line-height: 24px;
+  background-color: DefaultColor;
+  color: #fff;
+  overflow: hidden;
   z-index: 1;
 }
 
@@ -64,7 +64,6 @@ DefaultColor = UberGreen;
 }
 
 .message {
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
