@@ -299,13 +299,13 @@ export default {
         const queryOpen = { ...this.criteria, nextPageToken: this.npt };
         const queryClosed = { ...this.criteria, nextPageToken: this.nptAlt };
 
-        const { workflows: wfsOpen, nextPageToken: nptOpen } = await this.fetch(
+        let { workflows: wfsOpen, nextPageToken: nptOpen } = await this.fetch(
           `/api/namespaces/${namespace}/workflows/open`,
           queryOpen
         );
         this.npt = nptOpen;
 
-        const {
+        let {
           workflows: wfsClosed,
           nextPageToken: nptClosed,
         } = await this.fetch(
@@ -314,7 +314,6 @@ export default {
         );
         this.nptAlt = nptClosed;
 
-        let wfsDiff = [];
         if (this.npt && this.nptAlt) {
           // saturate diff in workflows between the max dates
           // so both open and closed workflows are fetched until the same date
@@ -347,22 +346,19 @@ export default {
               queryDiff
             );
 
-            wfsDiff = diff.workflows;
             nptDiff = diff.nextPageToken;
 
             if (saturateOpen === true) {
               this.npt = nptDiff;
+              wfsOpen = [...wfsOpen, ...diff.workflows];
             } else if (saturateOpen === false) {
               this.nptAlt = nptDiff;
+              wfsClosed = [...wfsClosed, ...diff.workflows];
             }
           }
         }
 
-        workflows = orderBy(
-          [...wfsOpen, ...wfsClosed, ...wfsDiff],
-          'startTime',
-          ['desc']
-        );
+        workflows = [...wfsOpen, ...wfsClosed];
       }
 
       this.results = [...this.results, ...workflows];
