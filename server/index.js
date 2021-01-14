@@ -7,6 +7,7 @@ const Koa = require('koa'),
   router = require('./routes'),
   session = require('koa-session'),
   passport = require('passport'),
+  csrf = require('koa-csrf'),
   auth = require('./auth');
 
 app.webpackConfig = require('../webpack.config');
@@ -70,6 +71,9 @@ app.init = function(options) {
     .use(auth.initialize)
     .use(passport.initialize())
     .use(passport.session())
+    .use(new csrf({
+      excludedMethods: ["GET", "HEAD", "OPTIONS"]
+    }))
     .use(router.prefix(PUBLIC_PATH).routes())
     .use(router.allowedMethods())
     .use(async function(ctx, next) {
@@ -81,6 +85,10 @@ app.init = function(options) {
           ctx.set('X-Content-Type-Options', 'nosniff');
           ctx.set('X-Frame-Options', 'SAMEORIGIN');
           ctx.set('X-XSS-Protection', '1; mode=block');
+          if(ctx.method === 'GET'){
+            ctx.session.csrf = ctx.csrf;
+            ctx.cookies.set("csrf-token", ctx.csrf, { httpOnly: false });
+          }
 
           if (useWebpack) {
             var filename = path.join(compiler.outputPath, 'index.html');
