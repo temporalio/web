@@ -38,6 +38,7 @@ const routeOpts = {
   mode: 'history',
   routes: [
     {
+      name: 'namespaces',
       path: '/',
       redirect: '/namespaces',
       component: Root,

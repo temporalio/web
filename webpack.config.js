@@ -7,12 +7,6 @@ const path = require('path'),
 
 require('babel-polyfill');
 
-const envKeys = {
-};
-if (!development) {
-  envKeys['NODE_ENV'] = '"production"';
-}
-
 const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
 
 module.exports = {
@@ -31,7 +25,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': envKeys,
+      'process.env.TEMPORAL_WEB_ROOT_PATH': `"${PUBLIC_PATH}"`,
     }),
     new ExtractTextPlugin({
       filename: development ? 'temporal.css' : 'temporal.[hash].css',
