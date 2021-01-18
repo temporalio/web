@@ -126,13 +126,15 @@ make
 npm run dev
 ```
 
+You can then access Temporal Web at `localhost:8088` (you can configure both the port and the path with `TEMPORAL_WEB_PORT` and `TEMPORAL_WEB_ROOT_PATH` per the config docs above).
+
 For development and contributing to `temporal-web`, please see the [contributing guide](https://github.com/temporalio/temporal-web/blob/master/CONTRIBUTING.md).
 
 You may also use docker by pulling [temporalio/web](https://hub.docker.com/r/temporalio/web/). It is also included in the Temporal server's [local docker setup](https://github.com/temporalio/temporal/tree/master/docker).
 
 ### API
 
-If you need to extend `temporal-web` to add middleware to the server, you can install `temporal-web` as a dependecy, and it will export the [Koa](http://koajs.com/) web server that has not yet been started or configured. It includes an additional `init` function that will then compose the built-in middleware. This gives you an option to add middleware before or after you call `init` so it will add the middleware at the beginning or the end of the chain, respectively.
+If you need to extend `temporal-web` to add middleware to the server, you can install `temporal-web` as a dependency, and it will export the [Koa](http://koajs.com/) web server that has not yet been started or configured. It includes an additional `init` function that will then compose the built-in middleware. This gives you an option to add middleware before or after you call `init` so it will add the middleware at the beginning or the end of the chain, respectively.
 
 #### `init(options)`
 
