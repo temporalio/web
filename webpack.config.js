@@ -7,11 +7,7 @@ const path = require('path'),
 
 require('babel-polyfill');
 
-const envKeys = {
-};
-if (!development) {
-  envKeys['NODE_ENV'] = '"production"';
-}
+const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
 
 module.exports = {
   devtool: 'source-map',
@@ -25,11 +21,11 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'temporal.[hash].js',
-    publicPath: '/',
+    publicPath: PUBLIC_PATH,
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': envKeys,
+      'process.env.TEMPORAL_WEB_ROOT_PATH': `"${PUBLIC_PATH}"`,
     }),
     new ExtractTextPlugin({
       filename: development ? 'temporal.css' : 'temporal.[hash].css',
@@ -111,5 +107,6 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     overlay: true,
+    publicPath: PUBLIC_PATH,
   },
 };

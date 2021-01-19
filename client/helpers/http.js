@@ -1,3 +1,4 @@
+const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
 export default function http(fetch, url, o) {
   const opts = {
     credentials: 'same-origin',
@@ -18,6 +19,9 @@ export default function http(fetch, url, o) {
       fetchUrl = `${url}?${qs}`;
     }
   }
+
+  let path = PUBLIC_PATH.slice(0, -1);
+  fetchUrl = `${path}${fetchUrl}`
 
   return fetch(fetchUrl, opts).then(r =>
     r.status >= 200 && r.status < 300

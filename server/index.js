@@ -28,6 +28,8 @@ app.init = function(options) {
   const hotReloadTestPort =
     Number(process.env.TEMPORAL_HOT_RELOAD_TEST_PORT) || 8082;
 
+  const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
+
   const secret =
     process.env.TEMPORAL_SESSION_SECRET ?? 'ensure secret in production';
   app.keys = [secret];
@@ -68,7 +70,7 @@ app.init = function(options) {
     .use(auth.initialize)
     .use(passport.initialize())
     .use(passport.session())
-    .use(router.routes())
+    .use(router.prefix(PUBLIC_PATH).routes())
     .use(router.allowedMethods())
     .use(async function(ctx, next) {
       if (

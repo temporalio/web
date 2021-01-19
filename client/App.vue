@@ -72,23 +72,6 @@ export default {
     await this.announceNewVersionIfExists();
   },
   methods: {
-    globalClick(e) {
-      // Code required for mocha tests to run correctly without infinite looping.
-      if (e.target.tagName === 'A') {
-        const href = e.target.getAttribute('href');
-
-        if (
-          href &&
-          href.startsWith('/') &&
-          !e.target.getAttribute('download') &&
-          !e.target.getAttribute('target')
-        ) {
-          e.preventDefault();
-          e.stopPropagation();
-          this.$router.push(href);
-        }
-      }
-    },
     onEnvironmentSelectChange(environment) {
       if (environment === this.environment.value) {
         return;
@@ -178,7 +161,7 @@ export default {
 </script>
 
 <template>
-  <main @click="globalClick">
+  <main>
     <notification-bar
       :message="notification.message"
       :onClose="onNotificationClose"
@@ -192,11 +175,10 @@ export default {
       :link="announcement.link"
     />
     <header class="top-bar">
-      <a href="/namespaces" class="logo">
+      <router-link :to="{ name: 'namespaces' }" class="logo">
         <div v-html="logo"></div>
         <span class="version">{{ version }}</span>
-      </a>
-
+      </router-link>
       <feature-flag name="environment-select">
         <v-select
           class="environment-select"
