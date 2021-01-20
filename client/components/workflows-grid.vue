@@ -124,6 +124,8 @@ paged-grid()
     align-self: center;
     flex-basis: auto;
     padding: 0.5rem;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 
     &.col-id
       flex-basis: 400px;
