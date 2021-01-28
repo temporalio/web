@@ -7,6 +7,7 @@
           class="terminate"
           v-show="showTerminate"
           @click.prevent="$modal.show('confirm-termination')"
+          data-cy="open-terminate-dialog"
         >
           Terminate
         </a>
@@ -15,9 +16,18 @@
 
     <modal name="confirm-termination">
       <h3>Are you sure you want to terminate this workflow?</h3>
-      <input v-model="terminationReason" placeholder="Reason" />
+      <input
+        v-model="terminationReason"
+        placeholder="Reason"
+        data-cy="termination-reason"
+      />
       <footer>
-        <a href="#" class="terminate" @click.prevent="terminate">
+        <a
+          href="#"
+          class="terminate"
+          @click.prevent="terminate"
+          data-cy="confirm-termination"
+        >
           Terminate
         </a>
         <a
