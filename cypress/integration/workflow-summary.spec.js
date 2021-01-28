@@ -9,8 +9,9 @@ context('Workflow Summary', () => {
     );
 
     cy.get('[data-cy=workflow-list]')
+      .find('[data-cy=workflow-row]')
+      .filter(':contains("wf_timedout")')
       .find('[data-cy=workflow-link]')
-      .eq(0)
       .click();
     cy.url().should('include', '/summary');
   });
