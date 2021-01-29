@@ -5,18 +5,17 @@ context('Workflow Summary', () => {
     cy.visit(
       `/namespaces/${Cypress.env(
         'namespace_id'
-      )}/workflows?range=last-5-days&status=WORKFLOW_EXECUTION_STATUS_TIMED_OUT`
+      )}/workflows?range=last-5-days&status=ALL`
     );
+  });
 
+  it('renders workflow summary', () => {
     cy.get('[data-cy=workflow-list]')
       .find('[data-cy=workflow-row]')
       .filter(':contains("wf_timedout")')
       .find('[data-cy=workflow-link]')
       .click();
-    cy.url().should('include', '/summary');
-  });
 
-  it('renders workflow summary', () => {
     cy.get('[data-cy=workflow-name]').should('contain.text', 'e2e_type');
 
     const dateTimeRegex = /\w+\s\w+\s[\d\w]+,\s(\d{1,2}:?){3}\s(am|pm)/;
@@ -41,5 +40,20 @@ context('Workflow Summary', () => {
     cy.get('[data-cy=workflow-input]')
       .should('contain.text', 'to infinity and beyond')
       .should('contain.text', '""');
+  });
+
+  it('can terminate workflow', () => {
+    cy.get('[data-cy=workflow-list]')
+      .find('[data-cy=workflow-row]')
+      .filter(':contains("wf_terminated2")')
+      .find('[data-cy=workflow-link]')
+      .click();
+
+    cy.get('[data-cy=open-terminate-dialog]').click();
+    cy.get('[data-cy=termination-reason]').type('testing termination');
+    cy.get('[data-cy=confirm-termination]').click();
+
+    cy.reload()
+    cy.get('[data-cy=workflow-status]').should('contain.text', 'terminated');
   });
 });

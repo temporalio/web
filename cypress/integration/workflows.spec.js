@@ -33,7 +33,7 @@ context('Workflows', () => {
       .find('[data-cy=workflow-row]')
       .should('contain.text', 'wf_open')
       .should('not.contain.text', 'wf_timedout')
-      .should('not.contain.text', 'wf_terminated')
+      .should('not.contain.text', 'wf_terminated1')
 
     cy.wait(1000);
     cy.get('[data-cy=status-filter]')
@@ -46,7 +46,7 @@ context('Workflows', () => {
       .find('[data-cy=workflow-row]')
       .should('not.contain.text', 'wf_open')
       .should('contain.text', 'wf_timedout')
-      .should('contain.text', 'wf_terminated')
+      .should('contain.text', 'wf_terminated1')
 
     cy.wait(1000);
     cy.get('[data-cy=status-filter]')
@@ -86,7 +86,7 @@ context('Workflows', () => {
 
     cy.get('[data-cy=workflow-list]')
       .find('[data-cy=workflow-row]')
-      .filter(':contains("wf_terminated")') // workflow id
+      .filter(':contains("wf_terminated1")') // workflow id
       .should('contain.text', 'e2e_type') // workflow type name
       .should('contain.text', 'terminated'); // status
   });
