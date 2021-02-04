@@ -8,7 +8,8 @@ const Koa = require('koa'),
   session = require('koa-session'),
   passport = require('passport'),
   csrf = require('koa-csrf'),
-  auth = require('./auth');
+  auth = require('./auth'),
+  { securityHeaders } = require('./middlewares');
 
 app.webpackConfig = require('../webpack.config');
 
@@ -71,25 +72,20 @@ app.init = function(options) {
     .use(auth.initialize)
     .use(passport.initialize())
     .use(passport.session())
-    .use(new csrf({
-      excludedMethods: ["GET", "HEAD", "OPTIONS"]
-    }))
+    .use(
+      new csrf({
+        excludedMethods: ['GET', 'HEAD', 'OPTIONS'],
+      })
+    )
     .use(router.prefix(PUBLIC_PATH).routes())
     .use(router.allowedMethods())
+    .use(securityHeaders({ ignorePaths: ['/api'] }))
     .use(async function(ctx, next) {
       if (
         ['HEAD', 'GET'].includes(ctx.method) &&
         !ctx.path.startsWith('/api')
       ) {
         try {
-          ctx.set('X-Content-Type-Options', 'nosniff');
-          ctx.set('X-Frame-Options', 'SAMEORIGIN');
-          ctx.set('X-XSS-Protection', '1; mode=block');
-          if(ctx.method === 'GET'){
-            ctx.session.csrf = ctx.csrf;
-            ctx.cookies.set("csrf-token", ctx.csrf, { httpOnly: false });
-          }
-
           if (useWebpack) {
             var filename = path.join(compiler.outputPath, 'index.html');
             ctx.set('content-type', 'text/html');
