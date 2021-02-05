@@ -57,17 +57,6 @@ app.init = function(options) {
         filter: (contentType) => !contentType.startsWith('text/event-stream'),
       })
     )
-    .use(
-      useWebpack
-        ? koaWebpack({
-            compiler,
-            dev: { stats: { colors: true } },
-            hot: {
-              port: process.env.TEST_RUN ? hotReloadTestPort : hotReloadPort,
-            },
-          })
-        : require('koa-static')(staticRoot)
-    )
     .use(session({}, app))
     .use(auth.initialize)
     .use(passport.initialize())
@@ -80,6 +69,17 @@ app.init = function(options) {
     .use(router.prefix(PUBLIC_PATH).routes())
     .use(router.allowedMethods())
     .use(securityHeaders({ ignorePaths: ['/api'] }))
+    .use(
+      useWebpack
+        ? koaWebpack({
+            compiler,
+            dev: { stats: { colors: true } },
+            hot: {
+              port: process.env.TEST_RUN ? hotReloadTestPort : hotReloadPort,
+            },
+          })
+        : require('koa-static')(staticRoot)
+    )
     .use(async function(ctx, next) {
       if (
         ['HEAD', 'GET'].includes(ctx.method) &&
