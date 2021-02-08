@@ -45,8 +45,6 @@
 </template>
 
 <script>
-import moment from 'moment';
-import orderBy from 'lodash-es/orderBy';
 import { RecycleScroller } from 'vue-virtual-scroller';
 import { NoResults } from '~components';
 

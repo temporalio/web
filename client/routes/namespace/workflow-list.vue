@@ -81,7 +81,6 @@
 import moment from 'moment';
 import debounce from 'lodash-es/debounce';
 import { maxBy } from 'lodash-es';
-import orderBy from 'lodash-es/orderBy';
 import { DateRangePicker, WorkflowsGrid } from '~components';
 import {
   getEndTimeIsoString,
