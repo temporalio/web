@@ -382,11 +382,11 @@ export default {
     },
     selectedTimelineEvent() {
       return this.timelineEvents.find((te) =>
-        te.eventIds.includes(this.eventId)
+        te.eventIds.includes(this.eventIdStr)
       );
     },
     selectedEvent() {
-      return this.events.find((e) => e.eventId === this.eventId);
+      return this.events.find((e) => e.eventId === this.eventIdStr);
     },
     selectedEventDetails() {
       if (!this.selectedEvent) {
@@ -419,6 +419,9 @@ export default {
           }),
           {}
         );
+    },
+    eventIdStr() {
+      return this.eventId?.toString();
     },
   },
   methods: {
