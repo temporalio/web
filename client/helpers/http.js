@@ -52,7 +52,7 @@ const addCsrf = (opts) => {
   const cookies = document.cookie.split(';');
   let csrf = cookies.find((c) => c.includes(cookieName));
   if (csrf && !opts.headers[CSRF_HEADER_NAME]) {
-    csrf = csrf.slice(cookieName.length + 1);
+    csrf = csrf.slice(cookieName.length + 2);
     opts.headers[CSRF_HEADER_NAME] = csrf;
   }
   return opts;
