@@ -1,4 +1,6 @@
 const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
+const CSRF_HEADER_NAME = "x-csrf-token"
+
 export default function http(fetch, url, o) {
   const opts = {
     credentials: 'same-origin',
@@ -49,9 +51,9 @@ const addCsrf = (opts) => {
   const cookieName = 'csrf-token';
   const cookies = document.cookie.split(';');
   let csrf = cookies.find((c) => c.includes(cookieName));
-  if (csrf && !opts.headers['X-CSRF-TOKEN']) {
+  if (csrf && !opts.headers[CSRF_HEADER_NAME]) {
     csrf = csrf.slice(cookieName.length + 1);
-    opts.headers['X-CSRF-TOKEN'] = csrf;
+    opts.headers[CSRF_HEADER_NAME] = csrf;
   }
   return opts;
 };
