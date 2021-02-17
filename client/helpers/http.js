@@ -45,13 +45,14 @@ http.post = function post(fetch, url, body) {
   return http(fetch, url, opts);
 };
 
-const addCsrf = (opts) => {
-  const cookieName = 'csrf-token';
+export const addCsrf = (opts) => {
+  const csrfCookie = 'csrf-token=';
+  const csrfHeader = 'X-CSRF-TOKEN';
   const cookies = document.cookie.split(';');
-  let csrf = cookies.find((c) => c.includes(cookieName));
-  if (csrf && !opts.headers['X-CSRF-TOKEN']) {
-    csrf = csrf.trim().slice(cookieName.length + 1);
-    opts.headers['X-CSRF-TOKEN'] = csrf;
+  let csrf = cookies.find((c) => c.includes(csrfCookie));
+  if (csrf && !opts.headers[csrfHeader]) {
+    csrf = csrf.trim().slice(csrfCookie.length);
+    opts.headers[csrfHeader] = csrf;
   }
   return opts;
 };
