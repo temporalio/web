@@ -7,6 +7,8 @@ Temporal is a distributed, scalable, durable, and highly available orchestration
 
 This web UI is used to view workflows from [Temporalio][temporal], see what's running, and explore and debug workflow executions.
 
+For a **video demo** of how this looks, you can [check our docs](https://docs.temporal.io/docs/java-run-your-first-app/#state-visibility).
+
 ## Getting Started
 
 ### Configuration
