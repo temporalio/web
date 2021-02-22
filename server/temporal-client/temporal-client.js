@@ -1,6 +1,6 @@
-const grpc = require('grpc');
-const bluebird = require('bluebird');
+const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
+const bluebird = require('bluebird');
 const utils = require('../utils');
 const { getCredentials } = require('../tls');
 const {

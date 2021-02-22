@@ -1,4 +1,4 @@
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
 const { getAuthConfig } = require('../config');
 
 const WithAuthMetadata = (temporalClient) => {
