@@ -57,6 +57,7 @@ export default {
         message: '',
         show: false,
         link: '',
+        severity: ''
       },
       onVersionAnnouncementClose: () => {},
       webSettings: undefined,
@@ -129,11 +130,11 @@ export default {
       }
     },
     async announceNewVersionIfExists() {
-      const { show, message, link, version } = await getNewVersionAnnouncement(
+      const { show, message, link, version, severity } = await getNewVersionAnnouncement(
         this.$http,
         this.onNotification
       );
-      this.announcement = { show, message, link };
+      this.announcement = { show, message, link, severity };
       if (version) {
         this.onVersionAnnouncementClose = () =>
           discardVersionAnnouncement(version);
@@ -173,6 +174,7 @@ export default {
       :onClose="onAnnouncementClose"
       :show="announcement.show"
       :link="announcement.link"
+      :severity="announcement.severity"
     />
     <header class="top-bar">
       <router-link :to="{ name: 'namespaces' }" class="logo">

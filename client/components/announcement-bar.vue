@@ -1,5 +1,10 @@
 <template>
-  <div data-color="announce" class="announcement-bar" v-if="show">
+  <div
+    data-color="announce"
+    class="announcement-bar"
+    :class="severity"
+    v-if="show"
+  >
     <a :href="link" target="_blank">
       <span class="message">
         {{ message }}
@@ -12,7 +17,7 @@
 <script>
 export default {
   name: 'notification-bar',
-  props: ['message', 'link', 'show', 'onClose'],
+  props: ['message', 'link', 'show', 'severity', 'onClose'],
 };
 </script>
 
@@ -28,6 +33,10 @@ export default {
   padding: 0.25rem 0;
   text-align: center;
   color: temporal-spaceblack;
+
+  &.high {
+    background-color: uber-yellow
+  }
 
   a {
     color: inherit;
