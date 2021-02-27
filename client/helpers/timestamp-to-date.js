@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const timestampToDate = (timestamp) => {
+const timestampToDate = timestamp => {
   if (!timestamp) {
     return timestamp;
   }
@@ -20,6 +20,7 @@ const timestampToDate = (timestamp) => {
   }
 
   ts = ts / 1000000;
+
   return moment(ts);
 };
 

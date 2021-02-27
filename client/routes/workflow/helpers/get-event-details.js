@@ -1,6 +1,6 @@
 import { getKeyValuePairs } from '~helpers';
 
-const getEventDetails = (event) => {
+const getEventDetails = event => {
   const { details, eventId, eventType, eventTimeDisplay } = event;
   const kvps = getKeyValuePairs({
     eventTime: eventTimeDisplay,

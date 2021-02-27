@@ -13,7 +13,7 @@
       {{ stackTrace.error }}
     </span>
     <span v-if="!isWorkerRunning" class="no-queries">
-      There are no Workers currently listening to the Task Queue: 
+      There are no Workers currently listening to the Task Queue:
       <router-link
         :to="{
           name: 'task-queue',
@@ -44,6 +44,7 @@ export default {
     if (!this.isWorkerRunning) {
       return;
     }
+
     this.getStackTrace();
   },
   methods: {
@@ -56,7 +57,7 @@ export default {
           this.stackTrace = getQueryResult(queryResult);
           this.stackTraceTimestamp = moment();
         })
-        .catch((e) => {
+        .catch(e => {
           // eslint-disable-next-line no-console
           console.error(e);
           this.stackTrace = {
@@ -72,8 +73,10 @@ export default {
     isWorkerRunning: function(newVal, oldVal) {
       if (newVal == false) {
         this.queries = [];
+
         return;
       }
+
       this.getStackTrace();
     },
   },

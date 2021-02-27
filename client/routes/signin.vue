@@ -50,6 +50,7 @@ export default {
   },
   async created() {
     const me = await this.$http('/api/me');
+
     this.currentUser = me.user;
   },
   methods: {

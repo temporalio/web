@@ -23,7 +23,7 @@ describe('Task Queue', () => {
       .textNodes('tbody tr td:first-child')
       .should.deep.equal(['node1', 'node2', 'node3']);
     taskQueueEl.textNodes('tbody tr td:nth-child(2)').should.deep.equal(
-      [5, 3, 4].map((m) =>
+      [5, 3, 4].map(m =>
         moment()
           .startOf('hour')
           .add(m, 'minutes')

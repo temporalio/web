@@ -6,7 +6,7 @@ export default function(historyEvents) {
   const events = [];
   const hash = {};
 
-  const add = (i) => {
+  const add = i => {
     hash[i.id] = i;
     events.push(i);
 
@@ -20,7 +20,7 @@ export default function(historyEvents) {
     item.end = moment(end);
   };
 
-  historyEvents.forEach((e) => {
+  historyEvents.forEach(e => {
     if (e.eventType.startsWith('ActivityTask')) {
       const scheduledEvent =
         'activityId' in e.details

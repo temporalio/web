@@ -181,8 +181,9 @@ export default {
       }
 
       this.history.loading = true;
+
       return this.$http(pagedHistoryUrl)
-        .then((res) => {
+        .then(res => {
           setTimeout(() => {
             this.nextPageToken = res.nextPageToken;
           });
@@ -214,7 +215,7 @@ export default {
 
           return this.events;
         })
-        .catch((error) => {
+        .catch(error => {
           // eslint-disable-next-line no-console
           console.error(error);
 
@@ -243,12 +244,12 @@ export default {
 
       await this.$http(baseAPIURL)
         .then(
-          (wf) => {
+          wf => {
             this.workflow = wf;
             this.isWorkflowRunning = !wf.workflowExecutionInfo.closeTime;
             this.baseApiUrlRetryCount = 0;
           },
-          (error) => {
+          error => {
             this.$emit('onNotification', {
               message: getErrorMessage(error),
               type: NOTIFICATION_TYPE_ERROR,
@@ -264,8 +265,8 @@ export default {
           this.wfLoading = false;
         });
 
-      await this.fetchHistoryPage(this.historyUrl)
-      await this.fetchTaskQueue()
+      await this.fetchHistoryPage(this.historyUrl);
+      await this.fetchTaskQueue();
     },
     onNotification(event) {
       this.$emit('onNotification', event);
@@ -288,10 +289,10 @@ export default {
         `/api/namespaces/${this.$route.params.namespace}/task-queues/${tqName}`
       )
         .then(
-          (tq) => {
+          tq => {
             this.taskQueue = { name: tqName, ...tq };
           },
-          (e) => {
+          e => {
             this.error = (e.json && e.json.message) || e.status || e.message;
           }
         )

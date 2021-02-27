@@ -738,7 +738,7 @@ describe('Workflow', () => {
             .should.deep.equal(
               fixtures.history.emailRun1
                 .filter((_value, index) => index < 6)
-                .map((e) => moment(e.eventTime).format('MMM Do h:mm:ss a'))
+                .map(e => moment(e.eventTime).format('MMM Do h:mm:ss a'))
             )
         );
         localStorage
@@ -756,7 +756,7 @@ describe('Workflow', () => {
             .should.deep.equal(
               fixtures.history.emailRun1
                 .filter((_value, index) => index < 6)
-                .map((e) => moment(e.eventTime).format('MMM Do h:mm:ss a'))
+                .map(e => moment(e.eventTime).format('MMM Do h:mm:ss a'))
             )
         );
       });

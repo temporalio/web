@@ -23,7 +23,7 @@
     }}</pre>
     <span class="error" v-if="error">{{ error }}</span>
     <span v-if="!isWorkerRunning" class="no-queries">
-      There are no Workers currently listening to the Task Queue: 
+      There are no Workers currently listening to the Task Queue:
       <router-link
         :to="{
           name: 'task-queue',
@@ -60,6 +60,7 @@ export default {
     if (!this.isWorkerRunning) {
       return;
     }
+
     this.fetchQueries();
   },
   methods: {
@@ -76,7 +77,7 @@ export default {
           ({ queryResult }) => {
             this.queryResult = getQueryResult(queryResult);
           },
-          (e) => {
+          e => {
             this.error = (e.json && e.json.message) || e.status || e.message;
           }
         )
@@ -86,16 +87,17 @@ export default {
     },
     fetchQueries() {
       this.loading = true;
+
       return this.$http(`${this.baseAPIURL}/query`)
         .then(
-          (queries) => {
-            this.queries = queries.filter((query) => query !== '__stack_trace');
+          queries => {
+            this.queries = queries.filter(query => query !== '__stack_trace');
 
             if (!this.queryName) {
               [this.queryName] = this.queries;
             }
           },
-          (e) => {
+          e => {
             this.error = (e.json && e.json.message) || e.status || e.message;
           }
         )
@@ -108,8 +110,10 @@ export default {
     isWorkerRunning: function(newVal, oldVal) {
       if (newVal == false) {
         this.queries = [];
+
         return;
       }
+
       this.fetchQueries();
     },
     queryName: function(newVal, oldVal) {

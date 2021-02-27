@@ -208,7 +208,7 @@ const routeOpts = {
     },
   ],
   parseQuery: qs.parse.bind(qs),
-  stringifyQuery: (query) => {
+  stringifyQuery: query => {
     const q = qs.stringify(query);
 
     return q ? `?${q}` : '';
@@ -277,11 +277,11 @@ if (typeof mocha === 'undefined') {
   });
 
   if (module.hot) {
-    module.hot.addStatusHandler((status) => {
+    module.hot.addStatusHandler(status => {
       if (status === 'apply') {
         document
           .querySelectorAll('link[href][rel=stylesheet]')
-          .forEach((link) => {
+          .forEach(link => {
             const nextStyleHref = link.href.replace(
               /(\?\d+)?$/,
               `?${Date.now()}`

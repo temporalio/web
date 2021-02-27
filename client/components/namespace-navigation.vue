@@ -62,9 +62,9 @@ import { getKeyValuePairs, mapNamespaceDescription } from '~helpers';
 import { DetailList } from '~components';
 
 const validationMessages = {
-  valid: (d) => `${d} exists`,
-  invalid: (d) => `${d} does not exist`,
-  error: (d) => `An error occoured while querying for ${d}`,
+  valid: d => `${d} exists`,
+  invalid: d => `${d} does not exist`,
+  error: d => `An error occoured while querying for ${d}`,
 };
 
 export default {
@@ -87,6 +87,7 @@ export default {
     this.namespaceDescCache = {};
 
     await this.getNamespaces();
+
     if (this.recentNamespaces.length == 1) {
       const namespace = this.recentNamespaces[0];
       const url = this.namespaceLink(namespace);
@@ -116,6 +117,7 @@ export default {
     },
     navigateFromClick(e) {
       const namespace = e.target.getAttribute('data-namespace');
+
       this.$emit('navigate', namespace);
     },
     getNamespaceDesc(d) {
@@ -123,29 +125,29 @@ export default {
         return Promise.resolve(this.namespaceDescCache[d]);
       }
 
-      return this.$http(`/api/namespaces/${d}`).then((r) => {
+      return this.$http(`/api/namespaces/${d}`).then(r => {
         this.namespaceDescCache[d] = mapNamespaceDescription(r);
 
         return this.namespaceDescCache[d];
       });
     },
     getNamespaces(d) {
-      return this.$http(`/api/namespaces`).then((r) => {
-        const namespaces = r.namespaces.map((n) => n.namespaceInfo.name);
+      return this.$http(`/api/namespaces`).then(r => {
+        const namespaces = r.namespaces.map(n => n.namespaceInfo.name);
 
         const newNamespaces = namespaces
-          .filter((n) => !this.recentNamespaces.includes(n))
-          .filter((n) => n !== 'temporal-system');
+          .filter(n => !this.recentNamespaces.includes(n))
+          .filter(n => n !== 'temporal-system');
 
         this.recentNamespaces = newNamespaces;
       });
     },
     checkValidity: debounce(function checkValidity() {
-      const check = (newNamespace) => {
+      const check = newNamespace => {
         this.validation = 'pending';
         this.namespaceDescRequest = this.getNamespaceDesc(newNamespace)
           .then(
-            (desc) => {
+            desc => {
               this.namespaceDescName = newNamespace;
               this.namespaceDesc = {
                 kvps: getKeyValuePairs(desc),
@@ -153,9 +155,9 @@ export default {
 
               return 'valid';
             },
-            (res) => (res.status === 404 ? 'invalid' : 'error')
+            res => (res.status === 404 ? 'invalid' : 'error')
           )
-          .then((v) => {
+          .then(v => {
             this.$emit('validate', this.d, v);
 
             if (v in validationMessages) {
@@ -182,10 +184,10 @@ export default {
     showNamespaceDesc(d) {
       this.namespaceDescName = d;
       this.namespaceDescRequest = this.getNamespaceDesc(d)
-        .catch((res) => ({
+        .catch(res => ({
           error: `${res.statusText || res.message} ${res.status}`,
         }))
-        .then((desc) => {
+        .then(desc => {
           if (this.namespaceDescName === d) {
             this.namespaceDesc = {
               kvps: getKeyValuePairs(desc),

@@ -23,7 +23,9 @@ describe('parentWorkflowLink', () => {
     it('should return an object with to.params.namespace.', () => {
       const output = parentWorkflowLink(wfStartDetails);
 
-      expect(output.to.params.namespace).toEqual('parentWorkflowNamespaceValue');
+      expect(output.to.params.namespace).toEqual(
+        'parentWorkflowNamespaceValue'
+      );
     });
 
     it('should return an object with to.params.workflowId.', () => {

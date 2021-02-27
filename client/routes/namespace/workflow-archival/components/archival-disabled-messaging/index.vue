@@ -31,7 +31,9 @@
     <div class="message-group">
       <p class="docs">
         For more details please check out
-        <a href="https://docs.temporal.io/docs/server-archive-data" target="_blank"
+        <a
+          href="https://docs.temporal.io/docs/server-archive-data"
+          target="_blank"
           >Archival Docs</a
         >
       </p>

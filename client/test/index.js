@@ -1,5 +1,5 @@
 if (module.hot) {
-  module.hot.addStatusHandler((status) => {
+  module.hot.addStatusHandler(status => {
     if (status === 'apply') {
       window.location.reload();
     }
@@ -81,7 +81,7 @@ window.it = function it(...args) {
 
         return result.then(
           () => currScenario && currScenario.tearDown(this.test),
-          (e) =>
+          e =>
             currScenario
               ? currScenario.tearDown(this.test).then(
                   () => Promise.reject(e),
@@ -114,7 +114,7 @@ HTMLElement.prototype.selectItem = async function selectItem(text) {
 
   const itemToClick = Array.from(
     await this.waitUntilAllExist('ul.dropdown-menu li a')
-  ).find((a) => a.innerText.trim() === text);
+  ).find(a => a.innerText.trim() === text);
   const selectedItem = new MouseEvent('mousedown');
 
   itemToClick.dispatchEvent(selectedItem);

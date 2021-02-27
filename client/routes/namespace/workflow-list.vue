@@ -163,12 +163,13 @@ export default {
       if (!this.statusName || statusName == 'ALL') {
         return 'all';
       }
+
       return statusName === 'OPEN' ? 'open' : 'closed';
     },
     status() {
       return !this.$route.query || !this.$route.query.status
         ? this.statuses[0]
-        : this.statuses.find((s) => s.value === this.$route.query.status);
+        : this.statuses.find(s => s.value === this.$route.query.status);
     },
     statusName() {
       return this.status.value;
@@ -258,14 +259,16 @@ export default {
       { maxWait: 1000 }
     ),
     fetchNamespace() {
-      return this.$http(`/api/namespaces/${this.namespace}`).then((r) => {
+      return this.$http(`/api/namespaces/${this.namespace}`).then(r => {
         this.maxRetentionDays = r.config.workflowExecutionRetentionTtl
           ? r.config.workflowExecutionRetentionTtl.duration / (24 * 60 * 60) // seconds to days
           : 30;
+
         if (!this.isRouteRangeValid(this.minStartDate)) {
           const prevRange = localStorage.getItem(
             `${this.namespace}:workflows-time-range`
           );
+
           if (prevRange && this.isRangeValid(prevRange, this.minStartDate)) {
             this.setRange(prevRange);
           } else {
@@ -280,8 +283,10 @@ export default {
       }
 
       let workflows = [];
+
       if (this.state !== 'all') {
         const query = { ...this.criteria, nextPageToken: this.npt };
+
         if (query.queryString) {
           query.queryString = decodeURI(query.queryString);
         }
@@ -302,6 +307,7 @@ export default {
           `/api/namespaces/${namespace}/workflows/open`,
           queryOpen
         );
+
         this.npt = nptOpen;
 
         let {
@@ -311,13 +317,14 @@ export default {
           `/api/namespaces/${namespace}/workflows/closed`,
           queryClosed
         );
+
         this.nptAlt = nptClosed;
 
         if (this.npt && this.nptAlt) {
           // saturate diff in workflows between the max dates
           // so both open and closed workflows are fetched until the same date
-          let maxOpen = maxBy(wfsOpen, (w) => moment(w.startTime));
-          let maxClosed = maxBy(wfsClosed, (w) => moment(w.startTime));
+          let maxOpen = maxBy(wfsOpen, w => moment(w.startTime));
+          let maxClosed = maxBy(wfsClosed, w => moment(w.startTime));
 
           let nptDiff;
           let saturateOpen;
@@ -334,11 +341,12 @@ export default {
             let [startTime, endTime] = saturateOpen
               ? [maxOpen, maxClosed]
               : [maxClosed, maxOpen];
+
             startTime = startTime.add(1, 'seconds').toISOString();
             endTime = endTime.add(1, 'seconds').toISOString();
             const queryDiff = { ...this.criteria, startTime, endTime };
 
-            let diff = await this.fetch(
+            const diff = await this.fetch(
               `/api/namespaces/${namespace}/workflows/${
                 saturateOpen ? 'open' : 'closed'
               }`,
@@ -476,7 +484,7 @@ export default {
       try {
         const res = await this.$http(url, { query });
 
-        workflows = res.executions.map((data) => ({
+        workflows = res.executions.map(data => ({
           workflowId: data.execution.workflowId,
           runId: data.execution.runId,
           workflowName: data.type.name,
@@ -495,6 +503,7 @@ export default {
       }
 
       this.loading = false;
+
       return { workflows, nextPageToken };
     },
   },
