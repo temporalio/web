@@ -169,6 +169,7 @@ function enumTransform(item) {
     'timeout_type',
     'archival_state',
     'retry_state',
+    'severity',
   ];
 
   const itemL = item.toLowerCase();
