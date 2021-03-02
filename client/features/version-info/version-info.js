@@ -34,12 +34,14 @@ export const getNewVersionAnnouncement = async (http, showNotification) => {
     const { instructions, alerts } = versionInfo;
     let alertMessage = '';
     let severity = '';
+
     if (alerts && alerts.length > 0) {
       alertMessage = alerts[0].message;
       severity = (alerts[0].severity || '').toLowerCase();
     }
 
     let message = `🪐 ${versionR} version is available!`;
+
     if (alertMessage || instructions) {
       message = alertMessage ? `${alertMessage} ` : '' + instructions;
     }
