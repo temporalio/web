@@ -1,27 +1,27 @@
 module.exports = {
-  "plugins": [
+  plugins: [
     [
-      "module-resolver",
+      'module-resolver',
       {
-        "alias": {
-          "~constants": "./client/constants",
-          "~components": "./client/components",
-          "~helpers": "./client/helpers",
-          "~features": "./client/features"
-        }
-      }
+        alias: {
+          '~constants': './client/constants',
+          '~components': './client/components',
+          '~helpers': './client/helpers',
+          '~features': './client/features',
+        },
+      },
     ],
-    ["@babel/plugin-transform-regenerator"]
+    ['@babel/plugin-transform-regenerator'],
   ],
-  "presets": [
+  presets: [
     [
-      "env",
+      'env',
       {
-        "targets": {
-          "node": "current"
-        }
-      }
+        targets: {
+          node: 'current',
+        },
+      },
     ],
-    "@babel/preset-env"
-  ]
+    '@babel/preset-env',
+  ],
 };

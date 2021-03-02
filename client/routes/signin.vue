@@ -38,7 +38,7 @@
 
 <script>
 import temporalLogo from '../assets/logo-rounded.png';
-import { NavigationLink, Avatar } from '~components';
+import { Avatar } from '~components';
 
 export default {
   components: {

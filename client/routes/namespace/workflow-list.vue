@@ -303,6 +303,7 @@ export default {
         const queryOpen = { ...this.criteria, nextPageToken: this.npt };
         const queryClosed = { ...this.criteria, nextPageToken: this.nptAlt };
 
+        // eslint-disable-next-line prefer-const
         let { workflows: wfsOpen, nextPageToken: nptOpen } = await this.fetch(
           `/api/namespaces/${namespace}/workflows/open`,
           queryOpen
@@ -312,6 +313,7 @@ export default {
 
         let {
           workflows: wfsClosed,
+          // eslint-disable-next-line prefer-const
           nextPageToken: nptClosed,
         } = await this.fetch(
           `/api/namespaces/${namespace}/workflows/closed`,

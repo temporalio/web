@@ -6,12 +6,10 @@ const getSummary = ({ events, isWorkflowRunning, workflow }) => {
   const formattedWorkflow = workflow.pendingActivities
     ? {
         ...workflow,
-        pendingActivities: workflow.pendingActivities.map(
-          (pendingActivity) => ({
-            ...pendingActivity,
-            kvps: getKeyValuePairs(pendingActivity),
-          })
-        ),
+        pendingActivities: workflow.pendingActivities.map(pendingActivity => ({
+          ...pendingActivity,
+          kvps: getKeyValuePairs(pendingActivity),
+        })),
       }
     : workflow;
 

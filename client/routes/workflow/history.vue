@@ -243,7 +243,7 @@
                   @click.prevent="$router.replaceQueryParam('eventId', eid)"
                   :data-event-id="eid"
                 >
-                  {{ events.find((event) => event.eventId === eid).eventType }}
+                  {{ events.find(event => event.eventId === eid).eventType }}
                 </a>
               </div>
               <detail-list
@@ -357,15 +357,13 @@ export default {
     },
     filteredEvents() {
       const { eventId, eventType } = this;
-      const formattedEvents = this.events.map((event) => ({
+      const formattedEvents = this.events.map(event => ({
         ...event,
         expanded: event.eventId === eventId,
       }));
 
       return eventType && eventType !== 'All'
-        ? formattedEvents.filter((result) =>
-            result.eventType.includes(eventType)
-          )
+        ? formattedEvents.filter(result => result.eventType.includes(eventType))
         : formattedEvents;
     },
     filteredEventIdToIndex() {
@@ -381,12 +379,12 @@ export default {
       return this.format === 'grid';
     },
     selectedTimelineEvent() {
-      return this.timelineEvents.find((te) =>
+      return this.timelineEvents.find(te =>
         te.eventIds.includes(this.eventIdStr)
       );
     },
     selectedEvent() {
-      return this.events.find((e) => e.eventId === this.eventIdStr);
+      return this.events.find(e => e.eventId === this.eventIdStr);
     },
     selectedEventDetails() {
       if (!this.selectedEvent) {

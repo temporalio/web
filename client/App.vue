@@ -57,7 +57,7 @@ export default {
         message: '',
         show: false,
         link: '',
-        severity: ''
+        severity: '',
       },
       onVersionAnnouncementClose: () => {},
       webSettings: undefined,
@@ -103,6 +103,7 @@ export default {
     },
     async getCurrentUser() {
       const me = await this.$http('/api/me');
+
       this.currentUser = me?.user;
     },
     redirectIfApplicable() {
@@ -110,8 +111,10 @@ export default {
 
       if (auth?.enabled && !this.currentUser) {
         this.$router.push('/signin');
+
         return;
       }
+
       if (
         routing?.defaultToNamespace &&
         (this.$route.params.namespace ||
@@ -119,22 +122,30 @@ export default {
         routing.defaultToNamespace !== this.$route.params.namespace
       ) {
         const { defaultToNamespace } = routing;
+
         if (this.$route.params.namespace) {
           this.onNotification({
             message: `No access to namespace ${this.$route.params.namespace}. Redirecting to ${defaultToNamespace}`,
             type: NOTIFICATION_TYPE_ERROR,
           });
         }
+
         this.$router.push(`/namespaces/${defaultToNamespace}/workflows`);
+
         return;
       }
     },
     async announceNewVersionIfExists() {
-      const { show, message, link, version, severity } = await getNewVersionAnnouncement(
-        this.$http,
-        this.onNotification
-      );
+      const {
+        show,
+        message,
+        link,
+        version,
+        severity,
+      } = await getNewVersionAnnouncement(this.$http, this.onNotification);
+
       this.announcement = { show, message, link, severity };
+
       if (version) {
         this.onVersionAnnouncementClose = () =>
           discardVersionAnnouncement(version);
