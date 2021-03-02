@@ -21,13 +21,13 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain your problem. You can also use [Loom](http://loom.com/) to do short video bug reports.
 
 **Desktop (please complete the following information where relevant):**
  - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Temporal Web Version [e.g. 22]
- - Tctl Version [e.g. 22]
+ - Browser [e.g. Chrome, Safari]
+ - Temporal Web Version [e.g. 1.7?]
+ - Tctl Version [e.g. 1.7?]
  - are you using Docker or building from source?
 
 **Additional context**
