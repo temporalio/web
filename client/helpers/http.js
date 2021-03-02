@@ -1,4 +1,5 @@
 const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
+
 export default function http(fetch, url, o) {
   const opts = {
     credentials: 'same-origin',
@@ -20,8 +21,9 @@ export default function http(fetch, url, o) {
     }
   }
 
-  let path = PUBLIC_PATH.slice(0, -1);
-  fetchUrl = `${path}${fetchUrl}`
+  const path = PUBLIC_PATH.slice(0, -1);
+
+  fetchUrl = `${path}${fetchUrl}`;
 
   return fetch(fetchUrl, opts).then(r =>
     r.status >= 200 && r.status < 300
@@ -41,19 +43,23 @@ http.post = function post(fetch, url, body) {
       'Content-Type': 'application/json',
     },
   };
+
   opts = addCsrf(opts);
+
   return http(fetch, url, opts);
 };
 
-export const addCsrf = (opts) => {
+export const addCsrf = opts => {
   const csrfCookie = 'csrf-token=';
   const csrfHeader = 'X-CSRF-TOKEN';
   const cookies = document.cookie.split(';');
-  let csrf = cookies.find((c) => c.includes(csrfCookie));
+  let csrf = cookies.find(c => c.includes(csrfCookie));
+
   if (csrf && !opts.headers[csrfHeader]) {
     csrf = csrf.trim().slice(csrfCookie.length);
     opts.headers[csrfHeader] = csrf;
   }
+
   return opts;
 };
 

@@ -36,8 +36,8 @@ export default {
       `/api/namespaces/${this.$route.params.namespace}/task-queues/${this.$route.params.taskQueue}/pollers`
     )
       .then(
-        (p) => {
-          this.pollers = Object.keys(p).map((identity) => ({
+        p => {
+          this.pollers = Object.keys(p).map(identity => ({
             identity,
             lastAccessTime: moment(p[identity].lastAccessTime),
             handlesWorkflowTasks: p[identity].taskQueueTypes.includes(
@@ -46,7 +46,7 @@ export default {
             handlesActivities: p[identity].taskQueueTypes.includes('activity'),
           }));
         },
-        (e) => {
+        e => {
           this.error = (e.json && e.json.message) || e.status || e.message;
         }
       )

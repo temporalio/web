@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const getQueryResult = (queryResponse) => {
+const getQueryResult = queryResponse => {
   return { payloads: JSON.parse(queryResponse.payloads) };
 };
 

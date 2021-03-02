@@ -1,7 +1,7 @@
 import { extractEventSummary } from './summarize-events';
 import { getKeyValuePairs } from '~helpers';
 
-const getEventSummary = (event) => {
+const getEventSummary = event => {
   if (!event) {
     return event;
   }

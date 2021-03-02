@@ -4,13 +4,14 @@ import { NOTIFICATION_TYPE_ERROR } from '~constants';
 const _versionInfoStorageKey = 'announcement.version';
 const _githubReleases = 'https://github.com/temporalio/temporal/releases/tag/v';
 
-const fetchVersionInfo = async (http) => {
+const fetchVersionInfo = async http => {
   return await http(`/api/cluster/version-info`);
 };
 
 export const getNewVersionAnnouncement = async (http, showNotification) => {
   try {
     const versionInfo = await fetchVersionInfo(http);
+
     if (!versionInfo || !versionInfo.recommended || !versionInfo.current) {
       return { show: false };
     }
@@ -25,6 +26,7 @@ export const getNewVersionAnnouncement = async (http, showNotification) => {
     const discardedRecord = localStorage.getItem(
       `${_versionInfoStorageKey}:${versionR}`
     );
+
     if (discardedRecord) {
       return { show: false };
     }
@@ -32,12 +34,14 @@ export const getNewVersionAnnouncement = async (http, showNotification) => {
     const { instructions, alerts } = versionInfo;
     let alertMessage = '';
     let severity = '';
+
     if (alerts && alerts.length > 0) {
       alertMessage = alerts[0].message;
       severity = (alerts[0].severity || '').toLowerCase();
     }
 
     let message = `🪐 ${versionR} version is available!`;
+
     if (alertMessage || instructions) {
       message = alertMessage ? `${alertMessage} ` : '' + instructions;
     }
@@ -51,11 +55,13 @@ export const getNewVersionAnnouncement = async (http, showNotification) => {
     };
   } catch (err) {
     const message = getErrorMessage(err);
+
     showNotification({ message, type: NOTIFICATION_TYPE_ERROR });
+
     return { show: false };
   }
 };
 
-export const discardVersionAnnouncement = (version) => {
+export const discardVersionAnnouncement = version => {
   localStorage.setItem(`${_versionInfoStorageKey}:${version}`, 'false');
 };
