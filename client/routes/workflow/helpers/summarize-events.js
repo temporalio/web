@@ -4,13 +4,13 @@ import workflowLink from './workflow-link';
 import { shortName } from '~helpers';
 
 const summaryExtractors = {
-  ActivityTaskCancelRequested: (d) => ({ Id: d.activityId }),
-  ActivityTaskCompleted: (d) => ({ result: d.result }),
-  ActivityTaskFailed: (d) => ({
+  ActivityTaskCancelRequested: d => ({ Id: d.activityId }),
+  ActivityTaskCompleted: d => ({ result: d.result }),
+  ActivityTaskFailed: d => ({
     details: d.details,
     reason: d.reason,
   }),
-  ActivityTaskScheduled: (d) => ({
+  ActivityTaskScheduled: d => ({
     'Close Timeout': moment
       .duration(d.scheduleToCloseTimeout?.duration, 'seconds')
       .format(),
@@ -18,34 +18,34 @@ const summaryExtractors = {
     input: d.input,
     Name: shortName(d.activityType.name),
   }),
-  ActivityTaskStarted: (d) => ({
+  ActivityTaskStarted: d => ({
     attempt: d.attempt,
     identity: d.identity,
     requestId: d.requestId,
   }),
-  ActivityTaskTimedOut: (d) => ({
+  ActivityTaskTimedOut: d => ({
     'Timeout Type': d.failure?.timeoutFailureInfo?.timeoutType,
   }),
-  ChildWorkflowExecutionCompleted: (d) => ({
+  ChildWorkflowExecutionCompleted: d => ({
     result: d.result,
     Workflow: workflowLink(d, true),
   }),
-  ChildWorkflowExecutionStarted: (d) => ({
+  ChildWorkflowExecutionStarted: d => ({
     Workflow: workflowLink(d),
   }),
-  WorkflowTaskCompleted: (d) => ({ identity: d.identity }),
-  WorkflowTaskScheduled: (d) => ({
+  WorkflowTaskCompleted: d => ({ identity: d.identity }),
+  WorkflowTaskScheduled: d => ({
     Taskqueue: d.taskQueue.name,
     Timeout: moment
       .duration(d.startToCloseTimeout?.duration, 'seconds')
       .format(),
   }),
-  WorkflowTaskStarted: (d) => ({ requestId: d.requestId }),
-  WorkflowTaskTimedOut: (d) => ({ 'Timeout Type': d.timeoutType }),
-  ExternalWorkflowExecutionSignaled: (d) => ({
+  WorkflowTaskStarted: d => ({ requestId: d.requestId }),
+  WorkflowTaskTimedOut: d => ({ 'Timeout Type': d.timeoutType }),
+  ExternalWorkflowExecutionSignaled: d => ({
     Workflow: workflowLink(d),
   }),
-  MarkerRecorded: (d) => {
+  MarkerRecorded: d => {
     const details = d.details || {};
 
     if (d.markerName === 'LocalActivity') {
@@ -79,23 +79,23 @@ const summaryExtractors = {
 
     return d;
   },
-  StartChildWorkflowExecutionInitiated: (d) => ({
+  StartChildWorkflowExecutionInitiated: d => ({
     input: d.input,
     Taskqueue: d.taskQueue.name,
     Workflow: shortName(d.workflowType.name),
   }),
-  SignalExternalWorkflowExecutionInitiated: (d) => ({
+  SignalExternalWorkflowExecutionInitiated: d => ({
     input: d.input,
     signal: d.signalName,
     Workflow: workflowLink(d),
   }),
-  TimerStarted: (d) => ({
+  TimerStarted: d => ({
     'Fire Timeout': moment
       .duration(d.startToFireTimeout?.duration, 'seconds')
       .format(),
     'Timer ID': d.timerId,
   }),
-  WorkflowExecutionStarted: (d) => {
+  WorkflowExecutionStarted: d => {
     const summary = {
       'Close Timeout': moment
         .duration(d.workflowExecutionTimeout?.duration, 'seconds')
@@ -116,12 +116,12 @@ const summaryExtractors = {
 
     return summary;
   },
-  WorkflowExecutionFailed: (d) => ({ message: d.failure?.message }),
-  WorkflowTaskFailed: (d) => ({ message: d.failure?.message }),
-  ChildWorkflowExecutionFailed: (d) => ({ message: d.failure?.message }),
+  WorkflowExecutionFailed: d => ({ message: d.failure?.message }),
+  WorkflowTaskFailed: d => ({ message: d.failure?.message }),
+  ChildWorkflowExecutionFailed: d => ({ message: d.failure?.message }),
 };
 
-const isKnownEventType = (eventType) => {
+const isKnownEventType = eventType => {
   return eventType in summaryExtractors;
 };
 

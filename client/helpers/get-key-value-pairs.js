@@ -1,7 +1,28 @@
 import moment from 'moment';
 import { failureKeys, jsonKeys, preKeys } from '~constants';
 
-const getKeyValuePairs = (event) => {
+function failureToString(failure) {
+  let res = '';
+  let node = { ...failure };
+  let isRoot = true;
+
+  while (node) {
+    const { message, stackTrace, applicationFailureInfo } = node;
+    const type = applicationFailureInfo?.type
+      ? `${applicationFailureInfo.type}: `
+      : '';
+    const trace = stackTrace ? ` \n${stackTrace}` : ``;
+    const err = `${type}${message}${trace}`;
+
+    res += isRoot ? err : `\nCaused By: ${err}`;
+    node = node.cause;
+    isRoot = false;
+  }
+
+  return res;
+}
+
+const getKeyValuePairs = event => {
   const kvps = [];
   const flatten = (prefix, obj, root) => {
     Object.entries(obj).forEach(([k, value]) => {
@@ -92,23 +113,5 @@ const getKeyValuePairs = (event) => {
 
   return kvps;
 };
-
-function failureToString(failure) {
-  let res = '';
-  let node = { ...failure };
-  let isRoot = true;
-  while (node) {
-    const { message, stackTrace, applicationFailureInfo } = node;
-    const type = applicationFailureInfo?.type
-      ? `${applicationFailureInfo.type}: `
-      : '';
-    const trace = stackTrace ? ` \n${stackTrace}` : ``;
-    const err = `${type}${message}${trace}`;
-    res += isRoot ? err : `\nCaused By: ${err}`;
-    node = node.cause;
-    isRoot = false;
-  }
-  return res;
-}
 
 export default getKeyValuePairs;

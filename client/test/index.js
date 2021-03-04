@@ -6,6 +6,8 @@ if (module.hot) {
   });
 }
 
+// TODO: look into this and fix this error.
+// eslint-disable-next-line import/no-unresolved
 require('mocha/mocha');
 
 const mochaDiv = document.createElement('div');

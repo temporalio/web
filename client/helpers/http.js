@@ -1,5 +1,19 @@
 const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
 
+export const addCsrf = opts => {
+  const csrfCookie = 'csrf-token=';
+  const csrfHeader = 'X-CSRF-TOKEN';
+  const cookies = document.cookie.split(';');
+  let csrf = cookies.find(c => c.includes(csrfCookie));
+
+  if (csrf && !opts.headers[csrfHeader]) {
+    csrf = csrf.trim().slice(csrfCookie.length);
+    opts.headers[csrfHeader] = csrf;
+  }
+
+  return opts;
+};
+
 export default function http(fetch, url, o) {
   const opts = {
     credentials: 'same-origin',
@@ -47,20 +61,6 @@ http.post = function post(fetch, url, body) {
   opts = addCsrf(opts);
 
   return http(fetch, url, opts);
-};
-
-export const addCsrf = opts => {
-  const csrfCookie = 'csrf-token=';
-  const csrfHeader = 'X-CSRF-TOKEN';
-  const cookies = document.cookie.split(';');
-  let csrf = cookies.find(c => c.includes(csrfCookie));
-
-  if (csrf && !opts.headers[csrfHeader]) {
-    csrf = csrf.trim().slice(csrfCookie.length);
-    opts.headers[csrfHeader] = csrf;
-  }
-
-  return opts;
 };
 
 http.global = http.bind(null, window.fetch);

@@ -155,7 +155,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import { TERMINATE_DEFAULT_ERROR_MESSAGE } from './constants';
 import { NOTIFICATION_TYPE_ERROR, NOTIFICATION_TYPE_SUCCESS } from '~constants';
 import { getErrorMessage } from '~helpers';
@@ -217,7 +216,7 @@ export default {
           reason: this.terminationReason,
         })
         .then(
-          (r) => {
+          r => {
             this.$emit('onNotification', {
               message: 'Workflow terminated.',
               type: NOTIFICATION_TYPE_SUCCESS,
@@ -225,7 +224,7 @@ export default {
             // eslint-disable-next-line no-console
             console.dir(r);
           },
-          (error) => {
+          error => {
             this.$emit('onNotification', {
               message: getErrorMessage(error, TERMINATE_DEFAULT_ERROR_MESSAGE),
               type: NOTIFICATION_TYPE_ERROR,
@@ -238,8 +237,9 @@ export default {
         return Promise.resolve(this.webSettingsCache);
       }
 
-      return this.$http(`/api/web-settings`).then((r) => {
+      return this.$http(`/api/web-settings`).then(r => {
         this.webSettingsCache = r;
+
         return this.webSettingsCache;
       });
     },

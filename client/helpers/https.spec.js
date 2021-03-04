@@ -52,15 +52,6 @@ describe('cross site request forgery (CSRF)', () => {
     });
   });
 
-  describe('When csrf cookie is pre-fixed with a space', () => {
-    it('should trim spaces and set CSRF header', () => {
-      document.cookie = ' csrf-token=xxxxx ;';
-      opts = addCsrf(opts);
-
-      expect(opts.headers['X-CSRF-TOKEN']).toEqual('xxxxx');
-    });
-  });
-
   describe('When csrf cookie has spaces', () => {
     it('should trim spaces and set CSRF header', () => {
       document.cookie = ' csrf-token=xxxxx ;';
