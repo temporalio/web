@@ -18,10 +18,7 @@
         :to="{ name: 'workflow-archival' }"
       />
       <span class="bugreport">
-        <a
-          target="_blank"
-          href="https://github.com/temporalio/web/issues/new/choose"
-        >
+        <a target="_blank" :href="issueReportLink">
           Report Bug/Give Feedback
         </a>
       </span>
@@ -40,6 +37,32 @@ export default {
   components: {
     'navigation-bar': NavigationBar,
     'navigation-link': NavigationLink,
+  },
+  data() {
+    return {
+      webSettings: undefined,
+    };
+  },
+  async created() {
+    await this.getWebSettings();
+  },
+  computed: {
+    issueReportLink() {
+      if (!this.webSettings?.routing?.issueReportLink) {
+        return 'https://github.com/temporalio/web/issues/new/choose';
+      }
+
+      return this.webSettings.routing.issueReportLink;
+    },
+  },
+  methods: {
+    async getWebSettings() {
+      if (this.webSettings) {
+        return this.webSettings;
+      }
+
+      this.webSettings = await this.$http(`/api/web-settings`);
+    },
   },
 };
 </script>

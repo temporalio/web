@@ -13,4 +13,5 @@ auth:
 # for more info see docs: https://github.com/temporalio/web#configuring-authentication-optional
 
 routing:
-  default_to_namespace: # my_namespace
+  default_to_namespace: # internal use only
+  issue_report_link: https://github.com/temporalio/web/issues/new/choose # set this field if you need to direct people to internal support forums
