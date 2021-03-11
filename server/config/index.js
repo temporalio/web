@@ -34,16 +34,22 @@ const getAuthConfig = async () => {
 };
 
 const getRoutingConfig = async () => {
-  let { routing } = await readConfig();
+  const { routing } = await readConfig();
+
   if (!routing) {
-    return { defaultToNamespace: null };
+    return { defaultToNamespace: null, issueReportLink: null };
   }
 
-  routing.defaultToNamespace =
+  // backwards compatibility fix
+  routing.default_to_namespace =
     routing.default_to_namespace || routing.defaultToNamespace;
-  delete routing.default_to_namespace;
 
-  return routing;
+  const { default_to_namespace, issue_report_link } = routing;
+
+  return {
+    defaultToNamespace: default_to_namespace,
+    issueReportLink: issue_report_link,
+  };
 };
 
 const getTlsConfig = () => {

@@ -14,3 +14,4 @@ auth:
 
 routing:
   default_to_namespace: # my_namespace
+  issue_report_link: https://github.com/temporalio/web/issues/new/choose
