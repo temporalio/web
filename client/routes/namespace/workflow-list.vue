@@ -11,6 +11,7 @@
             name="queryString"
             v-bind:value="$route.query.queryString"
             @input="setWorkflowFilter"
+            data-cy="query-string"
           />
           <label for="queryString">Query</label>
         </div>
@@ -63,7 +64,7 @@
           @change="setRange"
         />
       </template>
-      <a class="toggle-filter" @click="toggleFilter">{{
+      <a class="toggle-filter" @click="toggleFilter" data-cy="filter-mode">{{
         filterMode === 'advanced' ? 'basic' : 'advanced'
       }}</a>
     </header>
@@ -133,15 +134,6 @@ export default {
     'workflows-grid': WorkflowsGrid,
   },
   computed: {
-    fetchUrl() {
-      const { namespace, queryString, state } = this;
-
-      if (queryString) {
-        return `/api/namespaces/${namespace}/workflows/list`;
-      }
-
-      return `/api/namespaces/${namespace}/workflows/${state}`;
-    },
     endTime() {
       const { endTime, range } = this.$route.query;
 
@@ -282,95 +274,109 @@ export default {
         return;
       }
 
-      let workflows = [];
-
-      if (this.state !== 'all') {
-        const query = { ...this.criteria, nextPageToken: this.npt };
-
-        if (query.queryString) {
-          query.queryString = decodeURI(query.queryString);
-        }
-
-        const { workflows: wfs, nextPageToken } = await this.fetch(
-          this.fetchUrl,
-          query
-        );
-
-        workflows = wfs;
-        this.npt = nextPageToken;
+      if (this.criteria.queryString) {
+        await this.fetchWorkflowsWithQuery();
+      } else if (this.state === 'all') {
+        await this.fetchWorkflowsAllStates();
       } else {
-        const { namespace } = this;
-        const queryOpen = { ...this.criteria, nextPageToken: this.npt };
-        const queryClosed = { ...this.criteria, nextPageToken: this.nptAlt };
-
-        // eslint-disable-next-line prefer-const
-        let { workflows: wfsOpen, nextPageToken: nptOpen } = await this.fetch(
-          `/api/namespaces/${namespace}/workflows/open`,
-          queryOpen
-        );
-
-        this.npt = nptOpen;
-
-        let {
-          workflows: wfsClosed,
-          // eslint-disable-next-line prefer-const
-          nextPageToken: nptClosed,
-        } = await this.fetch(
-          `/api/namespaces/${namespace}/workflows/closed`,
-          queryClosed
-        );
-
-        this.nptAlt = nptClosed;
-
-        if (this.npt && this.nptAlt) {
-          // saturate diff in workflows between the max dates
-          // so both open and closed workflows are fetched until the same date
-          let maxOpen = maxBy(wfsOpen, w => moment(w.startTime));
-          let maxClosed = maxBy(wfsClosed, w => moment(w.startTime));
-
-          let nptDiff;
-          let saturateOpen;
-
-          if (
-            maxOpen &&
-            maxClosed &&
-            maxOpen.startTime !== maxClosed.startTime
-          ) {
-            maxOpen = moment(maxOpen.startTime);
-            maxClosed = moment(maxClosed.startTime);
-            saturateOpen = maxOpen < maxClosed;
-
-            let [startTime, endTime] = saturateOpen
-              ? [maxOpen, maxClosed]
-              : [maxClosed, maxOpen];
-
-            startTime = startTime.add(1, 'seconds').toISOString();
-            endTime = endTime.add(1, 'seconds').toISOString();
-            const queryDiff = { ...this.criteria, startTime, endTime };
-
-            const diff = await this.fetch(
-              `/api/namespaces/${namespace}/workflows/${
-                saturateOpen ? 'open' : 'closed'
-              }`,
-              queryDiff
-            );
-
-            nptDiff = diff.nextPageToken;
-
-            if (saturateOpen === true) {
-              this.npt = nptDiff;
-              wfsOpen = [...wfsOpen, ...diff.workflows];
-            } else if (saturateOpen === false) {
-              this.nptAlt = nptDiff;
-              wfsClosed = [...wfsClosed, ...diff.workflows];
-            }
-          }
-        }
-
-        workflows = [...wfsOpen, ...wfsClosed];
+        await this.fetchWorkflowsByState();
       }
+    },
+    async fetchWorkflowsWithQuery() {
+      const query = { ...this.criteria, nextPageToken: this.npt };
+
+      query.queryString = decodeURI(query.queryString);
+
+      const { workflows, nextPageToken } = await this.fetch(
+        `/api/namespaces/${this.namespace}/workflows/list`,
+        query
+      );
 
       this.results = [...this.results, ...workflows];
+      this.npt = nextPageToken;
+    },
+    async fetchWorkflowsByState() {
+      const { namespace, state } = this;
+      const query = { ...this.criteria, nextPageToken: this.npt };
+
+      if (query.queryString) {
+        query.queryString = decodeURI(query.queryString);
+      }
+
+      const { workflows, nextPageToken } = await this.fetch(
+        `/api/namespaces/${namespace}/workflows/${state}`,
+        query
+      );
+
+      this.results = [...this.results, ...workflows];
+      this.npt = nextPageToken;
+    },
+    async fetchWorkflowsAllStates() {
+      const { namespace } = this;
+      const queryOpen = { ...this.criteria, nextPageToken: this.npt };
+      const queryClosed = { ...this.criteria, nextPageToken: this.nptAlt };
+
+      // eslint-disable-next-line prefer-const
+      let { workflows: wfsOpen, nextPageToken: nptOpen } = await this.fetch(
+        `/api/namespaces/${namespace}/workflows/open`,
+        queryOpen
+      );
+
+      this.npt = nptOpen;
+
+      let {
+        workflows: wfsClosed,
+        // eslint-disable-next-line prefer-const
+        nextPageToken: nptClosed,
+      } = await this.fetch(
+        `/api/namespaces/${namespace}/workflows/closed`,
+        queryClosed
+      );
+
+      this.nptAlt = nptClosed;
+
+      if (this.npt && this.nptAlt) {
+        // saturate diff in workflows between the max dates
+        // so both open and closed workflows are fetched until the same date
+        let maxOpen = maxBy(wfsOpen, w => moment(w.startTime));
+        let maxClosed = maxBy(wfsClosed, w => moment(w.startTime));
+
+        let nptDiff;
+        let saturateOpen;
+
+        if (maxOpen && maxClosed && maxOpen.startTime !== maxClosed.startTime) {
+          maxOpen = moment(maxOpen.startTime);
+          maxClosed = moment(maxClosed.startTime);
+          saturateOpen = maxOpen < maxClosed;
+
+          let [startTime, endTime] = saturateOpen
+            ? [maxOpen, maxClosed]
+            : [maxClosed, maxOpen];
+
+          startTime = startTime.add(1, 'seconds').toISOString();
+          endTime = endTime.add(1, 'seconds').toISOString();
+          const queryDiff = { ...this.criteria, startTime, endTime };
+
+          const diff = await this.fetch(
+            `/api/namespaces/${namespace}/workflows/${
+              saturateOpen ? 'open' : 'closed'
+            }`,
+            queryDiff
+          );
+
+          nptDiff = diff.nextPageToken;
+
+          if (saturateOpen === true) {
+            this.npt = nptDiff;
+            wfsOpen = [...wfsOpen, ...diff.workflows];
+          } else if (saturateOpen === false) {
+            this.nptAlt = nptDiff;
+            wfsClosed = [...wfsClosed, ...diff.workflows];
+          }
+        }
+      }
+
+      this.results = [...this.results, ...wfsOpen, ...wfsClosed];
     },
     setWorkflowFilter(e) {
       const target = e.target || e.testTarget; // test hook since Event.target is readOnly and unsettable

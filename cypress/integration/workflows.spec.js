@@ -33,7 +33,7 @@ context('Workflows', () => {
       .find('[data-cy=workflow-row]')
       .should('contain.text', 'wf_open')
       .should('not.contain.text', 'wf_timedout')
-      .should('not.contain.text', 'wf_terminated1')
+      .should('not.contain.text', 'wf_terminated1');
 
     cy.wait(1000);
     cy.get('[data-cy=status-filter]')
@@ -46,7 +46,7 @@ context('Workflows', () => {
       .find('[data-cy=workflow-row]')
       .should('not.contain.text', 'wf_open')
       .should('contain.text', 'wf_timedout')
-      .should('contain.text', 'wf_terminated1')
+      .should('contain.text', 'wf_terminated1');
 
     cy.wait(1000);
     cy.get('[data-cy=status-filter]')
@@ -59,7 +59,7 @@ context('Workflows', () => {
       .find('[data-cy=workflow-row]')
       .should('not.contain.text', 'wf_open')
       .should('not.contain.text', 'wf_timedout')
-      .should('contain.text', 'wf_terminated')
+      .should('contain.text', 'wf_terminated');
 
     cy.wait(1000);
     cy.get('[data-cy=status-filter]')
@@ -72,7 +72,20 @@ context('Workflows', () => {
       .find('[data-cy=workflow-row]')
       .should('not.contain.text', 'wf_open')
       .should('contain.text', 'wf_timedout')
-      .should('not.contain.text', 'wf_terminated')
+      .should('not.contain.text', 'wf_terminated');
+  });
+
+  it('filters workflows using query', () => {
+    cy.get('[data-cy=filter-mode]').click();
+
+    cy.get('[data-cy=query-string]').type('WorkflowId="wf_open1"');
+    cy.wait(1000);
+
+    cy.get('[data-cy=workflow-list]')
+      .find('[data-cy=workflow-row]')
+      .should('contain.text', 'wf_open1')
+      .should('not.contain.text', 'wf_open2')
+      .should('not.contain.text', 'wf_terminated1');
   });
 
   it('renders workflow execution details', () => {
