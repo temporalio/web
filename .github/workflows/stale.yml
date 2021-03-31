@@ -17,5 +17,5 @@ jobs:
         stale-pr-message: 'Stale PR - @sw-yx please reassess'
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
-        exempt-issue-labels: 'exempt-stale'
+        exempt-issue-labels: 'exempt-stale,enhancement'
         exempt-pr-labels: 'exempt-stale'
