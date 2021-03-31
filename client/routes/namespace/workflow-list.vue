@@ -476,7 +476,11 @@ export default {
       }
     },
     onWorkflowsScroll(startIndex, endIndex) {
-      if (this.loading || !this.npt) {
+      if (
+        this.loading ||
+        (this.state !== 'all' && !this.npt) ||
+        (this.state === 'all' && !this.npt && !this.nptAlt)
+      ) {
         return;
       }
 
