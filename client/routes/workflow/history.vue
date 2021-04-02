@@ -537,6 +537,9 @@ export default {
         setTimeout(() => this.scrollEventIntoView(this.eventId), 100);
       }
     },
+    eventId(eventId) {
+      this.scrollEventIntoView(eventId);
+    },
     showGraph() {
       this.splitSizeSet = this.showGraph ? [20, 80] : [1, 99];
       this.onSplitResize();
