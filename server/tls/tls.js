@@ -1,4 +1,4 @@
-const grpc = require('@grpc/grpc-js');
+const grpc = require('grpc');
 const { readCredsFromCertFiles } = require('./read-creds-from-cert-files');
 const { readCredsFromConfig } = require('./read-creds-from-config');
 const { compareCaseInsensitive } = require('../utils');
