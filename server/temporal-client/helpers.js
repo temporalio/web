@@ -170,6 +170,7 @@ function enumTransform(item) {
     'archival_state',
     'retry_state',
     'severity',
+    'pending_activity_state',
   ];
 
   const itemL = item.toLowerCase();

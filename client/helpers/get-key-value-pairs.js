@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { failureKeys, jsonKeys, preKeys } from '~constants';
+import { timestampToDate } from '~helpers';
 
 function failureToString(failure) {
   let res = '';
@@ -21,6 +22,20 @@ function failureToString(failure) {
 
   return res;
 }
+
+const scheduledTimeView = time => {
+  const scheduledTime = timestampToDate(time);
+  const now = moment.now();
+  let res = scheduledTime.format('lll');
+
+  if (scheduledTime > now) {
+    const delta = moment.duration(scheduledTime - now);
+
+    res = `${res} (in ${delta.format()})`;
+  }
+
+  return res;
+};
 
 const getKeyValuePairs = event => {
   const kvps = [];
@@ -84,6 +99,10 @@ const getKeyValuePairs = event => {
           },
           value,
         });
+      } else if (key === 'scheduledTime') {
+        kvps.push({ key, value: scheduledTimeView(value) });
+      } else if (key === 'lastHeartbeatTime') {
+        kvps.push({ key, value: timestampToDate(value).format('lll') });
       } else if (key === 'taskQueue.name' || key === 'Taskqueue') {
         kvps.push({
           key,
