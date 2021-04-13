@@ -89,6 +89,7 @@ router.get(
         ? Buffer.from(q.nextPageToken, 'base64')
         : undefined,
       waitForNewEvent: 'waitForNewEvent' in q ? true : undefined,
+      rawPayloads: 'rawPayloads' in q ? true : undefined,
     });
   }
 );
@@ -350,10 +351,16 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
   ctx.body = tq;
 });
 
+router.post('/api/web-settings/data-converter/:port', async(ctx) => {
+  ctx.session.dataConverter = { port: ctx.params.port };
+  ctx.status = 200;
+});
+
 router.get('/api/web-settings', async (ctx) => {
   const routing = await getRoutingConfig();
   const { enabled } = await getAuthConfig();
   const permitWriteApi = isWriteApiPermitted();
+  const dataConverter = ctx.session.dataConverter;
 
   const auth = { enabled }; // only include non-sensitive data
 
@@ -361,6 +368,7 @@ router.get('/api/web-settings', async (ctx) => {
     routing,
     auth,
     permitWriteApi,
+    dataConverter,
   };
 });
 

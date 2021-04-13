@@ -18,6 +18,7 @@ function TemporalClient() {
     keepCase: false,
     longs: String,
     enums: String,
+    bytes: String,
     defaults: true,
     oneofs: true,
     includeDirs: [
@@ -161,6 +162,7 @@ TemporalClient.prototype.getHistory = async function(
     nextPageToken,
     execution,
     waitForNewEvent,
+    rawPayloads,
     maximumPageSize = 100,
   }
 ) {
@@ -174,7 +176,7 @@ TemporalClient.prototype.getHistory = async function(
 
   let res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
 
-  res = uiTransform(res);
+  res = uiTransform(res, rawPayloads);
 
   if (res.history && res.history.events) {
     res.history = buildHistory(res);

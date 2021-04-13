@@ -56,7 +56,7 @@ const _uiTransformPayloadKeys = [
   _payloads,
 ];
 
-function uiTransform(item) {
+function uiTransform(item, rawPayloads=false) {
   if (!item || typeof item !== 'object') {
     return item;
   }
@@ -96,7 +96,7 @@ function uiTransform(item) {
         item[subkey] = stringval;
       }
     } else if (Array.isArray(subvalue)) {
-      if (subkey === _payloads) {
+      if (subkey === _payloads && !rawPayloads) {
         let payloads = [];
 
         Object.entries(subvalue).forEach(([subkey, payload]) => {
@@ -120,7 +120,7 @@ function uiTransform(item) {
         });
         item[_payloads] = payloads;
       } else {
-        subvalue.forEach(uiTransform);
+        subvalue.forEach(function(item) { uiTransform(item, rawPayloads) });
       }
     } else if (typeof subvalue == 'string') {
       subvalue = enumTransform(subvalue);
@@ -144,10 +144,10 @@ function uiTransform(item) {
           });
           item[subkey] = values;
         } else {
-          uiTransform(subvalue);
+          uiTransform(subvalue, rawPayloads);
         }
       } else {
-        uiTransform(subvalue);
+        uiTransform(subvalue, rawPayloads);
       }
     }
   });
