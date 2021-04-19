@@ -18,9 +18,7 @@ export const decryptEventPayloads = async (events, port) => {
 
       if (event.details.input) {
         payloads = event.details.input.payloads;
-      }
-
-      if (event.details.result) {
+      } else if (event.details.result) {
         payloads = event.details.result.payloads;
       }
 
