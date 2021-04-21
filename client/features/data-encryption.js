@@ -33,10 +33,10 @@ export const decryptEventPayloads = async (events, port) => {
       });
     });
     await Promise.all(requests);
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    const message = `Unable to decrypt event payload: ${err}`;
 
-    return Promise.reject(error);
+    return Promise.reject({ message });
   } finally {
     if (sock.isOpened) {
       await sock.close();

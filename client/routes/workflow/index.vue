@@ -206,7 +206,16 @@ export default {
             return events;
           }
 
-          return decryptEventPayloads(events, port);
+          return decryptEventPayloads(events, port).catch(error => {
+            console.error(error);
+
+            this.$emit('onNotification', {
+              message: getErrorMessage(error),
+              type: NOTIFICATION_TYPE_ERROR,
+            });
+
+            return events;
+          });
         })
         .then(events => {
           const shouldHighlightEventId =
