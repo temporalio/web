@@ -114,10 +114,10 @@ export default {
   },
   props: ['namespace', 'runId', 'workflowId'],
   async created() {
+    await this.getWebSettings();
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
     );
-    await this.getWebSettings();
   },
   beforeDestroy() {
     this.clearWatches();
