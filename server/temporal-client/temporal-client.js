@@ -172,13 +172,15 @@ TemporalClient.prototype.getHistory = async function(
     maximumPageSize,
   };
 
-  const res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
+  let res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
+
+  res = uiTransform(res);
 
   if (res.history && res.history.events) {
     res.history = buildHistory(res);
   }
 
-  return uiTransform(res);
+  return res;
 };
 
 TemporalClient.prototype.archivedWorkflows = async function(
