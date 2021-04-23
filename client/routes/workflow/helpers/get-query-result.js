@@ -1,5 +1,9 @@
 const getQueryResult = queryResponse => {
-  return { payloads: JSON.parse(queryResponse.payloads) };
+  if (typeof queryResponse?.payloads === 'string') {
+    return { payloads: JSON.parse(queryResponse.payloads) };
+  }
+
+  return queryResponse;
 };
 
 export { getQueryResult };
