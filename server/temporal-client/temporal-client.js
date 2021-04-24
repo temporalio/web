@@ -18,7 +18,6 @@ function TemporalClient() {
     keepCase: false,
     longs: String,
     enums: String,
-    bytes: String,
     defaults: true,
     oneofs: true,
     includeDirs: [
