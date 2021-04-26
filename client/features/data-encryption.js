@@ -1,14 +1,5 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 
-const payloadAsBase64 = payload => {
-  payload.data = Buffer.from(JSON.stringify(payload.data)).toString('base64');
-  payload.metadata.encoding = Buffer.from(payload.metadata.encoding).toString(
-    'base64'
-  );
-
-  return payload;
-};
-
 export const decryptEventPayloads = async (events, port) => {
   const sock = new WebSocketAsPromised(`ws://localhost:${port}/`, {
     packMessage: data => JSON.stringify(data),
@@ -32,10 +23,6 @@ export const decryptEventPayloads = async (events, port) => {
       }
 
       payloads.forEach((payload, i) => {
-        if (payload.metadata.encoding === 'json/plain') {
-          payload = payloadAsBase64(payload);
-        }
-
         requests.push(
           sock
             .sendRequest({ payload: JSON.stringify(payload) })
