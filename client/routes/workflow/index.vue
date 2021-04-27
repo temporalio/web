@@ -77,7 +77,7 @@ import {
 import { NOTIFICATION_TYPE_ERROR } from '~constants';
 import { getErrorMessage } from '~helpers';
 import { NavigationBar, NavigationLink } from '~components';
-import { decryptEventPayloads } from '~features/data-encryption';
+import { convertEventPayloads } from '~features/data-conversion';
 
 export default {
   data() {
@@ -206,7 +206,7 @@ export default {
             return events;
           }
 
-          return decryptEventPayloads(events, port).catch(error => {
+          return convertEventPayloads(events, port).catch(error => {
             console.error(error);
 
             this.$emit('onNotification', {
