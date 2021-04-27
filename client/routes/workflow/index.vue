@@ -77,6 +77,7 @@ import {
 import { NOTIFICATION_TYPE_ERROR } from '~constants';
 import { getErrorMessage } from '~helpers';
 import { NavigationBar, NavigationLink } from '~components';
+import { decryptEventPayloads } from '~features/data-encryption';
 
 export default {
   data() {
@@ -107,10 +108,13 @@ export default {
       taskQueue: {},
 
       unwatch: [],
+
+      webSettings: undefined,
     };
   },
   props: ['namespace', 'runId', 'workflowId'],
-  created() {
+  async created() {
+    await this.getWebSettings();
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
     );
@@ -131,7 +135,10 @@ export default {
       )}/${encodeURIComponent(runId)}`;
     },
     historyUrl() {
-      const historyUrl = `${this.baseAPIURL}/history?waitForNewEvent=true`;
+      const rawPayloads = this.webSettings?.dataConverter?.port
+        ? '&rawPayloads=true'
+        : '';
+      const historyUrl = `${this.baseAPIURL}/history?waitForNewEvent=true${rawPayloads}`;
 
       if (!this.nextPageToken) {
         return historyUrl;
@@ -188,11 +195,32 @@ export default {
             this.nextPageToken = res.nextPageToken;
           });
 
+          const { events } = res.history;
+
+          return events;
+        })
+        .then(events => {
+          const port = this.webSettings?.dataConverter?.port;
+
+          if (port == undefined) {
+            return events;
+          }
+
+          return decryptEventPayloads(events, port).catch(error => {
+            console.error(error);
+
+            this.$emit('onNotification', {
+              message: getErrorMessage(error),
+              type: NOTIFICATION_TYPE_ERROR,
+            });
+
+            return events;
+          });
+        })
+        .then(events => {
           const shouldHighlightEventId =
             this.$route.query.eventId &&
             this.events.length <= this.$route.query.eventId;
-
-          const { events } = res.history;
 
           this.events = this.events.concat(events);
 
@@ -299,6 +327,13 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+    },
+    async getWebSettings() {
+      if (this.webSettings) {
+        return this.webSettings;
+      }
+
+      this.webSettings = await this.$http(`/api/web-settings`);
     },
   },
 };
