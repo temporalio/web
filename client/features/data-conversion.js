@@ -1,6 +1,6 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 
-export const decryptEventPayloads = async (events, port) => {
+export const convertEventPayloads = async (events, port) => {
   const sock = new WebSocketAsPromised(`ws://localhost:${port}/`, {
     packMessage: data => JSON.stringify(data),
     unpackMessage: data => JSON.parse(data),
@@ -27,14 +27,18 @@ export const decryptEventPayloads = async (events, port) => {
           sock
             .sendRequest({ payload: JSON.stringify(payload) })
             .then(response => {
-              payloads[i] = JSON.parse(response.content);
+              try {
+                payloads[i] = JSON.parse(response.content);
+              } catch {
+                payloads[i] = response.content;
+              }
             })
         );
       });
     });
     await Promise.all(requests);
   } catch (err) {
-    const message = `Unable to decrypt event payload: ${err}`;
+    const message = `Unable to convert event payload: ${err}`;
 
     return Promise.reject({ message });
   } finally {
