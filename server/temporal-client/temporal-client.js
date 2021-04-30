@@ -85,7 +85,7 @@ TemporalClient.prototype.openWorkflows = async function(
     executionFilter,
     typeFilter,
     nextPageToken,
-    maximumPageSize = 100,
+    maximumPageSize = 10,
   }
 ) {
   const startTimeFilter = {
@@ -115,7 +115,7 @@ TemporalClient.prototype.closedWorkflows = async function(
     typeFilter,
     status,
     nextPageToken,
-    maximumPageSize = 100,
+    maximumPageSize = 10,
   }
 ) {
   const startTimeFilter = {
