@@ -5,9 +5,9 @@ import {
 
 jest.mock('~helpers');
 
-const GH_ENCODED_BODY = `**Description**%0AA%20clear%20and%20concise%20description%0A%0A**To%20Reproduce**%0ASteps%20to%20reproduce%20the%20behavior%3A%0A1.%20Go%20to%20'...'%0A2.%20Click%20on%20'....'%0A3.%20Scroll%20down%20to%20'....'%0A4.%20See%20error%0A%0A**Expected%20behavior**%0AA%20clear%20and%20concise%20description%20of%20what%20you%20expected%20to%20happen.%0A%0A**Workflow%20ID**%0AworkflowIdValue%0A%0A**Run%20ID**%0ArunIdValue%0A%0A**Input**%0A%0A%60%60%60json%0A%7B%7D%0A%60%60%60%0A%0A**Result**%0A%0A%60%60%60json%0A%7B%7D%0A%60%60%60%0A%0A**Additional%20context**%0AAdd%20any%20other%20context%20about%20the%20problem%20here.%0A%0A**Link**%0Ahttp%3A%2F%2Flocalhost%3A8088%2Fnamespaces%2Fdefault%2Fworkflows%2FworkflowIdValue%2FrunIdValue`;
+const GH_ENCODED_BODY = `**Description**%0AA%20clear%20and%20concise%20description%0A%0A**To%20Reproduce**%0ASteps%20to%20reproduce%20the%20behavior%3A%0A1.%20Go%20to%20'...'%0A2.%20Click%20on%20'....'%0A3.%20Scroll%20down%20to%20'....'%0A4.%20See%20error%0A%0A**Expected%20behavior**%0AA%20clear%20and%20concise%20description%20of%20what%20you%20expected%20to%20happen.%0A%0A**Workflow%20ID**%0AworkflowIdValue%0A%0A**Run%20ID**%0ArunIdValue%0A%0A**Input**%0A%0A%60%60%60json%0A%7B%7D%0A%60%60%60%0A**Result**%0A%0A%60%60%60json%0A%7B%7D%0A%60%60%60%0A%0A**Additional%20context**%0AAdd%20any%20other%20context%20about%20the%20problem%20here.%0A%0A**Link**%0Ahttp%3A%2F%2Flocalhost%3A8088%2Fnamespaces%2Fdefault%2Fworkflows%2FworkflowIdValue%2FrunIdValue`;
 // Apply Jira formatting
-const JIRA_ENCODED_BODY = applyJiraFormat(GH_ENCODED_BODY);
+const JIRA_ENCODED_BODY = encodeURIComponent(applyJiraFormat(decodeURIComponent(GH_ENCODED_BODY)));
 
 describe('getReportIssueLink', () => {
   describe('When no feature flag', () => {
