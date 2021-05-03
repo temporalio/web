@@ -12,6 +12,11 @@
           Terminate
         </a>
       </feature-flag>
+      <feature-flag name="workflow-report-issue-url">
+        <a :href="reportWorkflowIssueLink" class="report-issue" target="_blank">
+          Report Issue
+        </a>
+      </feature-flag>
     </aside>
 
     <modal name="confirm-termination">
@@ -155,10 +160,11 @@
 </template>
 
 <script>
+import { getReportIssueLink } from './helpers';
 import { TERMINATE_DEFAULT_ERROR_MESSAGE } from './constants';
 import { NOTIFICATION_TYPE_ERROR, NOTIFICATION_TYPE_SUCCESS } from '~constants';
-import { getErrorMessage } from '~helpers';
 import { BarLoader, DataViewer, DetailList, FeatureFlag } from '~components';
+import { getErrorMessage } from '~helpers';
 
 export default {
   data() {
@@ -206,6 +212,16 @@ export default {
     },
     showTerminate() {
       return this.isWorkflowRunning && this.webSettingsCache?.permitWriteApi;
+    },
+    reportWorkflowIssueLink() {
+      return getReportIssueLink({
+        workflow: this.workflow,
+        workflowId: this.workflowId,
+        runId: this.runId,
+        input: JSON.stringify(this.input, null, 2),
+        result: JSON.stringify(this.resultView, null, 2),
+        href: window.location.href,
+      });
     },
   },
   methods: {
@@ -290,8 +306,20 @@ section.workflow-summary
     max-height 18vh
 
   aside.actions
-    float right
-    a
+    width 100%
+    display flex
+    position absolute
+    justify-content flex-end
+    right 18px
+
+    a.report-issue
+      action-button(uber-white-120)
+      margin-left 16px
+      text-align center
+
+      &::after
+        content ''
+    a.terminate
       action-button(uber-orange)
 
 [data-modal="confirm-termination"]

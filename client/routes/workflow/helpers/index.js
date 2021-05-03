@@ -4,6 +4,7 @@ export { default as getEventSummary } from './get-event-summary';
 export { default as getHistoryEvents } from './get-history-events';
 export { default as getHistoryTimelineEvents } from './get-history-timeline-events';
 export { default as getSummary } from './get-summary';
+export { getReportIssueLink } from './get-summary-report-issue';
 export { default as getSummaryWorkflowStatus } from './get-summary-workflow-status';
 export { default as getTimeElapsedDisplay } from './get-time-elapsed-display';
 export { default as getTimeStampDisplay } from './get-time-stamp-display';

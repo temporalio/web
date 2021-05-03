@@ -6,5 +6,9 @@
   {
     "key": "workflow-terminate",
     "value": true
+  },
+  {
+    "key": "workflow-report-issue-url",
+    "value": ""
   }
 ]

@@ -26,6 +26,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.TEMPORAL_WEB_ROOT_PATH': `"${PUBLIC_PATH}"`,
+      'process.env.FLAG_WORKFLOW_REPORT_ISSUE_URL': `"${process.env.FLAG_WORKFLOW_REPORT_ISSUE_URL}"`,
     }),
     new ExtractTextPlugin({
       filename: development ? 'temporal.css' : 'temporal.[hash].css',
