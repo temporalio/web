@@ -3,9 +3,6 @@ const getEventsFromPendingActivity = (activities, idOffset) => {
     return [];
   }
 
-  if (Number.isInteger(idOffset)) {
-    idOffset = Number(idOffset);
-  }
 
   return activities.map((a, i) => ({
     details: a,
