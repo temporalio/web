@@ -45,6 +45,7 @@
       name="history"
       :baseAPIURL="baseAPIURL"
       :events="history.events"
+      :pendingEvents="history.pendingEvents"
       :loading="history.loading"
       :timelineEvents="history.timelineEvents"
       @onNotification="onNotification"
@@ -73,6 +74,7 @@ import {
   getHistoryEvents,
   getHistoryTimelineEvents,
   getSummary,
+  getEventsFromPendingActivity,
 } from './helpers';
 import { NOTIFICATION_TYPE_ERROR } from '~constants';
 import { getErrorMessage } from '~helpers';
@@ -92,6 +94,7 @@ export default {
 
       history: {
         events: [],
+        pendingEvents: [],
         loading: undefined,
         timelineEvents: [],
       },
@@ -225,6 +228,13 @@ export default {
           this.events = this.events.concat(events);
 
           this.history.events = getHistoryEvents(this.events);
+          this.history.pendingEvents = getHistoryEvents(
+            getEventsFromPendingActivity(
+              this.workflow.pendingActivities,
+              this.history.events.length
+            )
+          );
+
           this.history.timelineEvents = getHistoryTimelineEvents(
             this.history.events
           );
