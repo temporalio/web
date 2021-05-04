@@ -3,7 +3,6 @@ const getEventsFromPendingActivity = (activities, idOffset) => {
     return [];
   }
 
-
   return activities.map((a, i) => ({
     details: a,
     eventId: idOffset + i + 1,
