@@ -85,7 +85,7 @@ TemporalClient.prototype.openWorkflows = async function(
     executionFilter,
     typeFilter,
     nextPageToken,
-    maximumPageSize = 100,
+    maximumPageSize = 10,
   }
 ) {
   const startTimeFilter = {
@@ -115,7 +115,7 @@ TemporalClient.prototype.closedWorkflows = async function(
     typeFilter,
     status,
     nextPageToken,
-    maximumPageSize = 100,
+    maximumPageSize = 10,
   }
 ) {
   const startTimeFilter = {
@@ -161,6 +161,7 @@ TemporalClient.prototype.getHistory = async function(
     nextPageToken,
     execution,
     waitForNewEvent,
+    rawPayloads,
     maximumPageSize = 100,
   }
 ) {
@@ -172,13 +173,15 @@ TemporalClient.prototype.getHistory = async function(
     maximumPageSize,
   };
 
-  const res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
+  let res = await this.client.getWorkflowExecutionHistoryAsync(ctx, req);
+
+  res = uiTransform(res, rawPayloads);
 
   if (res.history && res.history.events) {
     res.history = buildHistory(res);
   }
 
-  return uiTransform(res);
+  return res;
 };
 
 TemporalClient.prototype.archivedWorkflows = async function(

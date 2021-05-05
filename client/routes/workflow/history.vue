@@ -313,6 +313,7 @@ export default {
     'runId',
     'showGraph',
     'timelineEvents',
+    'pendingEvents',
     'workflowId',
   ],
   created() {
@@ -356,8 +357,9 @@ export default {
       }.json`;
     },
     filteredEvents() {
-      const { eventId, eventType } = this;
-      const formattedEvents = this.events.map(event => ({
+      const { eventId, eventType, pendingEvents } = this;
+      const events = [...this.events, ...pendingEvents];
+      const formattedEvents = events.map(event => ({
         ...event,
         expanded: event.eventId === eventId,
       }));

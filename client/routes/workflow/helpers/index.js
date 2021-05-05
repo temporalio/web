@@ -1,6 +1,7 @@
 export { default as getEventDetails } from './get-event-details';
 export { default as getEventFullDetails } from './get-event-full-details';
 export { default as getEventSummary } from './get-event-summary';
+export { default as getEventsFromPendingActivity } from './get-events-from-pending-activity';
 export { default as getHistoryEvents } from './get-history-events';
 export { default as getHistoryTimelineEvents } from './get-history-timeline-events';
 export { default as getSummary } from './get-summary';

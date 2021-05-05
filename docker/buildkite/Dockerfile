@@ -1,6 +1,9 @@
-FROM node:14.8.0-stretch
-
+FROM node:14.16-alpine
 WORKDIR /usr/temporal-web
+
+# install git & openssh to fetch github packages
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
 
 ENV NODE_ENV=development
 

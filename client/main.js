@@ -172,6 +172,16 @@ const routeOpts = {
     // redirects
 
     {
+      name: 'data-converter',
+      path: '/data-converter/:port',
+      beforeEnter: async (to, _from, next) => {
+        await http.global.post(
+          `/api/web-settings/data-converter/${to.params.port}`
+        );
+        next('/');
+      },
+    },
+    {
       name: 'namespaces-redirect',
       path: '/namespace/*',
       redirect: '/namespaces/*',

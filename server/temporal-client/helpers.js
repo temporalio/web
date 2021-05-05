@@ -5,33 +5,13 @@ const moment = require('moment');
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
 
-  history.events = getHistoryRes.history.events.map((e) => {
+  history.events = getHistoryRes.history.events.map(e => {
     let attr = '';
 
     if (e.eventType) {
-      attr = e.eventType.toLowerCase().replace(/\_\w/g, function(v) {
-        return v.toUpperCase();
-      });
-      attr = attr.replace(/\_/g, '');
-      attr = attr.replace(/EventType/i, '') + 'EventAttributes';
-      attr = attr.charAt(0).toLowerCase() + attr.slice(1);
-    }
-
-    let details;
-
-    if (e[attr]) {
-      details = JSON.parse(JSON.stringify(e[attr]), function replacer(
-        key,
-        value
-      ) {
-        if (value && value.type && value.type === 'Buffer') {
-          return Buffer.from(value)
-            .toString()
-            .replace(/["]/g, '')
-            .trim();
-        }
-
-        return value;
+      attr = e.eventType + 'EventAttributes';
+      attr = attr.replace(/^./, function(v) {
+        return v.toLowerCase();
       });
     }
 
@@ -39,7 +19,7 @@ function buildHistory(getHistoryRes) {
       eventTime: e.eventTime,
       eventType: e.eventType,
       eventId: e.eventId,
-      details,
+      details: e[attr],
     };
   });
 
@@ -63,15 +43,20 @@ function momentToProtoTime(time) {
   };
 }
 
-[_searchAttributes, _memo, _queryResult, _payloads] = [
+const [_searchAttributes, _memo, _queryResult, _payloads] = [
   'searchAttributes',
   'memo',
   'queryResult',
   'payloads',
 ];
-_uiTransformPayloadKeys = [_searchAttributes, _memo, _queryResult, _payloads];
+const _uiTransformPayloadKeys = [
+  _searchAttributes,
+  _memo,
+  _queryResult,
+  _payloads,
+];
 
-function uiTransform(item) {
+function uiTransform(item, rawPayloads=false, transformingPayloads=false) {
   if (!item || typeof item !== 'object') {
     return item;
   }
@@ -79,9 +64,11 @@ function uiTransform(item) {
   Object.entries(item).forEach(([subkey, subvalue]) => {
     if (subvalue && subvalue.seconds) {
       const seconds = Number(subvalue.seconds);
+
       item[subkey] = { duration: seconds };
 
       const dt = moment(seconds * 1000);
+
       if (dt.isValid() && dt.isAfter('2017-01-01')) {
         item[subkey] = dt.toISOString();
       }
@@ -92,13 +79,19 @@ function uiTransform(item) {
         return;
       }
 
+      if (rawPayloads && transformingPayloads) {
+        item[subkey] = subvalue.toString('base64');
+
+        return;
+      }
+
       const stringval = subvalue.toString('utf8');
 
       try {
         // most of Temporal's uses of buffer is just line-delimited JSON.
         item[subkey] = stringval
           .split('\n')
-          .filter((x) => x)
+          .filter(x => x)
           .map(JSON.parse);
 
         if (item[subkey].length === 1) {
@@ -109,26 +102,33 @@ function uiTransform(item) {
         item[subkey] = stringval;
       }
     } else if (Array.isArray(subvalue)) {
-      if (subkey === _payloads) {
-        let values = [];
+      if (subkey === _payloads && rawPayloads) {
+        subvalue.forEach(function(item) { uiTransform(item, rawPayloads, true) });
+      } else if (subkey === _payloads) {
+        let payloads = [];
+
         Object.entries(subvalue).forEach(([subkey, payload]) => {
           const encoding = Buffer.from(
             payload.metadata.encoding || ''
           ).toString();
+
           if (
             ['json/plain', 'json/protobuf'].includes(encoding) &&
             payload.data
           ) {
-            values = [...values, Buffer.from(payload.data || '').toString()];
+            const data = JSON.parse(Buffer.from(payload.data).toString());
+
+            payloads = [...payloads, data];
           } else {
             let data = Buffer.from(payload.data || '').toString('base64');
+
             data = data.length > 20 ? `${data.slice(0, 20)}..` : data;
-            values = [...values, data];
+            payloads = [...payloads, data];
           }
         });
-        item[_payloads] = values;
+        item[_payloads] = payloads;
       } else {
-        subvalue.forEach(uiTransform);
+        subvalue.forEach(function(item) { uiTransform(item, rawPayloads) });
       }
     } else if (typeof subvalue == 'string') {
       subvalue = enumTransform(subvalue);
@@ -137,6 +137,7 @@ function uiTransform(item) {
       if (_uiTransformPayloadKeys.includes(subkey)) {
         if (subkey === _searchAttributes) {
           let values = [];
+
           Object.entries(subvalue.indexedFields).forEach(
             ([subkey, subvalue]) => {
               values = [...values, subvalue.data.toString('utf8')];
@@ -145,18 +146,20 @@ function uiTransform(item) {
           item[subkey] = values;
         } else if (subkey === _memo) {
           let values = [];
+
           Object.entries(subvalue.fields).forEach(([subkey, subvalue]) => {
             values = [...values, subvalue.data.toString('utf8')];
           });
           item[subkey] = values;
         } else {
-          uiTransform(subvalue);
+          uiTransform(subvalue, rawPayloads, transformingPayloads);
         }
       } else {
-        uiTransform(subvalue);
+        uiTransform(subvalue, rawPayloads, transformingPayloads);
       }
     }
   });
+
   return item;
 }
 
@@ -174,16 +177,19 @@ function enumTransform(item) {
   ];
 
   const itemL = item.toLowerCase();
-  prefix = enumPrefixes.find((e) => itemL.startsWith(e));
+
+  prefix = enumPrefixes.find(e => itemL.startsWith(e));
 
   if (!prefix) {
     return item;
   }
 
   let processed = itemL.replace(new RegExp(`^${prefix}`), '');
+
   processed = processed.replace(/\_\w/g, function(v) {
     return v[1].toUpperCase();
   });
+
   return processed;
 }
 
