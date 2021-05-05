@@ -15,6 +15,5 @@ export default {
   flex-wrap: wrap;
   background-color: #000;
   padding: 0 12px;
-  opacity: 0.7;
 }
 </style>
