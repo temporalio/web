@@ -357,11 +357,11 @@ export default {
       }.json`;
     },
     filteredEvents() {
-      const { eventId, eventType, pendingEvents } = this;
+      const { eventIdStr, eventType, pendingEvents } = this;
       const events = [...this.events, ...pendingEvents];
       const formattedEvents = events.map(event => ({
         ...event,
-        expanded: event.eventId === eventId,
+        expanded: event.eventId === eventIdStr,
       }));
 
       return eventType && eventType !== 'All'
