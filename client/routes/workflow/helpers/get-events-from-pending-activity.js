@@ -5,7 +5,7 @@ const getEventsFromPendingActivity = (activities, idOffset) => {
 
   return activities.map((a, i) => ({
     details: a,
-    eventId: idOffset + i + 1,
+    eventId: (idOffset + i + 1).toString(),
     eventTime: a.scheduledTime,
     eventType: 'ActivityTaskStarted',
   }));
