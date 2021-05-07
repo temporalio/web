@@ -136,11 +136,11 @@ function uiTransform(item, rawPayloads=false, transformingPayloads=false) {
     } else if (subvalue && typeof subvalue === 'object') {
       if (_uiTransformPayloadKeys.includes(subkey)) {
         if (subkey === _searchAttributes) {
-          let values = [];
+          const values = {};
 
           Object.entries(subvalue.indexedFields).forEach(
             ([subkey, subvalue]) => {
-              values = [...values, subvalue.data.toString('utf8')];
+              values[subkey] = subvalue.data.toString('utf8');
             }
           );
           item[subkey] = values;
