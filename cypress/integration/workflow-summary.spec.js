@@ -7,6 +7,7 @@ context('Workflow Summary', () => {
         'namespace_id'
       )}/workflows?range=last-5-days&status=ALL`
     );
+    cy.wait(1000);
   });
 
   it('renders workflow summary', () => {
