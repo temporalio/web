@@ -26,6 +26,7 @@ Set these environment variables if you need to change their defaults
 | TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082                          |
 | TEMPORAL_SESSION_SECRET       | Secret used to hash the session with HMAC                         | "ensure secret in production" |
 | TEMPORAL_EXTERNAL_SCRIPTS     | Additional JavaScript tags to serve in the UI                     |                               |
+| TEMPORAL_GRPC_MAX_MESSAGE_LENGTH | gRPC max message length (bytes)                                | 4194304 (4mb)                 |
 
 <details>
 <summary>

@@ -10,7 +10,10 @@
       "runtimeArgs": ["run-script", "dev"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node"
+      "type": "pwa-node",
+      "env": {
+        "TEMPORAL_GRPC_MAX_MESSAGE_LENGTH": "6194304"
+      }
     },
     {
       "name": "Debug with mTLS",
