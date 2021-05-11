@@ -44,6 +44,9 @@ function TemporalClient() {
 
   const { credentials: tlsCreds, options: tlsOpts } = getCredentials();
 
+  tlsOpts['grpc.max_receive_message_length'] =
+    Number(process.env.TEMPORAL_GRPC_MAX_MESSAGE_LENGTH) || 4 * 1024 * 1024;
+
   let client = new service.temporal.api.workflowservice.v1.WorkflowService(
     process.env.TEMPORAL_GRPC_ENDPOINT || '127.0.0.1:7233',
     tlsCreds,
