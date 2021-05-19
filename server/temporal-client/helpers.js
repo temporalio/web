@@ -56,7 +56,7 @@ const _uiTransformPayloadKeys = [
   _payloads,
 ];
 
-function uiTransform(item, rawPayloads=false, transformingPayloads=false) {
+function uiTransform(item, rawPayloads = false, transformingPayloads = false) {
   if (!item || typeof item !== 'object') {
     return item;
   }
@@ -103,32 +103,44 @@ function uiTransform(item, rawPayloads=false, transformingPayloads=false) {
       }
     } else if (Array.isArray(subvalue)) {
       if (subkey === _payloads && rawPayloads) {
-        subvalue.forEach(function(item) { uiTransform(item, rawPayloads, true) });
+        subvalue.forEach(function(item) {
+          uiTransform(item, rawPayloads, true);
+        });
       } else if (subkey === _payloads) {
         let payloads = [];
 
         Object.entries(subvalue).forEach(([subkey, payload]) => {
-          const encoding = Buffer.from(
-            payload.metadata.encoding || ''
-          ).toString();
+          if (!payload.metadata.encoding || !payload.data) {
+            return;
+          }
 
-          if (
-            ['json/plain', 'json/protobuf'].includes(encoding) &&
-            payload.data
-          ) {
-            const data = JSON.parse(Buffer.from(payload.data).toString());
+          let encoding = payload.metadata.encoding;
+          let data = payload.data;
+
+          try {
+            encoding = Buffer.from(encoding).toString();
+
+            if (['json/plain', 'json/protobuf'].includes(encoding)) {
+              data = JSON.parse(Buffer.from(data).toString());
+            } else {
+              data = Buffer.from(data).toString('base64');
+
+              data = data.length > 20 ? `${data.slice(0, 20)}..` : data;
+            }
 
             payloads = [...payloads, data];
-          } else {
-            let data = Buffer.from(payload.data || '').toString('base64');
-
-            data = data.length > 20 ? `${data.slice(0, 20)}..` : data;
-            payloads = [...payloads, data];
+          } catch (error) {
+            console.log(
+              `Unable to process payload. Encoding: ${encoding}, data: ${data}. ${error}`
+            );
+            payloads = [...payloads, data.toString()];
           }
         });
         item[_payloads] = payloads;
       } else {
-        subvalue.forEach(function(item) { uiTransform(item, rawPayloads) });
+        subvalue.forEach(function(item) {
+          uiTransform(item, rawPayloads);
+        });
       }
     } else if (typeof subvalue == 'string') {
       subvalue = enumTransform(subvalue);
