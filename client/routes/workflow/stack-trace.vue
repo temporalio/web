@@ -5,9 +5,14 @@
       <a href="#" class="refresh" @click="getStackTrace">Refresh</a>
     </header>
 
-    <pre v-if="stackTrace && stackTrace.payloads" class="stack-trace-view">{{
-      stackTrace.payloads
-    }}</pre>
+    <prism
+      v-for="(payload, index) in stackTrace.payloads"
+      :key="index"
+      language="json"
+      class="stack-trace-view"
+    >
+      {{ payload }}
+    </prism>
 
     <span class="error" v-if="stackTrace && stackTrace.error">
       {{ stackTrace.error }}
@@ -29,13 +34,19 @@
 
 <script>
 import moment from 'moment';
-import { getQueryResult } from './helpers/get-query-result';
+
+import 'prismjs';
+import 'prismjs/components/prism-json';
+import Prism from 'vue-prism-component';
 
 export default {
+  components: {
+    prism: Prism,
+  },
   data() {
     return {
       loading: undefined,
-      stackTrace: undefined,
+      stackTrace: { payloads: [] },
       stackTraceTimestamp: undefined,
     };
   },
@@ -54,7 +65,10 @@ export default {
       return this.$http
         .post(`${this.baseAPIURL}/query/__stack_trace`)
         .then(({ queryResult }) => {
-          this.stackTrace = getQueryResult(queryResult);
+          queryResult.payloads = queryResult.payloads.map(p =>
+            p.replaceAll('\n', ' \n ')
+          );
+          this.stackTrace = queryResult;
           this.stackTraceTimestamp = moment();
         })
         .catch(e => {
@@ -96,7 +110,7 @@ section.stack-trace
     icon-refresh()
 
 section .stack-trace-view
-  white-space pre-wrap
+  white-space pre-line
 
 span.no-queries {
   display: block;
