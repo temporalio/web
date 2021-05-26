@@ -286,6 +286,11 @@ export default {
             this.workflow = wf;
             this.isWorkflowRunning = !wf.workflowExecutionInfo.closeTime;
             this.baseApiUrlRetryCount = 0;
+            this.summary = getSummary({
+              events: this.events,
+              isWorkflowRunning: this.isWorkflowRunning,
+              workflow: this.workflow,
+            });
           },
           error => {
             this.$emit('onNotification', {
