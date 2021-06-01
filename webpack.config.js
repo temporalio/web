@@ -17,9 +17,9 @@ module.exports = {
       __dirname,
       process.env.TEST_RUN ? 'client/test/index' : 'client/main'
     ),
-  ].filter((x) => x),
+  ].filter(x => x),
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'dist', PUBLIC_PATH),
     filename: 'temporal.[hash].js',
     publicPath: PUBLIC_PATH,
   },
@@ -40,9 +40,9 @@ module.exports = {
       lang: 'en-US',
       scripts: (process.env.TEMPORAL_EXTERNAL_SCRIPTS || '')
         .split(',')
-        .filter((x) => x),
+        .filter(x => x),
     }),
-  ].filter((x) => x),
+  ].filter(x => x),
   module: {
     rules: [
       {
