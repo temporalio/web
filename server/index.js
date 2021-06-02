@@ -91,7 +91,7 @@ app.init = function(options) {
             ctx.set('content-type', 'text/html');
             ctx.body = compiler.outputFileSystem.readFileSync(filename);
           } else {
-            done = await send(ctx, 'index.html', { root: staticRoot });
+            done = await send(ctx, 'index.html', { root: path.join(staticRoot, PUBLIC_PATH) });
           }
         } catch (err) {
           if (err.status !== 404) {

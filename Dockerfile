@@ -12,6 +12,8 @@ RUN npm install --production
 # Bundle app source
 COPY . .
 # Bundle the client code
+ENV TEMPORAL_WEB_ROOT_PATH=/
+# ENV TEMPORAL_WEB_ROOT_PATH=/custom-path-example/
 RUN npm run build-production
 
 
@@ -23,5 +25,7 @@ COPY --from=builder ./usr/build ./
 
 ENV NODE_ENV=production
 ENV NPM_CONFIG_PRODUCTION=true
+ENV TEMPORAL_WEB_ROOT_PATH=/
+# ENV TEMPORAL_WEB_ROOT_PATH=/custom-path-example/
 EXPOSE 8088
 CMD [ "node", "server.js" ]
