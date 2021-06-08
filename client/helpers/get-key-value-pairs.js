@@ -53,6 +53,17 @@ const getKeyValuePairs = event => {
           routeLink: value.routeLink,
           value: value.text,
         });
+      } else if (key === 'expirationTime') {
+        const val = timestampToDate(value);
+
+        if (!val || !val.isValid()) {
+          return;
+        }
+
+        kvps.push({
+          key,
+          value: val.year() === 1969 ? '' : val.format('lll'), // 1969 corresponds to no expiration timeout
+        });
       } else if (value.duration !== undefined) {
         kvps.push({
           key,
@@ -101,7 +112,7 @@ const getKeyValuePairs = event => {
         });
       } else if (key === 'scheduledTime') {
         kvps.push({ key, value: scheduledTimeView(value) });
-      } else if (key === 'lastHeartbeatTime') {
+      } else if (['lastStartedTime', 'lastHeartbeatTime'].includes(key)) {
         kvps.push({ key, value: timestampToDate(value).format('lll') });
       } else if (key === 'taskQueue.name' || key === 'Taskqueue') {
         kvps.push({
