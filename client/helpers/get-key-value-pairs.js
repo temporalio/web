@@ -1,5 +1,10 @@
 import moment from 'moment';
-import { failureKeys, jsonKeys, preKeys } from '~constants';
+import {
+  failureKeys,
+  jsonKeys,
+  preKeys,
+  NO_EXPIRATION_TIMEOUT,
+} from '~constants';
 import { timestampToDate } from '~helpers';
 
 function failureToString(failure) {
@@ -37,6 +42,26 @@ const scheduledTimeView = time => {
   return res;
 };
 
+const expirationTimeoutView = val => {
+  if (!val) {
+    return;
+  }
+
+  if (!val.year) {
+    return;
+  }
+
+  if (!val.format) {
+    return;
+  }
+
+  if (val.year() === NO_EXPIRATION_TIMEOUT) {
+    return '';
+  }
+
+  return val.format('lll');
+};
+
 const getKeyValuePairs = event => {
   const kvps = [];
   const flatten = (prefix, obj, root) => {
@@ -52,6 +77,13 @@ const getKeyValuePairs = event => {
           key,
           routeLink: value.routeLink,
           value: value.text,
+        });
+      } else if (key === 'expirationTime') {
+        const val = timestampToDate(value);
+
+        kvps.push({
+          key,
+          value: expirationTimeoutView(val),
         });
       } else if (value.duration !== undefined) {
         kvps.push({
@@ -101,7 +133,7 @@ const getKeyValuePairs = event => {
         });
       } else if (key === 'scheduledTime') {
         kvps.push({ key, value: scheduledTimeView(value) });
-      } else if (key === 'lastHeartbeatTime') {
+      } else if (['lastStartedTime', 'lastHeartbeatTime'].includes(key)) {
         kvps.push({ key, value: timestampToDate(value).format('lll') });
       } else if (key === 'taskQueue.name' || key === 'Taskqueue') {
         kvps.push({
