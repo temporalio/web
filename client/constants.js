@@ -43,3 +43,4 @@ export const NOTIFICATION_TYPE_ERROR_MESSAGE_DEFAULT =
 export const NOTIFICATION_TYPE_SUCCESS = 'success';
 export const NOTIFICATION_TYPE_WARNING = 'warning';
 export const NOTIFICATION_TIMEOUT = 5000;
+export const NO_EXPIRATION_TIMEOUT = 1969;

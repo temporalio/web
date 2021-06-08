@@ -1,5 +1,10 @@
 import moment from 'moment';
-import { failureKeys, jsonKeys, preKeys } from '~constants';
+import {
+  failureKeys,
+  jsonKeys,
+  preKeys,
+  NO_EXPIRATION_TIMEOUT,
+} from '~constants';
 import { timestampToDate } from '~helpers';
 
 function failureToString(failure) {
@@ -37,6 +42,26 @@ const scheduledTimeView = time => {
   return res;
 };
 
+const expirationTimeoutView = val => {
+  if (!val) {
+    return;
+  }
+
+  if (!val.year) {
+    return;
+  }
+
+  if (!val.format) {
+    return;
+  }
+
+  if (val.year() === NO_EXPIRATION_TIMEOUT) {
+    return '';
+  }
+
+  return val.format('lll');
+};
+
 const getKeyValuePairs = event => {
   const kvps = [];
   const flatten = (prefix, obj, root) => {
@@ -56,13 +81,9 @@ const getKeyValuePairs = event => {
       } else if (key === 'expirationTime') {
         const val = timestampToDate(value);
 
-        if (!val || !val.isValid()) {
-          return;
-        }
-
         kvps.push({
           key,
-          value: val.year() === 1969 ? '' : val.format('lll'), // 1969 corresponds to no expiration timeout
+          value: expirationTimeoutView(val),
         });
       } else if (value.duration !== undefined) {
         kvps.push({
