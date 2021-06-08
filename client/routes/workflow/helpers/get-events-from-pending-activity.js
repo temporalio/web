@@ -3,12 +3,14 @@ const getEventsFromPendingActivity = (activities, idOffset) => {
     return [];
   }
 
-  return activities.map((a, i) => ({
-    details: a,
-    eventId: (idOffset + i + 1).toString(),
-    eventTime: a.scheduledTime,
-    eventType: 'ActivityTaskStarted',
-  }));
+  return activities
+    .filter(a => a.state === 'Started')
+    .map((a, i) => ({
+      details: a,
+      eventId: (idOffset + i + 1).toString(),
+      eventTime: a.scheduledTime,
+      eventType: 'ActivityTaskStarted',
+    }));
 };
 
 export default getEventsFromPendingActivity;
