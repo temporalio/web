@@ -8,7 +8,7 @@
     "dev": "NODE_ENV=development node server.js",
     "eslint": "eslint --ext .js,.vue client --fix",
     "start": "npm run build && NODE_ENV=production node server.js",
-    "test:unit": "jest",
+    "test:unit": "TZ=utc jest",
     "test:ci": "cypress run --headless --quiet",
     "build": "webpack",
     "build-production": "NODE_ENV=production npm run build"
