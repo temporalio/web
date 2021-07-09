@@ -56,6 +56,7 @@
       :baseAPIURL="baseAPIURL"
       :taskQueueName="taskQueue.name"
       :isWorkerRunning="isWorkerRunning"
+      :isWorkflowRunning="this.summary.isWorkflowRunning"
       @onNotification="onNotification"
     />
     <router-view

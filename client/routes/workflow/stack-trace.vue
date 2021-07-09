@@ -1,23 +1,12 @@
 <template>
   <section :class="{ 'stack-trace': true, loading }" data-cy="stack-trace">
-    <header v-if="stackTraceTimestamp">
-      <span>Stack trace at {{ stackTraceTimestamp.format('h:mm:ss a') }}</span>
-      <a href="#" class="refresh" @click="getStackTrace">Refresh</a>
-    </header>
-
-    <prism
-      v-for="(payload, index) in stackTrace.payloads"
-      :key="index"
-      language="json"
-      class="stack-trace-view"
-    >
-      {{ payload }}
-    </prism>
-
-    <span class="error" v-if="stackTrace && stackTrace.error">
+    <span v-if="!isWorkflowRunning" class="no-queries">
+      Workflow execution has finished. No stack trace available
+    </span>
+    <span v-else-if="stackTrace && stackTrace.error" class="error">
       {{ stackTrace.error }}
     </span>
-    <span v-if="!isWorkerRunning" class="no-queries">
+    <span v-else-if="!isWorkerRunning" class="no-queries">
       There are no Workers currently listening to the Task Queue:
       <router-link
         :to="{
@@ -29,6 +18,23 @@
         >{{ taskQueueName }}
       </router-link>
     </span>
+
+    <div v-else>
+      <header v-if="stackTraceTimestamp">
+        <span
+          >Stack trace at {{ stackTraceTimestamp.format('h:mm:ss a') }}</span
+        >
+        <a href="#" class="refresh" @click="getStackTrace">Refresh</a>
+      </header>
+      <prism
+        v-for="(payload, index) in stackTrace.payloads"
+        :key="index"
+        language="json"
+        class="stack-trace-view"
+      >
+        {{ payload }}
+      </prism>
+    </div>
   </section>
 </template>
 
@@ -50,9 +56,14 @@ export default {
       stackTraceTimestamp: undefined,
     };
   },
-  props: ['baseAPIURL', 'taskQueueName', 'isWorkerRunning'],
+  props: [
+    'baseAPIURL',
+    'taskQueueName',
+    'isWorkerRunning',
+    'isWorkflowRunning',
+  ],
   created() {
-    if (!this.isWorkerRunning) {
+    if (!this.isWorkerRunning || !this.isWorkflowRunning) {
       return;
     }
 
@@ -66,7 +77,7 @@ export default {
         .post(`${this.baseAPIURL}/query/__stack_trace`)
         .then(({ queryResult }) => {
           queryResult.payloads = queryResult.payloads.map(p =>
-            p.replaceAll('\n', ' \n ')
+            p?.replaceAll('\n', ' \n ')
           );
           this.stackTrace = queryResult;
           this.stackTraceTimestamp = moment();
@@ -85,7 +96,7 @@ export default {
   },
   watch: {
     isWorkerRunning: function(newVal, oldVal) {
-      if (newVal == false) {
+      if (newVal == false || !this.isWorkflowRunning) {
         this.queries = [];
 
         return;
