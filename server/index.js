@@ -10,7 +10,7 @@ const Koa = require('koa'),
   csrf = require('koa-csrf'),
   auth = require('./auth'),
   { securityHeaders } = require('./middlewares'),
-  { logger } = require('./logger');
+  logger = require('./logger');
 
 app.webpackConfig = require('../webpack.config');
 

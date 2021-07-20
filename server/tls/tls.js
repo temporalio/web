@@ -3,7 +3,7 @@ const { readCredsFromCertFiles } = require('./read-creds-from-cert-files');
 const { readCredsFromConfig } = require('./read-creds-from-config');
 const { compareCaseInsensitive } = require('../utils');
 const { getTlsConfig } = require('../config');
-const { logger } = require('../logger')
+const logger = require('../logger')
 
 const keyPath = process.env.TEMPORAL_TLS_KEY_PATH;
 const certPath = process.env.TEMPORAL_TLS_CERT_PATH;

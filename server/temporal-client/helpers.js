@@ -1,7 +1,7 @@
 const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
-const { logger } = require('../logger')
+const logger = require('../logger')
 
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;

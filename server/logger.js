@@ -1,20 +1,14 @@
-class Logger {
-  ts = () => {
-    return '[' + new Date().toISOString() + '] ';
-  };
+const timeStamp = () => '[' + new Date().toISOString() + ']';
 
-  log(...data) {
-    console.log(this.ts(), ...data);
-  }
-  warn(...data) {
-    console.warn(this.ts(), ...data);
-  }
-  error(...data) {
-    console.error(this.ts(), ...data);
-  }
-  debug(...data) {
-    console.debug(this.ts(), ...data);
-  }
-}
+const withTimestamp = (fn, ...args) => {
+  return fn.call(null, timeStamp(), ...args);
+};
 
-module.exports = { logger: new Logger() };
+const logger = {
+  log: (...args) => withTimestamp(console.log, ...args),
+  warn: (...args) => withTimestamp(console.warn, ...args),
+  error: (...args) => withTimestamp(console.error, ...args),
+  debug: (...args) => withTimestamp(console.debug, ...args),
+};
+
+module.exports = logger;
