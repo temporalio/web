@@ -1,6 +1,7 @@
 const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
+const { logger } = require('../logger')
 
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
@@ -130,7 +131,7 @@ function uiTransform(item, rawPayloads = false, transformingPayloads = false) {
 
             payloads = [...payloads, data];
           } catch (error) {
-            console.log(
+            logger.log(
               `Unable to process payload. Encoding: ${encoding}, data: ${data}. ${error}`
             );
             payloads = [...payloads, data.toString()];

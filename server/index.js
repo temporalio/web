@@ -9,7 +9,8 @@ const Koa = require('koa'),
   passport = require('passport'),
   csrf = require('koa-csrf'),
   auth = require('./auth'),
-  { securityHeaders } = require('./middlewares');
+  { securityHeaders } = require('./middlewares'),
+  { logger } = require('./logger');
 
 app.webpackConfig = require('../webpack.config');
 
@@ -45,7 +46,7 @@ app.init = function(options) {
           options.logErrors !== false &&
           (typeof err.statusCode !== 'number' || err.statusCode >= 500)
         ) {
-          console.error(err);
+          logger.error(err);
         }
         ctx.status = err.statusCode || err.status || 500;
         ctx.body = { message: err.message };

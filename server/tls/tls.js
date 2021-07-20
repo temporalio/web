@@ -3,6 +3,7 @@ const { readCredsFromCertFiles } = require('./read-creds-from-cert-files');
 const { readCredsFromConfig } = require('./read-creds-from-config');
 const { compareCaseInsensitive } = require('../utils');
 const { getTlsConfig } = require('../config');
+const { logger } = require('../logger')
 
 const keyPath = process.env.TEMPORAL_TLS_KEY_PATH;
 const certPath = process.env.TEMPORAL_TLS_CERT_PATH;
@@ -14,7 +15,7 @@ const verifyHost = [true, 'true', undefined].includes(
 const tlsConfigFile = getTlsConfig()
 function getCredentials() {
   if (keyPath !== undefined && certPath !== undefined) {
-    console.log('establishing secure connection using TLS cert files...');
+    logger.log('establishing secure connection using TLS cert files...');
     const { pk, cert, ca } = readCredsFromCertFiles({
       keyPath,
       certPath,
@@ -22,17 +23,17 @@ function getCredentials() {
     });
     return createSecure(pk, cert, ca, serverName, verifyHost);
   } else if (caPath !== undefined) {
-    console.log('establishing server-side TLS connection using only TLS CA file...');
+    logger.log('establishing server-side TLS connection using only TLS CA file...');
     const { ca } = readCredsFromCertFiles({ caPath });
     return createSecure(undefined, undefined, ca, serverName, verifyHost);
   } else if (tlsConfigFile.key) {
-    console.log(
+    logger.log(
       'establishing secure connection using TLS yml configuration...'
     );
     const { pk, cert, ca, serverName, verifyHost } = readCredsFromConfig();
     return createSecure(pk, cert, ca, serverName, verifyHost);
   } else {
-    console.log('establishing insecure connection...');
+    logger.log('establishing insecure connection...');
     return { credentials: grpc.credentials.createInsecure(), options: {} };
   }
 }
