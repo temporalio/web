@@ -2,27 +2,20 @@ const { promisify } = require('util');
 const { readFile, readFileSync } = require('fs');
 const yaml = require('js-yaml');
 
-let config = undefined;
 const configPath = process.env.TEMPORAL_CONFIG_PATH || './server/config.yml';
 
 const readConfigSync = () => {
-  if (!config) {
-    const cfgContents = readFileSync(configPath, {
-      encoding: 'utf8',
-    });
-    config = yaml.safeLoad(cfgContents);
-  }
-  return config;
+  const cfgContents = readFileSync(configPath, {
+    encoding: 'utf8',
+  });
+  return yaml.safeLoad(cfgContents);
 };
 
 const readConfig = async () => {
-  if (!config) {
-    const cfgContents = await promisify(readFile)(configPath, {
-      encoding: 'utf8',
-    });
-    config = yaml.safeLoad(cfgContents);
-  }
-  return config;
+  const cfgContents = await promisify(readFile)(configPath, {
+    encoding: 'utf8',
+  });
+  return yaml.safeLoad(cfgContents);
 };
 
 const getAuthConfig = async () => {
@@ -59,7 +52,7 @@ const getTlsConfig = () => {
     tls = {};
   }
 
-  const { ca, key, cert, server_name, verify_host } = tls;
+  const { ca, key, cert, server_name, verify_host, refresh_interval } = tls;
 
   return {
     ca,
@@ -67,6 +60,7 @@ const getTlsConfig = () => {
     cert,
     serverName: server_name,
     verifyHost: verify_host,
+    refreshInterval: refresh_interval,
   };
 };
 
