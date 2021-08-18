@@ -2,7 +2,6 @@ const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 const bluebird = require('bluebird');
 const utils = require('../utils');
-const { getCredentials } = require('../tls');
 const {
   buildHistory,
   buildWorkflowExecutionRequest,
@@ -10,8 +9,9 @@ const {
   uiTransform,
   cliTransform,
 } = require('./helpers');
+const { getGrpcCredentials } = require('../tls');
 
-function TemporalClient() {
+function TemporalClient(tlsConfig) {
   const dir = process.cwd();
   const protoFileName = 'service.proto';
   const options = {
@@ -42,7 +42,7 @@ function TemporalClient() {
   const packageDefinition = protoLoader.loadSync(protoFileName, options);
   const service = grpc.loadPackageDefinition(packageDefinition);
 
-  const { credentials: tlsCreds, options: tlsOpts } = getCredentials();
+  const { credentials: tlsCreds, options: tlsOpts } = getGrpcCredentials(tlsConfig);
 
   tlsOpts['grpc.max_receive_message_length'] =
     Number(process.env.TEMPORAL_GRPC_MAX_MESSAGE_LENGTH) || 4 * 1024 * 1024;

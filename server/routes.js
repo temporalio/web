@@ -2,21 +2,15 @@ const Router = require('koa-router'),
   router = new Router(),
   moment = require('moment'),
   losslessJSON = require('lossless-json'),
-  {
-    TemporalClient,
-    WithAuthMetadata,
-    WithErrorConverter,
-  } = require('./temporal-client'),
   { isWriteApiPermitted } = require('./utils'),
-  { getAuthConfig, getRoutingConfig } = require('./config');
-authRoutes = require('./routes-auth');
-
-const tClient = WithErrorConverter(WithAuthMetadata(new TemporalClient()));
+  { getAuthConfig, getRoutingConfig } = require('./config'),
+  authRoutes = require('./routes-auth'),
+  { getTemporalClient: tClient } = require('./temporal-client-provider');
 
 router.use('/auth', authRoutes);
 
 router.get('/api/namespaces', async function(ctx) {
-  ctx.body = await tClient.listNamespaces(ctx, {
+  ctx.body = await tClient().listNamespaces(ctx, {
     pageSize: 50,
     nextPageToken: ctx.query.nextPageToken
       ? Buffer.from(ctx.query.nextPageToken, 'base64')
@@ -25,7 +19,7 @@ router.get('/api/namespaces', async function(ctx) {
 });
 
 router.get('/api/namespaces/:namespace', async function(ctx) {
-  ctx.body = await tClient.describeNamespace(ctx, {
+  ctx.body = await tClient().describeNamespace(ctx, {
     namespace: ctx.params.namespace,
   });
 });
@@ -66,7 +60,7 @@ router.get('/api/namespaces/:namespace/workflows/list', async function(ctx) {
 
   const { namespace } = ctx.params;
 
-  ctx.body = await tClient.listWorkflows(ctx, {
+  ctx.body = await tClient().listWorkflows(ctx, {
     namespace,
     query: q.queryString || undefined,
     nextPageToken: q.nextPageToken
@@ -82,7 +76,7 @@ router.get(
 
     const { namespace, workflowId, runId } = ctx.params;
 
-    ctx.body = await tClient.getHistory(ctx, {
+    ctx.body = await tClient().getHistory(ctx, {
       namespace,
       execution: { workflowId, runId },
       nextPageToken: q.nextPageToken
@@ -127,7 +121,7 @@ router.get('/api/namespaces/:namespace/workflows/archived', async function(
     queryString = buildQueryString(startTime, endTime, query);
   }
 
-  ctx.body = await tClient.archivedWorkflows(ctx, {
+  ctx.body = await tClient().archivedWorkflows(ctx, {
     namespace,
     nextPageToken: nextPageToken
       ? Buffer.from(nextPageToken, 'base64')
@@ -144,7 +138,7 @@ router.get(
     const { namespace, workflowId, runId } = ctx.params;
 
     do {
-      const page = await tClient.exportHistory(ctx, {
+      const page = await tClient().exportHistory(ctx, {
         namespace,
         nextPageToken,
         execution: { workflowId, runId },
@@ -174,7 +168,7 @@ router.get(
     try {
       const { namespace, workflowId, runId } = ctx.params;
 
-      await tClient.queryWorkflow(ctx, {
+      await tClient().queryWorkflow(ctx, {
         namespace,
         execution: { workflowId, runId },
         query: {
@@ -199,7 +193,7 @@ router.post(
   async function(ctx) {
     const { namespace, workflowId, runId } = ctx.params;
 
-    ctx.body = await tClient.queryWorkflow(ctx, {
+    ctx.body = await tClient().queryWorkflow(ctx, {
       namespace,
       execution: { workflowId, runId },
       query: {
@@ -214,7 +208,7 @@ router.post(
   async function(ctx) {
     const { namespace, workflowId, runId } = ctx.params;
 
-    ctx.body = await tClient.terminateWorkflow(ctx, {
+    ctx.body = await tClient().terminateWorkflow(ctx, {
       namespace,
       execution: { workflowId, runId },
       reason: ctx.request.body && ctx.request.body.reason,
@@ -227,7 +221,7 @@ router.post(
   async function(ctx) {
     const { namespace, workflowId, runId, signal } = ctx.params;
 
-    ctx.body = await tClient.signalWorkflow(ctx, {
+    ctx.body = await tClient().signalWorkflow(ctx, {
       namespace,
       execution: { workflowId, runId },
       signalName: signal,
@@ -241,7 +235,7 @@ router.get(
     const { namespace, workflowId, runId } = ctx.params;
 
     try {
-      ctx.body = await tClient.describeWorkflow(ctx, {
+      ctx.body = await tClient().describeWorkflow(ctx, {
         namespace,
         execution: { workflowId, runId },
       });
@@ -250,7 +244,7 @@ router.get(
         throw error;
       }
 
-      const archivedHistoryResponse = await tClient.getHistory();
+      const archivedHistoryResponse = await tClient().getHistory();
       const archivedHistoryEvents = mapHistoryResponse(
         archivedHistoryResponse.history
       );
@@ -299,7 +293,7 @@ router.get(
     const { namespace, taskQueue } = ctx.params;
     const descTaskQueue = async (taskQueueType) =>
       (
-        await tClient.describeTaskQueue(ctx, {
+        await tClient().describeTaskQueue(ctx, {
           namespace,
           taskQueue: { name: taskQueue },
           taskQueueType,
@@ -337,7 +331,7 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
 ) {
   const { namespace, taskQueue } = ctx.params;
   const descTaskQueue = async (taskQueueType) =>
-    await tClient.describeTaskQueue(ctx, {
+    await tClient().describeTaskQueue(ctx, {
       namespace,
       taskQueue: { name: taskQueue },
       taskQueueType,
@@ -351,7 +345,7 @@ router.get('/api/namespaces/:namespace/task-queues/:taskQueue/', async function(
   ctx.body = tq;
 });
 
-router.post('/api/web-settings/data-converter/:port', async(ctx) => {
+router.post('/api/web-settings/data-converter/:port', async (ctx) => {
   ctx.session.dataConverter = { port: ctx.params.port };
   ctx.status = 200;
 });
@@ -385,7 +379,7 @@ router.get('/api/me', async (ctx) => {
 });
 
 router.get('/api/cluster/version-info', async (ctx) => {
-  const res = await tClient.getVersionInfo(ctx);
+  const res = await tClient().getVersionInfo(ctx);
   ctx.body = res;
 });
 

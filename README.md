@@ -40,11 +40,14 @@ Optional TLS configuration variables:
 | TEMPORAL_TLS_CA_PATH                  | Certificate authority (CA) certificate for the validation of server |         |
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      | true    |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |         |
+| TEMPORAL_TLS_REFRESH_INTERVAL         | How often to refresh TLS Certs, seconds                             | 0       |
 
 * To enable mutual TLS, you need to specify `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`.
 * For server-side TLS you need to specify only `TEMPORAL_TLS_CA_PATH`.
 
 By default we will also verify your server `hostname`, matching it to `TEMPORAL_TLS_SERVER_NAME`. You can turn this off by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `false`.
+
+Setting `TEMPORAL_TLS_REFRESH_INTERVAL` will make the TLS certs reload every N seconds.
 
 </details>
 
