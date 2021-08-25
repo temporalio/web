@@ -33,7 +33,7 @@ async function listWorkflows(state, ctx) {
 
   const { namespace } = ctx.params;
 
-  ctx.body = await tClient[state + 'Workflows'](ctx, {
+  ctx.body = await tClient()[state + 'Workflows'](ctx, {
     namespace,
     startTime,
     endTime,

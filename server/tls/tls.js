@@ -14,7 +14,7 @@ const verifyHost = [true, 'true', undefined].includes(
 );
 
 function getGrpcCredentials(tlsCreds) {
-  if (!tlsCreds || (tlsCreds.pk && !tlsCreds.ca)) {
+  if (!tlsCreds || (!tlsCreds.pk && !tlsCreds.ca)) {
     logger.log('will use insecure connection with Temporal server...');
     return { credentials: grpc.credentials.createInsecure(), options: {} };
   } else if (tlsCreds.pk) {
