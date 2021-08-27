@@ -140,6 +140,10 @@
         <dt>History Events</dt>
         <dd>{{ workflow.workflowExecutionInfo.historyLength }}</dd>
       </div>
+      <div data-cy="state-transitions">
+        <dt>State Transitions</dt>
+        <dd>{{ workflow.workflowExecutionInfo.stateTransitionCount }}</dd>
+      </div>
       <div
         class="pending-activities"
         v-if="workflow.pendingActivities"
