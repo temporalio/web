@@ -3,16 +3,19 @@ const app = require('./server/index'),
   production = process.env.NODE_ENV === 'production',
   sslEnabled = process.env.TEMPORAL_WEB_USE_HTTPS || false;
 
-if (sslEnabled) {
+if (sslEnabled === "true") {
   const https = require('https');
   const fs = require('fs');
-  const options = {
-    key: fs.readFileSync(process.env.TEMPORAL_WEB_TLS_KEY_PATH),
-    cert: fs.readFileSync(process.env.TEMPORAL_WEB_TLS_CERT_PATH),
-  };
 
-  https.createServer(options, app.init().callback()).listen(port);
+  console.log('temporal-web ssl is enabled');
+  https.createServer({
+      key: fs.readFileSync(process.env.TEMPORAL_WEB_TLS_KEY_PATH),
+      cert: fs.readFileSync(process.env.TEMPORAL_WEB_TLS_CERT_PATH),
+    }, 
+    app.init().callback()
+  ).listen(port);
 } else {
+  console.log('temporal-web ssl is not enabled');
   app.init().listen(port);
 }
 
