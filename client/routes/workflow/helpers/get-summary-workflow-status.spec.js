@@ -53,22 +53,22 @@ describe('getSummaryWorkflowStatus', () => {
       };
     });
 
-    it('should return an object with to.name = "workflow/summary".', () => {
+    it('should return an object with next.name = "workflow/summary".', () => {
       const output = getSummaryWorkflowStatus(event);
 
-      expect(output.to.name).toEqual('workflow/summary');
+      expect(output.next.name).toEqual('workflow/summary');
     });
 
-    it('should return an object with to.params.runId.', () => {
+    it('should return an object with next.params.runId.', () => {
       const output = getSummaryWorkflowStatus(event);
 
-      expect(output.to.params.runId).toEqual('newExecutionRunIdValue');
+      expect(output.next.params.runId).toEqual('newExecutionRunIdValue');
     });
 
-    it('should return an object with text = "Continued As New".', () => {
+    it('should return an object with text = "continued-as-new".', () => {
       const output = getSummaryWorkflowStatus(event);
 
-      expect(output.text).toEqual('Continued As New');
+      expect(output.text).toEqual('continued-as-new');
     });
 
     it('should return an object with status = "continued-as-new".', () => {
@@ -78,16 +78,55 @@ describe('getSummaryWorkflowStatus', () => {
     });
   });
 
+  describe('When passed an event with workflowCompletedEvent.eventType === "WorkflowExecutionCompleted" and workflowCompletedEvent.details.newExecutionRunId is defined', () => {
+    let event;
+
+    beforeEach(() => {
+      event = {
+        workflowCompletedEvent: {
+          eventType: 'WorkflowExecutionCompleted',
+          details: {
+            newExecutionRunId: 'newExecutionRunIdValue',
+          },
+        },
+      };
+    });
+
+    it('should return an object with next.name = "workflow/summary".', () => {
+      const output = getSummaryWorkflowStatus(event);
+
+      expect(output.next.name).toEqual('workflow/summary');
+    });
+
+    it('should return an object with next.params.runId.', () => {
+      const output = getSummaryWorkflowStatus(event);
+
+      expect(output.next.params.runId).toEqual('newExecutionRunIdValue');
+    });
+
+    it('should return an object with text = "completed".', () => {
+      const output = getSummaryWorkflowStatus(event);
+
+      expect(output.text).toEqual('completed');
+    });
+
+    it('should return an object with status = "completed".', () => {
+      const output = getSummaryWorkflowStatus(event);
+
+      expect(output.status).toEqual('completed');
+    });
+  });
+
   describe('When passed an workflowCompletedEvent.eventType !== "WorkflowExecutionContinuedAsNew"', () => {
     it('should return workflowCompletedEvent.eventType without WorkflowExecution and in lower case.', () => {
       const event = {
         workflowCompletedEvent: {
-          eventType: 'NotWorkflowExecutionContinuedAsNew',
+          eventType: 'WorkflowExecutionSomethingElse',
         },
       };
       const output = getSummaryWorkflowStatus(event);
 
-      expect(output).toEqual('notcontinuedasnew');
+      expect(output).toEqual('somethingelse');
     });
   });
 });

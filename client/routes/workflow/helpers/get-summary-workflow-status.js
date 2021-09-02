@@ -14,22 +14,26 @@ const getSummaryWorkflowStatus = ({
     ).toLowerCase();
   }
 
-  if (workflowCompletedEvent.eventType === 'WorkflowExecutionContinuedAsNew') {
+  const text = workflowCompletedEvent.eventType
+    .replace('WorkflowExecution', '')
+    .toLowerCase()
+    .replace('continuedasnew', 'continued-as-new');
+
+  // Any of {Completed,Failed,TimedOut,ContinuedAsNew} can have this field:
+  if (workflowCompletedEvent.details && workflowCompletedEvent.details.newExecutionRunId) {
     return {
-      to: {
+      text: text,
+      status: text,
+      next: {
         name: 'workflow/summary',
         params: {
           runId: workflowCompletedEvent.details.newExecutionRunId,
         },
       },
-      text: 'Continued As New',
-      status: 'continued-as-new',
     };
   }
 
-  return workflowCompletedEvent.eventType
-    .replace('WorkflowExecution', '')
-    .toLowerCase();
+  return text;
 };
 
 export default getSummaryWorkflowStatus;

@@ -72,12 +72,10 @@
         <dd>
           <bar-loader v-if="wfStatus === 'running'" />
           <span v-if="typeof wfStatus === 'string'">{{ wfStatus }}</span>
-          <router-link
-            v-if="wfStatus !== undefined && wfStatus.to"
-            :to="wfStatus.to"
-          >
+          <span v-if="wfStatus !== undefined && wfStatus.next">
             {{ wfStatus.text }}
-          </router-link>
+            <router-link :to="wfStatus.next">(next)</router-link>
+          </span>
         </dd>
       </div>
       <div class="workflow-id" data-cy="workflow-id">
@@ -286,6 +284,8 @@ section.workflow-summary
   .workflow-status
     dd
       text-transform capitalize
+      a
+        text-transform none
     &[data-status="completed"] dd
       color uber-green
     &[data-status="failed"] dd

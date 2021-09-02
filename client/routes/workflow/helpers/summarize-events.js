@@ -116,7 +116,18 @@ const summaryExtractors = {
 
     return summary;
   },
-  WorkflowExecutionFailed: d => ({ message: d.failure?.message }),
+  WorkflowExecutionCompleted: d => ({
+    result: d.result,
+    newExecutionRunId: d.newExecutionRunId || undefined,
+  }),
+  WorkflowExecutionFailed: d => ({
+    message: d.failure?.message,
+    newExecutionRunId: d.newExecutionRunId || undefined,
+  }),
+  WorkflowExecutionTimedOut: d => ({
+    retryState: d.retryState,
+    newExecutionRunId: d.newExecutionRunId || undefined,
+  }),
   WorkflowTaskFailed: d => ({ message: d.failure?.message }),
   ChildWorkflowExecutionFailed: d => ({ message: d.failure?.message }),
 };
