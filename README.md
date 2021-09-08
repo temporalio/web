@@ -41,12 +41,12 @@ Optional TLS configuration variables:
 | TEMPORAL_TLS_ENABLE_HOST_VERIFICATION | Enables verification of the server certificate                      | true    |
 | TEMPORAL_TLS_SERVER_NAME              | Target server that is used for TLS host verification                |         |
 | TEMPORAL_TLS_REFRESH_INTERVAL         | How often to refresh TLS Certs, seconds                             | 0       |
-| TEMPORAL_WEB_USE_HTTPS                | Enables HTTPS when viewing the temporal web UI in a browser         | false   |
 | TEMPORAL_WEB_TLS_CERT_PATH            | Certificate used to support HTTPS in the temporal web UI            |         |
 | TEMPORAL_WEB_TLS_KEY_PATH             | Private key for supporting HTTPS in the temporal web UI             |         |
 
 * To enable mutual TLS, you need to specify `TEMPORAL_TLS_KEY_PATH` and `TEMPORAL_TLS_CERT_PATH`.
 * For server-side TLS you need to specify only `TEMPORAL_TLS_CA_PATH`.
+* To Enable HTTPS in the temporal web UI, specify a `TEMPORAL_WEB_TLS_CERT_PATH` and a `TEMPORAL_WEB_TLS_CERT_PATH` value.
 
 By default we will also verify your server `hostname`, matching it to `TEMPORAL_TLS_SERVER_NAME`. You can turn this off by setting `TEMPORAL_TLS_ENABLE_HOST_VERIFICATION` to `false`.
 

@@ -1,9 +1,9 @@
 const app = require('./server/index'),
   port = Number(process.env.TEMPORAL_WEB_PORT) || 8088,
   production = process.env.NODE_ENV === 'production',
-  sslEnabled = process.env.TEMPORAL_WEB_USE_HTTPS || false;
+  sslEnabled = process.env.TEMPORAL_WEB_TLS_CERT_PATH != null;
 
-if (sslEnabled === "true") {
+if (sslEnabled) {
   const https = require('https');
   const fs = require('fs');
 
