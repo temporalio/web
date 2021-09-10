@@ -3,9 +3,9 @@
 [![Build status](https://badge.buildkite.com/72da2011c93761d680bc8c641d07adad16c94b99b0ed8d7566.svg?branch=master)](https://buildkite.com/temporal/temporal-web)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Ftemporalio%2Ftemporal-web.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Ftemporalio%2Ftemporal-web?ref=badge_shield)
 
-**Nota bene**: The repo is in maintenance mode and will only receive updates for significant bugs. We are focusing efforts on the next version of UI:
-- https://github.com/temporalio/ui
-- https://github.com/temporalio/ui-server
+> **Nota bene**: The repo is in maintenance mode and will only receive updates for significant bugs. We are focusing efforts on  > the next version of UI:
+> - https://github.com/temporalio/ui
+> - https://github.com/temporalio/ui-server
 
 
 Temporal is a distributed, scalable, durable, and highly available orchestration engine we developed at Uber Engineering to execute asynchronous long-running business logic in a scalable and resilient way.
