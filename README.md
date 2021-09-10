@@ -6,6 +6,7 @@
 **Nota bene**: The repo is in maintenance mode and will only receive updates for significant bugs. We are focusing efforts on the next version of UI here:
 - https://github.com/temporalio/ui
 - https://github.com/temporalio/ui-server
+We are still tracking the open issues and will more likely address them with the new UI, not current.
 
 Temporal is a distributed, scalable, durable, and highly available orchestration engine we developed at Uber Engineering to execute asynchronous long-running business logic in a scalable and resilient way.
 
