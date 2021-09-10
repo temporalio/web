@@ -311,7 +311,7 @@ header.top-bar
   div.workflow-id span::before
       content 'WORKFLOW ID'
   div.task-queue span::before
-      content 'TASK LIST'
+      content 'TASK QUEUE'
   .version {
     color: #c6c6c6;
     font-size: 10px;
