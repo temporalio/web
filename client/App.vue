@@ -291,8 +291,6 @@ header.top-bar
       margin-right spacing
     a:hover
       color lighten(uber-blue, 15%)
-    .router-link-active
-      pointer-events none
     span
       cursor pointer
       transition smooth-transition
