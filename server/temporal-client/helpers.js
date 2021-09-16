@@ -1,7 +1,7 @@
 const Long = require('long');
 const losslessJSON = require('lossless-json');
 const moment = require('moment');
-const logger = require('../logger')
+const logger = require('../logger');
 
 function buildHistory(getHistoryRes) {
   const history = getHistoryRes.history;
@@ -211,8 +211,21 @@ function cliTransform(item) {
     return item;
   }
 
+  removeProtoOneOf(item);
+
   Object.entries(item).forEach(([subkey, subvalue]) => {
-    if (subvalue && typeof subvalue.unsigned === 'boolean') {
+    if (subvalue && subvalue.seconds) {
+      const seconds = Number(subvalue.seconds);
+      const dt = moment(seconds * 1000);
+
+      if (dt.isValid() && dt.isAfter('2017-01-01')) {
+        // iso date
+        item[subkey] = dt.toISOString();
+      } else {
+        // duration
+        item[subkey] = subvalue.seconds + 's';
+      }
+    } else if (subvalue && typeof subvalue.unsigned === 'boolean') {
       item[subkey] = new losslessJSON.LosslessNumber(
         Long.fromValue(subvalue).toString()
       );
@@ -222,12 +235,28 @@ function cliTransform(item) {
       subvalue.forEach(cliTransform);
     } else if (subvalue && typeof subvalue === 'object') {
       cliTransform(subvalue);
+    } else if (typeof subvalue == 'string') {
+      subvalue = enumTransform(subvalue);
+      item[subkey] = subvalue;
     } else if (subvalue === null || subvalue === undefined) {
       delete item[subkey];
     }
   });
 
   return item;
+}
+
+
+function removeProtoOneOf(item) {
+  if (item.eventId && item.attributes) {
+    delete item.attributes;
+  }
+  if (item.failure?.failureInfo) {
+    delete item.failure.failureInfo;
+  }
+  if (item.cause?.failureInfo) {
+    delete item.cause.failureInfo;
+  }
 }
 
 module.exports = {

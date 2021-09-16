@@ -149,14 +149,14 @@ router.get(
       }
 
       ctx.res.write(
-        (nextPageToken ? ',' : '[') +
+        (nextPageToken ? ',' : '{ "events": [') +
           page.history.events.map(losslessJSON.stringify).join(',')
       );
       nextPageToken =
         page.nextPageToken && Buffer.from(page.nextPageToken, 'base64');
     } while (nextPageToken);
 
-    ctx.res.write(']');
+    ctx.res.write('] }');
     ctx.body = '';
   }
 );
