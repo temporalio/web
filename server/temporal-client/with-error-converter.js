@@ -29,6 +29,8 @@ const getter = (obj, property) => {
         try {
           return await fn(...args);
         } catch (err) {
+          const req = args.length >= 1 ? args[1]: null; // [0] - context, [1] - request
+          err.message = `${err.message}. method: ${property}, req: ${JSON.stringify(req)}`;
           throw convertError(err);
         }
       };
