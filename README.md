@@ -122,6 +122,7 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
         ```
       </details>
     - Keycloak: https://www.keycloak.org/getting-started/getting-started-docker
+    - LoginRadius: https://www.loginradius.com/docs/developer/guide/oauth/
     - please feel free to [PR or request more help on the Temporal Web repo](https://github.com/temporalio/web/)
 
 2. You will need to provide a redirect URL to your Oauth Provider. If you are hosting Temporal Web at `http://localhost:8088` (this is configured by `callback_base_uri` in `server/config.yml`), then it is `http://localhost:8088/auth/sso_callback`. 
