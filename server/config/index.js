@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const { readFile, readFileSync } = require('fs');
 const yaml = require('js-yaml');
+const logger = require('../logger');
 
 const configPath = process.env.TEMPORAL_CONFIG_PATH || './server/config.yml';
 
@@ -63,6 +64,10 @@ const getTlsConfig = () => {
     refreshInterval: refresh_interval,
   };
 };
+
+logger.log(
+  `Auth is ${readConfigSync().auth?.enabled ? 'enabled' : 'disabled'} in config`
+);
 
 module.exports = {
   getAuthConfig,
