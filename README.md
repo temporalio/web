@@ -63,7 +63,7 @@ Setting `TEMPORAL_TLS_REFRESH_INTERVAL` will make the TLS certs reload every N s
 
 > ⚠️ This is currently a beta feature, [please report any and all issues to us!](https://github.com/temporalio/web/issues/new)
 
-**Note** For proper security, your server needs to be secured as well and validate the JWT tokens that Temporal Web will be sending to server once users are authenticated. See https://docs.temporal.io/docs/server/security/#authorization for details
+**Note** For proper security, your server needs to be secured as well and validate the JWT tokens that Temporal Web will be sending to server once users are authenticated. See [security docs](https://docs.temporal.io/docs/server/security/#authorization) for details
 
 Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enable it in 2 steps:
 
