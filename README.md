@@ -73,7 +73,7 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
       providers:
           - label: 'Auth0 oidc'                        # for internal use; in future may expose as button text
             type: oidc                                  # for futureproofing; only oidc is supported today
-            issuer: https://myorg.us.auth0.com/
+            issuer: https://myorg.us.auth0.com
             client_id: xxxxxxxxxxxxxxxxxxxx
             client_secret: xxxxxxxxxxxxxxxxxxxx
             scope: openid profile email
