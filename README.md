@@ -63,6 +63,8 @@ Setting `TEMPORAL_TLS_REFRESH_INTERVAL` will make the TLS certs reload every N s
 
 > ⚠️ This is currently a beta feature, [please report any and all issues to us!](https://github.com/temporalio/web/issues/new)
 
+**Note** For proper security, your server needs to be secured as well and validate the JWT tokens that Temporal Web will be sending to server once users are authenticated. See https://docs.temporal.io/docs/server/security/#authorization for details
+
 Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enable it in 2 steps:
 
 1. Edit the `server/config.yml` file:
@@ -71,13 +73,13 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
     auth:
       enabled: true # Temporal Web checks this first before reading your provider config
       providers:
-          - label: 'google oidc'                        # for internal use; in future may expose as button text
+          - label: 'Auth0 oidc'                        # for internal use; in future may expose as button text
             type: oidc                                  # for futureproofing; only oidc is supported today
-            issuer: https://accounts.google.com
-            client_id: xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com
-            client_secret: xxxxxxxxxxxxxxxxxxxxxxx
+            issuer: https://myorg.us.auth0.com/
+            client_id: xxxxxxxxxxxxxxxxxxxx
+            client_secret: xxxxxxxxxxxxxxxxxxxx
             scope: openid profile email
-            audience: temporal # identifier of the audience for an issued token (optional)
+            audience: # identifier of the audience for an issued token (optional)
             callback_base_uri: http://localhost:8088
             pass_id_token: false # adds ID token as 'authorization-extras' header with every request to server
     ```
@@ -101,8 +103,6 @@ Since v1.3, Temporal Web offers optional OAuth SSO authentication. You can enabl
     In future, multiple Oauth providers may be supported, however for now we only read the first Oauth provider under the `providers` key above.
 
     Common Oauth Providers and their docs:
-
-    - Google: https://developers.google.com/identity/protocols/oauth2/openid-connect
     - Auth0: https://auth0.com/docs/protocols/configure-okta-as-oauth2-identity-provider
     - Okta: https://help.okta.com/en/prod/Content/Topics/Apps/Apps_App_Integration_Wizard_OIDC.htm
         <details>
