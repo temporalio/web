@@ -61,6 +61,8 @@ import { stringify } from 'friendly-querystring';
 import { getKeyValuePairs, mapNamespaceDescription } from '~helpers';
 import { DetailList } from '~components';
 
+const PUBLIC_PATH = process.env.TEMPORAL_WEB_ROOT_PATH || '/';
+
 const validationMessages = {
   valid: d => `${d} exists`,
   invalid: d => `${d} does not exist`,
@@ -111,7 +113,7 @@ export default {
       }
     },
     namespaceLink(d) {
-      return `/namespaces/${d}/workflows?${stringify(
+      return `${PUBLIC_PATH}namespaces/${d}/workflows?${stringify(
         this.$router.currentRoute.query
       )}`;
     },
