@@ -80,7 +80,7 @@ import {
 import { NOTIFICATION_TYPE_ERROR } from '~constants';
 import { getErrorMessage } from '~helpers';
 import { NavigationBar, NavigationLink } from '~components';
-import { convertEventPayloads } from '~features/data-conversion';
+import { convertEventPayloadsWithWebsocket, convertEventPayloadsWithRemoteEncoder } from '~features/data-conversion';
 
 export default {
   data() {
@@ -139,7 +139,7 @@ export default {
       )}/${encodeURIComponent(runId)}`;
     },
     historyUrl() {
-      const rawPayloads = this.webSettings?.dataConverter?.port
+      const rawPayloads = (this.webSettings?.dataConverter?.port || this.webSettings?.remoteDataEncoder?.endpoint)
         ? '&rawPayloads=true'
         : '';
       const historyUrl = `${this.baseAPIURL}/history?waitForNewEvent=true${rawPayloads}`;
@@ -205,21 +205,35 @@ export default {
         })
         .then(events => {
           const port = this.webSettings?.dataConverter?.port;
+          const endpoint = this.webSettings?.remoteDataEncoder?.endpoint;
 
-          if (port == undefined) {
-            return events;
+          if (port !== undefined) {
+            return convertEventPayloadsWithWebsocket(events, port).catch(error => {
+              console.error(error);
+
+              this.$emit('onNotification', {
+                message: getErrorMessage(error),
+                type: NOTIFICATION_TYPE_ERROR,
+              });
+
+              return events;
+            });
           }
 
-          return convertEventPayloads(events, port).catch(error => {
-            console.error(error);
+          if (endpoint !== undefined) {
+            return convertEventPayloadsWithRemoteEncoder(events, endpoint).catch(error => {
+              console.error(error);
 
-            this.$emit('onNotification', {
-              message: getErrorMessage(error),
-              type: NOTIFICATION_TYPE_ERROR,
+              this.$emit('onNotification', {
+                message: getErrorMessage(error),
+                type: NOTIFICATION_TYPE_ERROR,
+              });
+
+              return events;
             });
+          }
 
-            return events;
-          });
+          return events;
         })
         .then(events => {
           const shouldHighlightEventId =
