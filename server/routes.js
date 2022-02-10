@@ -385,6 +385,16 @@ router.get('/api/me', async (ctx) => {
   };
 });
 
+router.get('/api/tokens', async (ctx) => {
+  const tokens = {};
+  if (ctx.isAuthenticated() && !!ctx.state.user) {
+    const { accessToken } = ctx.state.user;
+    tokens.accessToken = accessToken;
+  }
+
+  ctx.body = tokens;
+});
+
 router.get('/api/cluster/version-info', async (ctx) => {
   const res = await tClient().getVersionInfo(ctx);
   ctx.body = res;

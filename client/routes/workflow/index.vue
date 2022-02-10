@@ -114,11 +114,16 @@ export default {
       unwatch: [],
 
       webSettings: undefined,
+
+      tokens: undefined,
     };
   },
   props: ['namespace', 'runId', 'workflowId'],
   async created() {
     await this.getWebSettings();
+    if (this.webSettings?.remoteDataEncoder?.endpoint) {
+      await this.getTokens();
+    }
     this.unwatch.push(
       this.$watch('baseAPIURL', this.onBaseApiUrlChange, { immediate: true })
     );
@@ -206,6 +211,7 @@ export default {
         .then(events => {
           const port = this.webSettings?.dataConverter?.port;
           const endpoint = this.webSettings?.remoteDataEncoder?.endpoint;
+          const token = this.tokens?.accessToken;
 
           if (port !== undefined) {
             return convertEventPayloadsWithWebsocket(events, port).catch(error => {
@@ -221,7 +227,7 @@ export default {
           }
 
           if (endpoint !== undefined) {
-            return convertEventPayloadsWithRemoteEncoder(events, endpoint).catch(error => {
+            return convertEventPayloadsWithRemoteEncoder(this.namespace, events, endpoint, token).catch(error => {
               console.error(error);
 
               this.$emit('onNotification', {
@@ -364,6 +370,13 @@ export default {
       }
 
       this.webSettings = await this.$http(`/api/web-settings`);
+    },
+    async getTokens() {
+      if (this.tokens !== undefined) {
+        return this.tokens;
+      }
+
+      this.tokens = await this.$http(`/api/tokens`) || {};
     },
   },
 };
