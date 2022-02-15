@@ -3,7 +3,7 @@ const Router = require('koa-router'),
   moment = require('moment'),
   losslessJSON = require('lossless-json'),
   { isWriteApiPermitted } = require('./utils'),
-  { getAuthConfig, getRoutingConfig, getEncoderConfig } = require('./config'),
+  { getAuthConfig, getRoutingConfig, getDataEncoderConfig } = require('./config'),
   authRoutes = require('./routes-auth'),
   { getTemporalClient: tClient } = require('./temporal-client-provider');
 
@@ -358,7 +358,7 @@ router.post('/api/web-settings/remote-data-encoder/:endpoint', async (ctx) => {
 router.get('/api/web-settings', async (ctx) => {
   const routing = await getRoutingConfig();
   const { enabled } = await getAuthConfig();
-  const { dataEncoder } = await getEncoderConfig();
+  const dataEncoder = await getDataEncoderConfig();
   const permitWriteApi = isWriteApiPermitted();
   const dataConverter = ctx.session.dataConverter;
   const dataEncoderEndpoint = ctx.session.dataEncoderEndpoint;
