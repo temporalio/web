@@ -32,6 +32,7 @@ Set these environment variables if you need to change their defaults
 | TEMPORAL_SESSION_SECRET       | Secret used to hash the session with HMAC                         | "ensure secret in production" |
 | TEMPORAL_EXTERNAL_SCRIPTS     | Additional JavaScript tags to serve in the UI                     |                               |
 | TEMPORAL_GRPC_MAX_MESSAGE_LENGTH | gRPC max message length (bytes)                                | 4194304 (4mb)                 |
+| TEMPORAL_DATA_ENCODER_ENDPOINT | Remote Data Encoder Endpoint, explained below                    |                               |
 
 <details>
 <summary>
@@ -58,6 +59,22 @@ By default we will also verify your server `hostname`, matching it to `TEMPORAL_
 Setting `TEMPORAL_TLS_REFRESH_INTERVAL` will make the TLS certs reload every N seconds.
 
 </details>
+
+### Configuring Remote Data Encoder (optional)
+
+If you are using a data converter on your workers to encrypt Temporal Payloads you may wish to deploy a remote data encoder so that your users can see the unencrypted Payloads while using Temporal Web. The documentation for the Temporal SDK you are using for your application should include documentation on how to build a remote data encoder. Please let us know if this is not the case. Once you have a remote data encoder running you can configure Temporal Web to use it to decode Payloads for a user in 2 ways:
+
+1. Edit the `server/config.yml` file:
+
+    ```yaml
+    data_encoder:
+      endpoint: https://remote_encoder.myorg.com
+    ```
+2. Set the environment variable TEMPORAL_DATA_ENCODER_ENDPOINT to the URL for your remote data encoder. This is often a more convenient option when running Temporal Web in a docker container.
+
+Temporal Web will then configure it's UI to decode Payloads as appropriate via the remote data encoder.
+
+Please note that requests to the remote data encoder will be made from the user's browser directly, not via Temporal Web's server. This means that the Temporal Web server will never see the decoded Payloads and does not need to be able to connect to the remote data encoder. This allows using remote data encoders on internal and secure networks while using an externally hosted Temporal Web instance, such that provided by Temporal Cloud.
 
 ### Configuring Authentication (optional)
 
