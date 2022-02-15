@@ -182,6 +182,16 @@ const routeOpts = {
       },
     },
     {
+      name: 'remote-data-encoder',
+      path: '/remote-data-encoder/:endpoint',
+      beforeEnter: async (to, _from, next) => {
+        await http.global.post(
+          `/api/web-settings/remote-data-encoder/${encodeURIComponent(to.params.endpoint)}`
+        );
+        next('/');
+      },
+    },
+    {
       name: 'namespaces-redirect',
       path: '/namespace/*',
       redirect: '/namespaces/*',

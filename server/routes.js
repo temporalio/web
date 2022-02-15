@@ -350,11 +350,17 @@ router.post('/api/web-settings/data-converter/:port', async (ctx) => {
   ctx.status = 200;
 });
 
+router.post('/api/web-settings/remote-data-encoder/:endpoint', async (ctx) => {
+  ctx.session.remoteDataEncoder = { endpoint: ctx.params.endpoint };
+  ctx.status = 200;
+});
+
 router.get('/api/web-settings', async (ctx) => {
   const routing = await getRoutingConfig();
   const { enabled } = await getAuthConfig();
   const permitWriteApi = isWriteApiPermitted();
   const dataConverter = ctx.session.dataConverter;
+  const remoteDataEncoder = ctx.session.remoteDataEncoder;
 
   const auth = { enabled }; // only include non-sensitive data
 
@@ -363,6 +369,7 @@ router.get('/api/web-settings', async (ctx) => {
     auth,
     permitWriteApi,
     dataConverter,
+    remoteDataEncoder,
   };
 });
 
