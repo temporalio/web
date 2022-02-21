@@ -14,7 +14,7 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
     }
 
     if (!payloadsWrapper) {
-      continue;
+      return;
     }
 
     requests.push(
