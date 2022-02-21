@@ -13,6 +13,10 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
       payloadsWrapper = event.details.result;
     }
 
+    if (!payloadsWrapper) {
+      continue;
+    }
+
     requests.push(
       fetch(`${endpoint}/decode`, { method: 'POST', headers: headers, body: JSON.stringify(payloadsWrapper) })
         .then((response) => response.json())
