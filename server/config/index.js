@@ -4,6 +4,7 @@ const yaml = require('js-yaml');
 const logger = require('../logger');
 
 const configPath = process.env.TEMPORAL_CONFIG_PATH || './server/config.yml';
+const dataEncoderEndpoint = process.env.TEMPORAL_DATA_ENCODER_ENDPOINT;
 
 const readConfigSync = () => {
   const cfgContents = readFileSync(configPath, {
@@ -26,6 +27,18 @@ const getAuthConfig = async () => {
   }
   return auth;
 };
+
+const getDataEncoderConfig = async () => {
+  let { data_encoder } = await readConfig();
+
+  // Data encoder endpoint from the environment takes precedence over
+  // configuration file value.
+  const dataEncoderConfig = {
+    endpoint: dataEncoderEndpoint || data_encoder?.endpoint
+  }
+
+  return dataEncoderConfig;
+}
 
 const getRoutingConfig = async () => {
   const { routing } = await readConfig();
@@ -71,6 +84,7 @@ logger.log(
 
 module.exports = {
   getAuthConfig,
+  getDataEncoderConfig,
   getRoutingConfig,
   getTlsConfig,
 };

@@ -5,31 +5,36 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
   const requests = [];
 
   events.forEach(event => {
-    let payloads = [];
+    let payloadsWrapper;
 
     if (event.details.input) {
-      payloads = event.details.input.payloads;
+      payloadsWrapper = event.details.input;
     } else if (event.details.result) {
-      payloads = event.details.result.payloads;
+      payloadsWrapper = event.details.result;
     }
 
-    payloads.forEach((payload, i) => {
-      requests.push(
-        fetch(`${endpoint}/decode`, { method: 'POST', headers: headers, body: JSON.stringify(payload) })
-        .then((response) => response.json())
-        .then((decodedPayload) => {
-          let data = window.atob(decodedPayload.data);
-          try {
-            payloads[i] = JSON.parse(data);
-          } catch {
-            payloads[i] = data;
-          }
-        })
-      )
-    });
-  });
+    if (!payloadsWrapper) {
+      return;
+    }
 
-  await Promise.allSettled(requests)
+    requests.push(
+      fetch(`${endpoint}/decode`, { method: 'POST', headers: headers, body: JSON.stringify(payloadsWrapper) })
+        .then((response) => response.json())
+        .then((decodedPayloadsWrapper) => decodedPayloadsWrapper.payloads)
+        .then((decodedPayloads) => {
+          decodedPayloads.forEach((payload, i) => {
+            let data = window.atob(payload.data);
+            try {
+              payloadsWrapper.payloads[i] = JSON.parse(data);
+            } catch {
+              payloadsWrapper.payloads[i] = data;
+            }  
+          });
+        })
+    )
+  })
+
+  await Promise.allSettled(requests);
 
   return events;
 };

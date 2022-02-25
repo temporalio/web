@@ -139,7 +139,7 @@ export default {
       )}/${encodeURIComponent(runId)}`;
     },
     historyUrl() {
-      const rawPayloads = (this.webSettings?.dataConverter?.port || this.webSettings?.remoteDataEncoder?.endpoint)
+      const rawPayloads = (this.webSettings?.dataConverter?.port || this.webSettings?.dataEncoder?.endpoint)
         ? '&rawPayloads=true'
         : '';
       const historyUrl = `${this.baseAPIURL}/history?waitForNewEvent=true${rawPayloads}`;
@@ -205,7 +205,7 @@ export default {
         })
         .then(events => {
           const port = this.webSettings?.dataConverter?.port;
-          const endpoint = this.webSettings?.remoteDataEncoder?.endpoint;
+          const endpoint = this.webSettings?.dataEncoder?.endpoint;
 
           if (port !== undefined) {
             return convertEventPayloadsWithWebsocket(events, port).catch(error => {
