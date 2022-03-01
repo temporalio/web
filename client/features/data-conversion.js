@@ -31,6 +31,11 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
             }  
           });
         })
+        .catch(() => {
+          payloadsWrapper.payloads.forEach((payload) => {
+            payload.error = "Could not decode payload, remote decoder returned an error."
+          })
+        })
     )
   })
 
