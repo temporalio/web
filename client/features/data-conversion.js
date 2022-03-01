@@ -39,7 +39,8 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
     )
   })
 
-  await Promise.allSettled(requests);
+  // We catch and handle errors above so no error handling needed here.
+  await Promise.all(requests);
 
   return events;
 };
