@@ -31,10 +31,16 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
             }  
           });
         })
+        .catch(() => {
+          payloadsWrapper.payloads.forEach((payload) => {
+            payload.error = "Could not decode payload, remote decoder returned an error."
+          })
+        })
     )
   })
 
-  await Promise.allSettled(requests);
+  // We catch and handle errors above so no error handling needed here.
+  await Promise.all(requests);
 
   return events;
 };
