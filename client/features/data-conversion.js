@@ -25,11 +25,13 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) =>
           decodedPayloads.forEach((payload, i) => {
             let data = window.atob(payload.data);
             try {
-              payloadsWrapper.payloads[i] = JSON.parse(data);
+              decodedPayloads[i] = JSON.parse(data);
             } catch {
-              payloadsWrapper.payloads[i] = data;
+              decodedPayloads[i] = data;
             }  
           });
+
+          payloadsWrapper.payloads = decodedPayloads
         })
         .catch(() => {
           payloadsWrapper.payloads.forEach((payload) => {
