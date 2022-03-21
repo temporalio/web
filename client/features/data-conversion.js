@@ -1,11 +1,12 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 
-export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint, accessToken) => {
-  let headers = { 'Content-Type': 'application/json' };
+export const convertEventPayloadsWithRemoteEncoder = async (namespace, events, endpoint, accessToken) => {
+  let headers = { 'Content-Type': 'application/json', 'X-Namespace': namespace };
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
   const requests = [];
+  const endpoint = endpointTemplate.replaceAll('{namespace}', namespace);
 
   events.forEach(event => {
     let payloadsWrapper;
@@ -28,11 +29,13 @@ export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint, ac
           decodedPayloads.forEach((payload, i) => {
             let data = window.atob(payload.data);
             try {
-              payloadsWrapper.payloads[i] = JSON.parse(data);
+              decodedPayloads[i] = JSON.parse(data);
             } catch {
-              payloadsWrapper.payloads[i] = data;
+              decodedPayloads[i] = data;
             }  
           });
+
+          payloadsWrapper.payloads = decodedPayloads
         })
         .catch(() => {
           payloadsWrapper.payloads.forEach((payload) => {
