@@ -221,7 +221,9 @@ export default {
           }
 
           if (endpoint !== undefined) {
-            return convertEventPayloadsWithRemoteEncoder(events, endpoint).catch(error => {
+            const accessToken = this.webSettings.dataEncoder.accessToken;
+
+            return convertEventPayloadsWithRemoteEncoder(events, endpoint, accessToken).catch(error => {
               console.error(error);
 
               this.$emit('onNotification', {

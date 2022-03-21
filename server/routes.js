@@ -367,6 +367,9 @@ router.get('/api/web-settings', async (ctx) => {
   if (ctx.session.dataEncoder?.endpoint) {
     dataEncoder.endpoint = ctx.session.dataEncoder.endpoint;
   }
+  if (dataEncoder.passAccessToken && !!ctx.state.user) {
+    dataEncoder.accessToken = ctx.state.user.accessToken;
+  }
 
   const auth = { enabled }; // only include non-sensitive data
 

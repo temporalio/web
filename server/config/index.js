@@ -5,6 +5,7 @@ const logger = require('../logger');
 
 const configPath = process.env.TEMPORAL_CONFIG_PATH || './server/config.yml';
 const dataEncoderEndpoint = process.env.TEMPORAL_DATA_ENCODER_ENDPOINT;
+const dataEncoderPassAccessToken = process.env.TEMPORAL_DATA_ENCODER_PASS_ACCESS_TOKEN ? ![false, 'false'].includes(process.env.TEMPORAL_DATA_ENCODER_PASS_ACCESS_TOKEN) : undefined;
 
 const readConfigSync = () => {
   const cfgContents = readFileSync(configPath, {
@@ -34,7 +35,8 @@ const getDataEncoderConfig = async () => {
   // Data encoder endpoint from the environment takes precedence over
   // configuration file value.
   const dataEncoderConfig = {
-    endpoint: dataEncoderEndpoint || data_encoder?.endpoint
+    endpoint: dataEncoderEndpoint || data_encoder?.endpoint,
+    passAccessToken: dataEncoderPassAccessToken || !!data_encoder?.pass_auth_token,
   }
 
   return dataEncoderConfig;

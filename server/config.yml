@@ -20,3 +20,4 @@ routing:
 # data_encoder:
   # Remote Data Encoder Endpoint
   # endpoint: https://remote_encoder.myorg.com
+  # pass_auth_token: false

@@ -1,7 +1,10 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 
-export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint) => {
-  const headers = { 'Content-Type': 'application/json' };
+export const convertEventPayloadsWithRemoteEncoder = async (events, endpoint, accessToken) => {
+  let headers = { 'Content-Type': 'application/json' };
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
   const requests = [];
 
   events.forEach(event => {
