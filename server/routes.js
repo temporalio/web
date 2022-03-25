@@ -358,16 +358,17 @@ router.post('/api/web-settings/remote-data-encoder/:endpoint', async (ctx) => {
 router.get('/api/web-settings', async (ctx) => {
   const routing = await getRoutingConfig();
   const { enabled } = await getAuthConfig();
-  const dataEncoder = await getDataEncoderConfig();
+  const dataEncoderConfig = await getDataEncoderConfig();
   const permitWriteApi = isWriteApiPermitted();
   const dataConverter = ctx.session.dataConverter;
-  
+
   // Encoder endpoint from the session has higher priority than global config.
   // This is to allow for testing of new remote encoder endpoints.
-  if (ctx.session.dataEncoder?.endpoint) {
-    dataEncoder.endpoint = ctx.session.dataEncoder.endpoint;
-  }
-  if (dataEncoder.passAccessToken && !!ctx.state.user) {
+  let dataEncoder = {
+    endpoint: ctx.session.dataEncoder?.endpoint || dataEncoderConfig.endpoint
+  };
+
+  if (dataEncoderConfig.passAccessToken && !!ctx.state.user) {
     dataEncoder.accessToken = ctx.state.user.accessToken;
   }
 
