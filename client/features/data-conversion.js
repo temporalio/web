@@ -1,6 +1,6 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 
-export const convertEventPayloadsWithRemoteEncoder = async (namespace, events, endpoint, accessToken) => {
+export const convertEventPayloadsWithRemoteEncoder = async (namespace, events, endpointTemplate, accessToken) => {
   let headers = { 'Content-Type': 'application/json', 'X-Namespace': namespace };
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`;
@@ -9,40 +9,46 @@ export const convertEventPayloadsWithRemoteEncoder = async (namespace, events, e
   const endpoint = endpointTemplate.replaceAll('{namespace}', namespace);
 
   events.forEach(event => {
-    let payloadsWrapper;
+    let payloadsPBs = [];
 
     if (event.details.input) {
-      payloadsWrapper = event.details.input;
-    } else if (event.details.result) {
-      payloadsWrapper = event.details.result;
+      payloadsPBs.push(event.details.input);
+    }
+    
+    if (event.details.result) {
+      payloadsPBs.push(event.details.result);
+    }
+    
+    if (event.details.details) {
+      Object.values(event.details.details).forEach(field => {
+        payloadsPBs.push(field) 
+      })
     }
 
-    if (!payloadsWrapper) {
-      return;
-    }
-
-    requests.push(
-      fetch(`${endpoint}/decode`, { method: 'POST', headers: headers, body: JSON.stringify(payloadsWrapper) })
-        .then((response) => response.json())
-        .then((decodedPayloadsWrapper) => decodedPayloadsWrapper.payloads)
-        .then((decodedPayloads) => {
-          decodedPayloads.forEach((payload, i) => {
-            let data = window.atob(payload.data);
-            try {
-              decodedPayloads[i] = JSON.parse(data);
-            } catch {
-              decodedPayloads[i] = data;
-            }  
-          });
-
-          payloadsWrapper.payloads = decodedPayloads
-        })
-        .catch(() => {
-          payloadsWrapper.payloads.forEach((payload) => {
-            payload.error = "Could not decode payload, remote decoder returned an error."
+    payloadsPBs.forEach(payloadsPB => {
+      requests.push(
+        fetch(`${endpoint}/decode`, { method: 'POST', headers: headers, body: JSON.stringify(payloadsPB) })
+          .then((response) => response.json())
+          .then((decodedPayloadsPB) => decodedPayloadsPB.payloads)
+          .then((decodedPayloads) => {
+            decodedPayloads.forEach((payload, i) => {
+              let data = window.atob(payload.data);
+              try {
+                decodedPayloads[i] = JSON.parse(data);
+              } catch {
+                decodedPayloads[i] = data;
+              }  
+            });
+  
+            payloadsPB.payloads = decodedPayloads
           })
-        })
-    )
+          .catch(() => {
+            payloadsPB.payloads.forEach((payload) => {
+              payload.error = "Could not decode payload, remote decoder returned an error."
+            })
+          })
+      );
+    })
   })
 
   // We catch and handle errors above so no error handling needed here.
