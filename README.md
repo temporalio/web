@@ -64,7 +64,9 @@ Setting `TEMPORAL_TLS_REFRESH_INTERVAL` will make the TLS certs reload every N s
 
 ### Configuring a Codec Endpoint (optional)
 
-If you are using a codec on your workers to encrypt or compress Temporal Payloads you may wish to deploy a codec server so that your users can see the decoded Payloads while using Temporal Web. The samples for the Temporal SDK you are using for your application should include examples of how to build a codec server. Please let us know if this is not the case. Once you have a codec server running you can configure Temporal Web to use it to decode Payloads for a user in 2 ways:
+If you are using a codec on your workers to encrypt or compress Temporal Payloads you may wish to deploy a codec server so that your users can see the decoded Payloads while using Temporal Web. The samples for the Temporal SDK you are using for your application should include examples of how to build a codec server. Please let us know if this is not the case. There is an example implementation for the [Codec Server in Go](https://github.com/temporalio/samples-go/tree/main/codec-server).
+
+Once you have a codec server running you can configure Temporal Web to use it to decode Payloads for a user in 2 ways:
 
 1. Edit the `server/config.yml` file:
 
@@ -75,6 +77,8 @@ If you are using a codec on your workers to encrypt or compress Temporal Payload
 2. Set the environment variable TEMPORAL_CODEC_ENDPOINT to the URL for your remote codec server. This is often a more convenient option when running Temporal Web in a docker container.
 
 Temporal Web will then configure it's UI to decode Payloads as appropriate via the codec.
+
+The codec endpoint can contain the special string `{namespace}`. This will be replaced with the appropriate namespace when requests are made. This allows hosting codecs for multiple namespaces on different URLs on the same host. For example you might use an endpoint URL such as: `https://codec.myorg.com/{namespace}`.
 
 Please note that requests to the codec server will be made from the user's browser directly, not via Temporal Web's server. This means that the Temporal Web server will never see the decoded Payloads and does not need to be able to connect to the codec server. This allows using codec servers on internal and secure networks while using an externally hosted Temporal Web instance, such that provided by Temporal Cloud.
 
