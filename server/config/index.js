@@ -4,7 +4,8 @@ const yaml = require('js-yaml');
 const logger = require('../logger');
 
 const configPath = process.env.TEMPORAL_CONFIG_PATH || './server/config.yml';
-const dataEncoderEndpoint = process.env.TEMPORAL_DATA_ENCODER_ENDPOINT;
+const codecEndpointFromEnv = process.env.TEMPORAL_CODEC_ENDPOINT;
+const codecPassAccessTokenFromEnv = process.env.TEMPORAL_CODEC_PASS_ACCESS_TOKEN ? ![false, 'false'].includes(process.env.TEMPORAL_CODEC_PASS_ACCESS_TOKEN) : undefined;
 
 const readConfigSync = () => {
   const cfgContents = readFileSync(configPath, {
@@ -28,16 +29,15 @@ const getAuthConfig = async () => {
   return auth;
 };
 
-const getDataEncoderConfig = async () => {
-  let { data_encoder } = await readConfig();
+const getCodecConfig = async () => {
+  let { codec } = await readConfig();
 
-  // Data encoder endpoint from the environment takes precedence over
-  // configuration file value.
-  const dataEncoderConfig = {
-    endpoint: dataEncoderEndpoint || data_encoder?.endpoint
+  const codecConfig = {
+    endpoint: codecEndpointFromEnv || codec?.endpoint,
+    passAccessToken: codecPassAccessTokenFromEnv || !!codec?.pass_access_token,
   }
 
-  return dataEncoderConfig;
+  return codecConfig;
 }
 
 const getRoutingConfig = async () => {
@@ -84,7 +84,7 @@ logger.log(
 
 module.exports = {
   getAuthConfig,
-  getDataEncoderConfig,
+  getCodecConfig,
   getRoutingConfig,
   getTlsConfig,
 };

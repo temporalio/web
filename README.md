@@ -20,19 +20,21 @@ For a **video demo** of how this looks, you can [check our docs](https://docs.te
 
 Set these environment variables if you need to change their defaults
 
-| Variable                      | Description                                                       | Default                       |
-| ----------------------------- | ----------------------------------------------------------------- | ----------------------------- |
-| TEMPORAL_GRPC_ENDPOINT        | String representing server gRPC endpoint                          | 127.0.0.1:7233                |
-| TEMPORAL_WEB_PORT             | HTTP port to serve on                                             | 8088                          |
-| TEMPORAL_CONFIG_PATH          | Path to config file, see [configurations](#configuring-authentication-optional) | ./server/config.yml |
-| TEMPORAL_PERMIT_WRITE_API     | Boolean to permit write API methods such as Terminating Workflows | true                          |
-| TEMPORAL_WEB_ROOT_PATH        | The root path to serve the app under. Ex. "/test/"                | /                             |
-| TEMPORAL_HOT_RELOAD_PORT      | HTTP port used by hot reloading in development                    | 8081                          |
-| TEMPORAL_HOT_RELOAD_TEST_PORT | HTTP port used by hot reloading in tests                          | 8082                          |
-| TEMPORAL_SESSION_SECRET       | Secret used to hash the session with HMAC                         | "ensure secret in production" |
-| TEMPORAL_EXTERNAL_SCRIPTS     | Additional JavaScript tags to serve in the UI                     |                               |
-| TEMPORAL_GRPC_MAX_MESSAGE_LENGTH | gRPC max message length (bytes)                                | 4194304 (4mb)                 |
-| TEMPORAL_DATA_ENCODER_ENDPOINT | Remote Data Encoder Endpoint, explained below                    |                               |
+| Variable                         | Description                                                       | Default                       |
+| -------------------------------- | ----------------------------------------------------------------- | ----------------------------- |
+| TEMPORAL_GRPC_ENDPOINT           | String representing server gRPC endpoint                          | 127.0.0.1:7233                |
+| TEMPORAL_WEB_PORT                | HTTP port to serve on                                             | 8088                          |
+| TEMPORAL_CONFIG_PATH             | Path to config file, see [configurations](#configuring-authentication-optional) | ./server/config.yml |
+| TEMPORAL_PERMIT_WRITE_API        | Boolean to permit write API methods such as Terminating Workflows | true                          |
+| TEMPORAL_WEB_ROOT_PATH           | The root path to serve the app under. Ex. "/test/"                | /                             |
+| TEMPORAL_HOT_RELOAD_PORT         | HTTP port used by hot reloading in development                    | 8081                          |
+| TEMPORAL_HOT_RELOAD_TEST_PORT    | HTTP port used by hot reloading in tests                          | 8082                          |
+| TEMPORAL_SESSION_SECRET          | Secret used to hash the session with HMAC                         | "ensure secret in production" |
+| TEMPORAL_EXTERNAL_SCRIPTS        | Additional JavaScript tags to serve in the UI                     |                               |
+| TEMPORAL_GRPC_MAX_MESSAGE_LENGTH | gRPC max message length (bytes)                                   | 4194304 (4mb)                 |
+| TEMPORAL_CODEC_ENDPOINT          | Codec Endpoint, explained below                                   |                               |
+| TEMPORAL_CODEC_PASS_ACCESS_TOKEN | Send OIDC access token to Codec Server                            | false                         |
+
 
 <details>
 <summary>
@@ -60,21 +62,21 @@ Setting `TEMPORAL_TLS_REFRESH_INTERVAL` will make the TLS certs reload every N s
 
 </details>
 
-### Configuring Remote Data Encoder (optional)
+### Configuring a Codec Endpoint (optional)
 
-If you are using a data converter on your workers to encrypt Temporal Payloads you may wish to deploy a remote data encoder so that your users can see the unencrypted Payloads while using Temporal Web. The documentation for the Temporal SDK you are using for your application should include documentation on how to build a remote data encoder. Please let us know if this is not the case. Once you have a remote data encoder running you can configure Temporal Web to use it to decode Payloads for a user in 2 ways:
+If you are using a codec on your workers to encrypt or compress Temporal Payloads you may wish to deploy a codec server so that your users can see the decoded Payloads while using Temporal Web. The samples for the Temporal SDK you are using for your application should include examples of how to build a codec server. Please let us know if this is not the case. Once you have a codec server running you can configure Temporal Web to use it to decode Payloads for a user in 2 ways:
 
 1. Edit the `server/config.yml` file:
 
     ```yaml
-    data_encoder:
-      endpoint: https://remote_encoder.myorg.com
+    codec:
+      endpoint: https://codec.myorg.com
     ```
-2. Set the environment variable TEMPORAL_DATA_ENCODER_ENDPOINT to the URL for your remote data encoder. This is often a more convenient option when running Temporal Web in a docker container.
+2. Set the environment variable TEMPORAL_CODEC_ENDPOINT to the URL for your remote codec server. This is often a more convenient option when running Temporal Web in a docker container.
 
-Temporal Web will then configure it's UI to decode Payloads as appropriate via the remote data encoder.
+Temporal Web will then configure it's UI to decode Payloads as appropriate via the codec.
 
-Please note that requests to the remote data encoder will be made from the user's browser directly, not via Temporal Web's server. This means that the Temporal Web server will never see the decoded Payloads and does not need to be able to connect to the remote data encoder. This allows using remote data encoders on internal and secure networks while using an externally hosted Temporal Web instance, such that provided by Temporal Cloud.
+Please note that requests to the codec server will be made from the user's browser directly, not via Temporal Web's server. This means that the Temporal Web server will never see the decoded Payloads and does not need to be able to connect to the codec server. This allows using codec servers on internal and secure networks while using an externally hosted Temporal Web instance, such that provided by Temporal Cloud.
 
 ### Configuring Authentication (optional)
 

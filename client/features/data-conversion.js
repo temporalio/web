@@ -1,7 +1,13 @@
 import WebSocketAsPromised from 'websocket-as-promised';
 
-export const convertEventPayloadsWithRemoteEncoder = async (namespace, events, endpointTemplate) => {
-  const headers = { 'Content-Type': 'application/json', 'X-Namespace': namespace };
+export const convertEventPayloadsWithCodec = async (namespace, events, endpointTemplate, accessToken) => {
+  let headers = {
+    'Content-Type': 'application/json',
+    'X-Namespace': namespace,
+  };
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`;
+  }
   const requests = [];
   const endpoint = endpointTemplate.replaceAll('{namespace}', namespace);
 

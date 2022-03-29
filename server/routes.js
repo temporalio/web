@@ -3,7 +3,7 @@ const Router = require('koa-router'),
   moment = require('moment'),
   losslessJSON = require('lossless-json'),
   { isWriteApiPermitted } = require('./utils'),
-  { getAuthConfig, getRoutingConfig, getDataEncoderConfig } = require('./config'),
+  { getAuthConfig, getRoutingConfig, getCodecConfig } = require('./config'),
   authRoutes = require('./routes-auth'),
   { getTemporalClient: tClient } = require('./temporal-client-provider');
 
@@ -350,22 +350,26 @@ router.post('/api/web-settings/data-converter/:port', async (ctx) => {
   ctx.status = 200;
 });
 
-router.post('/api/web-settings/remote-data-encoder/:endpoint', async (ctx) => {
-  ctx.session.dataEncoder = { endpoint: ctx.params.endpoint };
+router.post('/api/web-settings/codec/:endpoint', async (ctx) => {
+  ctx.session.codec = { endpoint: ctx.params.endpoint };
   ctx.status = 200;
 });
 
 router.get('/api/web-settings', async (ctx) => {
   const routing = await getRoutingConfig();
   const { enabled } = await getAuthConfig();
-  const dataEncoder = await getDataEncoderConfig();
+  const codecConfig = await getCodecConfig();
   const permitWriteApi = isWriteApiPermitted();
   const dataConverter = ctx.session.dataConverter;
-  
-  // Encoder endpoint from the session has higher priority than global config.
+
+  // Codec endpoint from the session has higher priority than global config.
   // This is to allow for testing of new remote encoder endpoints.
-  if (ctx.session.dataEncoder?.endpoint) {
-    dataEncoder.endpoint = ctx.session.dataEncoder.endpoint;
+  let codec = {
+    endpoint: ctx.session.codec?.endpoint || codecConfig.endpoint
+  };
+
+  if (codecConfig.passAccessToken && !!ctx.state.user) {
+    codec.accessToken = ctx.state.user.accessToken;
   }
 
   const auth = { enabled }; // only include non-sensitive data
@@ -375,7 +379,7 @@ router.get('/api/web-settings', async (ctx) => {
     auth,
     permitWriteApi,
     dataConverter,
-    dataEncoder,
+    codec,
   };
 });
 
