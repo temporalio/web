@@ -221,7 +221,7 @@ export default {
           }
 
           if (endpoint !== undefined) {
-            return convertEventPayloadsWithRemoteEncoder(events, endpoint).catch(error => {
+            return convertEventPayloadsWithRemoteEncoder(this.namespace, events, endpoint).catch(error => {
               console.error(error);
 
               this.$emit('onNotification', {
