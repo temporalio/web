@@ -223,7 +223,7 @@ export default {
           if (endpoint !== undefined) {
             const accessToken = this.webSettings.codec.accessToken;
 
-            return convertEventPayloadsWithCodec(events, endpoint, accessToken).catch(error => {
+            return convertEventPayloadsWithCodec(this.namespace, events, endpoint, accessToken).catch(error => {
               console.error(error);
 
               this.$emit('onNotification', {
