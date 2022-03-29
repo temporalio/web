@@ -17,7 +17,7 @@ routing:
   default_to_namespace: # internal use only
   issue_report_link: https://github.com/temporalio/web/issues/new/choose # set this field if you need to direct people to internal support forums
 
-# data_encoder:
-  # Remote Data Encoder Endpoint
-  # endpoint: https://remote_encoder.myorg.com
-  # pass_auth_token: false
+# codec:
+  # Codec Server Endpoint
+  # endpoint: https://codec.myorg.com
+  # pass_access_token: false
