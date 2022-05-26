@@ -4,3 +4,4 @@ dist/
 .idea
 cypress/screenshots
 cypress/videos
+.vscode

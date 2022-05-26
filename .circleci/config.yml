@@ -1,0 +1,15 @@
+version: 2.1
+orbs:
+  shared: getoutreach/shared@1.56.0
+
+jobs:
+  build_push_docker_image:
+    executor:
+      name: shared/testbed-machine
+    resource_class: xlarge
+    steps:
+      - shared/setup_environment:
+          machine: true
+      - shared/build_docker_image
+      - store_artifacts:
+          path: /tmp/test-results/image_scan.json
