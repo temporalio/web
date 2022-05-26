@@ -1,3 +1,6 @@
 [submodule "proto"]
 	path = proto
 	url = https://github.com/temporalio/api
+[submodule ".bootstrap"]
+	path = .bootstrap
+	url = git@github.com:getoutreach/devbase.git
