@@ -16,7 +16,7 @@ commands:
       - steps: << parameters.steps >>
       
 jobs:
-  build_push_docker_image:
+  build:
     executor:
       name: shared/testbed-machine
     resource_class: xlarge
