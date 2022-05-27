@@ -1,0 +1,41 @@
+version: 2.1
+orbs:
+  shared: getoutreach/shared@1.56.0
+
+# DEPRECATED: Use the devbase orb instead:
+# https://github.com/getoutreach/devbase/tree/main/orbs/shared
+commands:
+  with_job_span:
+    parameters:
+      steps:
+        type: steps
+    steps:
+      - run:
+          name: DEPRECATION NOTICE
+          command: echo "with_job_span is deprecated and should be removed"
+      - steps: << parameters.steps >>
+
+jobs:
+  build:
+    executor:
+      name: shared/testbed-machine
+    resource_class: xlarge
+    steps:
+      - shared/setup_environment:
+          machine: true
+      - run:
+          command: ./scripts/docker.sh
+      - store_artifacts:
+          path: /tmp/test-results/image_scan.json
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context:
+            - docker-registry
+            - ghaccesstoken
+            - aws-credentials
+            - package-cloud-credentials
+            - prismacloud-credentials

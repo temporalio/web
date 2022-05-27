@@ -17,3 +17,6 @@ install-proto-submodule:
 init: install-proto-submodule
 
 update: update-proto-submodule
+
+version:
+	@echo "1.15.1"
