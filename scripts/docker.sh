@@ -34,7 +34,9 @@ info "Building Docker Image (for scanning)"
 info "🔐 Scanning docker image for vulnerabilities"
 "${DIR}/twist-scan.sh" "temporal-web" || echo "Warning: Failed to scan image"
 
-if [[ -n $CIRCLE_TAG ]]; then
+echo "Branch: ${CIRCLE_BRANCH}"
+
+if [ "$CIRCLE_BRANCH" = "master" ]; then
   echo "🔨 Building and Pushing Docker Image (production)"
   (
     set -x
