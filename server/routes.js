@@ -172,7 +172,7 @@ router.get(
         namespace,
         execution: { workflowId, runId },
         query: {
-          queryType: '__cadence_web_list',
+          queryType: '__temporal_nonexistent_query',
         },
       });
 

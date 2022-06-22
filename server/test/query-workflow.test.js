@@ -2,11 +2,11 @@ describe('Query Workflow', function() {
   it('should list workflows using a temporary hack of parsing out the available workflows from a NotFoundError', async function () {
     this.timeout(50000)
     this.test.QueryWorkflow = ({ queryRequest }) => {
-      queryRequest.query.queryType.should.equal('__cadence_web_list')
+      queryRequest.query.queryType.should.equal('__temporal_nonexistent_query')
 
       return {
         ok: false,
-        body: { message: '__cadence_web_list not found. KnownQueryTypes=[foo bar ]' },
+        body: { message: '__temporal_nonexistent_query not found. KnownQueryTypes=[foo bar ]' },
         typeName: 'badRequestError'
       }
     }
