@@ -4,7 +4,7 @@ set -e
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 LIB_DIR="${DIR}/lib"
-VERSION="1.15.2-rc1"
+VERSION="1.15.1"
 
 remote_image_name="gcr.io/outreach-docker/temporal/temporal-web"
 
