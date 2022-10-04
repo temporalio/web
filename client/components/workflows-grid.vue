@@ -127,8 +127,10 @@ paged-grid()
 
     &.col-id
       flex-basis: 400px;
+      font-family: monospace;
     &.col-link
       flex-basis: 400px;
+      font-family: monospace;
     &.col-name
       flex-basis: 300px;
     &.col-status
