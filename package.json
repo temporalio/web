@@ -66,7 +66,7 @@
     "openid-client": "^4.2.1",
     "prismjs": "^1.27.0",
     "promise.prototype.finally": "^3.1.0",
-    "stylus": "^0.54.5",
+    "stylus": "^0.55.0",
     "stylus-loader": "^3.0.1",
     "vis": "nathanboktae/vis#4.21.0a",
     "vue": "^2.5.13",
