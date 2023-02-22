@@ -1,4 +1,4 @@
-FROM node:14.16-alpine
+FROM node:14.20-alpine
 WORKDIR /usr/temporal-web
 
 # install git & openssh to fetch github packages

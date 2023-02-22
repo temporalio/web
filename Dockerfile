@@ -1,4 +1,4 @@
-FROM node:14.16-alpine as builder
+FROM node:14.20-alpine as builder
 WORKDIR /usr/build
 
 # install git & openssh to fetch github packages
@@ -18,7 +18,7 @@ RUN npm run build-production
 
 
 # Build final image
-FROM node:14.16-alpine
+FROM node:14.20-alpine
 WORKDIR /usr/app
 
 COPY --from=builder ./usr/build ./
