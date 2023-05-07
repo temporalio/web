@@ -31,7 +31,7 @@
     "@babel/preset-env": "^7.8.3",
     "@grpc/proto-loader": "^0.5.6",
     "babel-loader": "^8.0.6",
-    "babel-plugin-module-resolver": "^4.0.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "bluebird": "^3.7.2",
@@ -44,7 +44,7 @@
     "propagating-hammerjs": "1.4.7",
     "grpc": "^1.24.6",
     "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^5.5.1",
     "html-webpack-template": "^6.1.0",
     "js-yaml": "^3.14.0",
     "koa": "^2.3.0",
@@ -81,7 +81,7 @@
     "vue-template-compiler": "^2.5.2",
     "vue-virtual-scroller": "^1.0.10",
     "vue2-datepicker": "^3.4.1",
-    "webpack": "^3.12.0",
+    "webpack": "^5.82.0",
     "websocket-as-promised": "^2.0.1"
   },
   "devDependencies": {
